@@ -4,14 +4,14 @@ WORKDIR /app
 
 RUN apk add --no-cache openssl
 
-COPY backend/package*.json ./
+COPY package*.json ./
 RUN npm install
 
-COPY backend/ .
+COPY . .
 
 RUN ./node_modules/.bin/prisma generate
 RUN npm run build
 
 EXPOSE 3000
 
-CMD ["node", "server-test.js"]
+CMD ["node", "dist/main.js"]
