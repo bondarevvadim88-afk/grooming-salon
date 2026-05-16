@@ -100,6 +100,7 @@ export class AppointmentsService {
     const updated = await this.prisma.appointment.update({
       where: { id },
       data: { status: AppointmentStatus.CANCELLED, notes: reason ?? appt.notes },
+      include: { client: true, pet: true, staff: true, service: true },
     });
     this.notifications.sendCancellation(updated).catch(console.error);
     return updated;
