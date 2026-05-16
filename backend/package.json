@@ -13,7 +13,8 @@
     "db:migrate": "prisma migrate deploy",
     "db:migrate:dev": "prisma migrate dev",
     "db:seed": "ts-node prisma/seed.ts",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "start:migrate": "prisma migrate deploy && node dist/main.js"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.0",
