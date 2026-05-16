@@ -4,37 +4,46 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  console.log('=== STARTING APP ===');
+  console.log('NODE_ENV:', process.env.NODE_ENV);
+  console.log('PORT:', process.env.PORT);
+  console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL);
+  console.log('JWT_SECRET exists:', !!process.env.JWT_SECRET);
 
-  // Global validation pipe
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }),
-  );
+  try {
+    const app = await NestFactory.create(AppModule);
+    console.log('=== APP CREATED ===');
 
-  // API versioning
-  app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+      }),
+    );
 
-  // CORS — tighten origins in production via env
-  app.enableCors({
-    origin: process.env.ALLOWED_ORIGINS?.split(',') ?? '*',
-    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-  });
+    app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
 
-  // Swagger
-  const config = new DocumentBuilder()
-    .setTitle('ГрумПро API')
-    .setDescription('Grooming salon booking service')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
-  SwaggerModule.setup('docs', app, SwaggerModule.createDocument(app, config));
+    app.enableCors({
+      origin: process.env.ALLOWED_ORIGINS?.split(',') ?? '*',
+      methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+    });
 
-  const port = process.env.PORT ?? 3000;
-  await app.listen(port, '0.0.0.0');
-  console.log(`🐾 ГрумПро API running on port ${port}`);
+    const config = new DocumentBuilder()
+      .setTitle('ГрумПро API')
+      .setDescription('Grooming salon booking service')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
+    SwaggerModule.setup('docs', app, SwaggerModule.createDocument(app, config));
+
+    const port = process.env.PORT ?? 3000;
+    await app.listen(port, '0.0.0.0');
+    console.log(`=== APP LISTENING ON PORT ${port} ===`);
+  } catch (err) {
+    console.error('=== BOOTSTRAP ERROR ===', err);
+    process.exit(1);
+  }
 }
+
 bootstrap();
