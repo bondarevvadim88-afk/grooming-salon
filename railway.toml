@@ -1,0 +1,24 @@
+# railway.toml
+# Railway reads this file to configure deployment
+
+[build]
+builder    = "DOCKERFILE"
+dockerfilePath = "backend/Dockerfile"
+
+[deploy]
+startCommand  = "npx prisma migrate deploy && node dist/main"
+healthcheckPath   = "/v1/services"
+healthcheckTimeout = 30
+restartPolicyType  = "ON_FAILURE"
+restartPolicyMaxRetries = 3
+
+[[services]]
+name = "grooming-api"
+
+  [services.variables]
+  PORT      = "3000"
+  NODE_ENV  = "production"
+  # All secrets set in Railway dashboard → Variables, NOT here:
+  # DATABASE_URL, REDIS_HOST, REDIS_PORT, REDIS_PASSWORD,
+  # JWT_SECRET, JWT_REFRESH_SECRET,
+  # SMS_API_KEY, SMTP_PASS, TELEGRAM_BOT_TOKEN, etc.
