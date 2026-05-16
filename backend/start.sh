@@ -1,8 +1,13 @@
 #!/bin/sh
-set -e
 
 echo "=== Running migrations ==="
 npx prisma migrate deploy
+echo "=== Migration exit code: $? ==="
+
+echo "=== Checking dist ==="
+ls -la /app/dist/
 
 echo "=== Starting NestJS ==="
-exec node dist/main.js
+node /app/dist/main.js
+echo "=== Node exit code: $? ==="
+
