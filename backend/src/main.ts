@@ -1,49 +1,32 @@
+import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   console.log('=== STARTING APP ===');
-  console.log('NODE_ENV:', process.env.NODE_ENV);
-  console.log('PORT:', process.env.PORT);
-  console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL);
-  console.log('JWT_SECRET exists:', !!process.env.JWT_SECRET);
 
-  try {
-    const app = await NestFactory.create(AppModule);
-    console.log('=== APP CREATED ===');
+  const app = await NestFactory.create(AppModule, {
+    logger: ['error', 'warn', 'log'],
+  });
 
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: true,
-        transform: true,
-      }),
-    );
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+    }),
+  );
 
-    app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
+  app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
 
-    app.enableCors({
-      origin: process.env.ALLOWED_ORIGINS?.split(',') ?? '*',
-      methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-    });
+  app.enableCors({ origin: '*' });
 
-    const config = new DocumentBuilder()
-      .setTitle('ГрумПро API')
-      .setDescription('Grooming salon booking service')
-      .setVersion('1.0')
-      .addBearerAuth()
-      .build();
-    SwaggerModule.setup('docs', app, SwaggerModule.createDocument(app, config));
-
-    const port = process.env.PORT ?? 3000;
-    await app.listen(port, '0.0.0.0');
-    console.log(`=== APP LISTENING ON PORT ${port} ===`);
-  } catch (err) {
-    console.error('=== BOOTSTRAP ERROR ===', err);
-    process.exit(1);
-  }
+  const port = Number(process.env.PORT) || 3000;
+  await app.listen(port, '0.0.0.0');
+  console.log(`=== LISTENING ON PORT ${port} ===`);
 }
 
-bootstrap();
+bootstrap().catch(err => {
+  console.error('=== FATAL ERROR ===', err);
+  process.exit(1);
+});
