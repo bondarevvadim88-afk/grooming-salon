@@ -151,4 +151,70 @@ enum AppointmentStatus {
 }
 
 model Notification {
-  id
+  id            String             @id @default(uuid())
+  appointmentId String
+  channel       NotificationChannel
+  type          NotificationType
+  status        NotificationStatus @default(PENDING)
+  payload       Json
+  sentAt        DateTime?
+  deliveredAt   DateTime?
+  errorMessage  String?
+  retryCount    Int                @default(0)
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+
+  @@index([appointmentId])
+  @@index([status])
+  @@index([channel])
+  @@index([type])
+}
+
+enum NotificationChannel {
+  SMS
+  EMAIL
+  TELEGRAM
+  VK
+  MAX
+  PUSH
+}
+
+enum NotificationType {
+  BOOKING_CONFIRMED
+  REMINDER_24H
+  REMINDER_2H
+  BOOKING_CANCELLED
+  REVIEW_REQUEST
+  BOOKING_CHANGED
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  DELIVERED
+  FAILED
+}
+
+model NotificationPreference {
+  clientId       String  @id
+  smsEnabled     Boolean @default(true)
+  emailEnabled   Boolean @default(true)
+  telegramChatId String?
+  vkUserId       String?
+  maxUserId      String?
+  pushToken      String?
+
+  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+}
+
+model Review {
+  id            String   @id @default(uuid())
+  appointmentId String   @unique
+  rating        Int
+  comment       String?
+  createdAt     DateTime @default(now())
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+}
