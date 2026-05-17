@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nest start --watch",
     "build": "npx prisma generate && nest build",
-    "start": "node --max-old-space-size=400 dist/main.js",
+    "start": "node dist/main.js",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,test}/**/*.ts\"",
     "test": "jest",
@@ -13,8 +13,7 @@
     "db:migrate": "prisma migrate deploy",
     "db:migrate:dev": "prisma migrate dev",
     "db:seed": "ts-node prisma/seed.ts",
-    "db:studio": "prisma studio",
-    "start:migrate": "prisma migrate deploy && node dist/main.js"
+    "db:studio": "prisma studio"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.0",
