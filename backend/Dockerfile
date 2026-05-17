@@ -14,4 +14,4 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD ["node", "--max-old-space-size=400", "dist/main.js"]
+CMD ["node", "run.js"]
