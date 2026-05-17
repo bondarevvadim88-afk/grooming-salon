@@ -14,4 +14,4 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD ["node", "run.js"]
+CMD ["node", "-e", "console.log('CMD STARTED'); require('./dist/main.js')"]
