@@ -14,4 +14,4 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD ["node", "-e", "console.log('CMD STARTED'); require('./dist/main.js')"]
+CMD ["sh", "-c", "./node_modules/.bin/prisma migrate deploy; echo 'CMD STARTED'; node -e \"console.log('NODE STARTED'); require('./dist/main.js')\""]
