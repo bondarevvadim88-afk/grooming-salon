@@ -14,4 +14,4 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD ["node", "--no-warnings", "diagnose.js"]
+CMD ["node", "--no-warnings", "--max-old-space-size=512", "diagnose.js"]
