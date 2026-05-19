@@ -1,17 +1,21 @@
 import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  process.stdout.write('BOOT START\n');
+  console.log('BOOT START');
   const app = await NestFactory.create(AppModule);
-  const port = process.env.PORT || 3000;
+  
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+  app.enableCors({ origin: '*' });
+
+  const port = Number(process.env.PORT) || 3000;
   await app.listen(port, '0.0.0.0');
-  process.stdout.write('BOOT OK PORT ' + port + '\n');
+  console.log('BOOT OK PORT ' + port);
 }
 
-bootstrap().catch(e => {
-  process.stdout.write('BOOT ERROR: ' + e.message + '\n');
-  process.stdout.write(e.stack + '\n');
+bootstrap().catch(err => {
+  console.error('BOOT ERROR:', err);
   process.exit(1);
 });
