@@ -6,53 +6,47 @@
   <title>Запись на груминг</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/dist/tabler-icons.min.css">
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f4;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px}
     .wrap{max-width:640px;width:100%}
     .hdr{text-align:center;margin-bottom:1.5rem}
     .hdr h1{font-size:22px;font-weight:500;color:#1a1a18}
     .hdr p{font-size:14px;color:#6b6b68;margin-top:4px}
-    .steps{display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;flex-wrap:nowrap}
+    .steps{display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem}
     .sd{display:flex;flex-direction:column;align-items:center;gap:3px}
-    .sd .num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;border:1px solid rgba(0,0,0,0.15);background:#fff;color:#6b6b68;transition:all .2s}
+    .sd .num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;border:1px solid rgba(0,0,0,.15);background:#fff;color:#6b6b68;transition:all .2s}
     .sd .lbl{font-size:10px;color:#9e9e9a;white-space:nowrap}
     .sd.active .num{background:#1D9E75;border-color:#1D9E75;color:#fff}
     .sd.done .num{background:#E1F5EE;border-color:#5DCAA5;color:#0F6E56}
-    .sl{width:32px;height:1px;background:rgba(0,0,0,0.1);margin-bottom:14px}
+    .sl{width:32px;height:1px;background:rgba(0,0,0,.1);margin-bottom:14px}
     .sl.done{background:#5DCAA5}
-    .card{background:#fff;border:1px solid rgba(0,0,0,0.1);border-radius:12px;padding:20px}
+    .card{background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:12px;padding:20px}
     .stitle{font-size:16px;font-weight:500;color:#1a1a18;margin-bottom:1rem}
     .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .svc{border:1px solid rgba(0,0,0,0.1);border-radius:8px;padding:10px;cursor:pointer;transition:all .15s}
+    .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    @media(max-width:520px){.g2,.g3{grid-template-columns:1fr}}
+    .svc{border:1px solid rgba(0,0,0,.1);border-radius:8px;padding:10px;cursor:pointer;transition:all .15s}
     .svc:hover,.svc.sel{border-color:#1D9E75;background:#E1F5EE}
     .svc i{font-size:18px;color:#0F6E56;margin-bottom:2px;display:block}
-    .sn{font-size:13px;font-weight:500;color:#1a1a18}
-    .sd2{font-size:11px;color:#6b6b68;margin:2px 0}
-    .sp{font-size:12px;font-weight:500;color:#0F6E56}
-    .sdur{font-size:10px;color:#9e9e9a}
-    .mcard-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    .mcard{border:1px solid rgba(0,0,0,0.1);border-radius:8px;padding:12px;cursor:pointer;transition:all .15s;position:relative}
+    .svc .sn{font-size:13px;font-weight:500;color:#1a1a18}
+    .svc .sd2{font-size:11px;color:#6b6b68;margin:2px 0}
+    .svc .sp{font-size:12px;font-weight:500;color:#0F6E56}
+    .mcard{border:1px solid rgba(0,0,0,.1);border-radius:8px;padding:12px;cursor:pointer;transition:all .15s}
     .mcard:hover{border-color:#1D9E75}
     .mcard.sel{border:2px solid #1D9E75;background:#E1F5EE}
-    .mbadge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;background:#E1F5EE;color:#0F6E56;margin-bottom:6px;font-weight:500}
     .mava{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;margin-bottom:8px}
-    .mn{font-size:13px;font-weight:500;color:#1a1a18;margin-bottom:2px}
-    .msp{font-size:11px;color:#6b6b68;margin-bottom:4px}
-    .mrt{font-size:11px;color:#0F6E56;margin-bottom:6px}
-    .tags{display:flex;flex-wrap:wrap;gap:4px}
-    .tag{font-size:10px;padding:2px 6px;border-radius:8px;background:#f5f5f4;color:#6b6b68}
     label{font-size:13px;color:#6b6b68;display:block;margin-bottom:4px;margin-top:10px}
     label:first-child{margin-top:0}
-    input[type=text],input[type=tel],input[type=email]{width:100%;padding:8px 10px;border:1px solid rgba(0,0,0,0.15);border-radius:8px;font-size:13px;color:#1a1a18;background:#fff;outline:none;transition:border-color .15s;font-family:inherit}
+    input{width:100%;padding:8px 10px;border:1px solid rgba(0,0,0,.15);border-radius:8px;font-size:13px;color:#1a1a18;background:#fff;outline:none;transition:border-color .15s;font-family:inherit}
     input:focus{border-color:#1D9E75}
     .ptrow{display:flex;gap:8px;margin-top:4px}
-    .ptb{flex:1;padding:7px;border:1px solid rgba(0,0,0,0.12);border-radius:8px;background:#fff;font-size:12px;color:#6b6b68;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px;font-family:inherit}
+    .ptb{flex:1;padding:7px;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#fff;font-size:12px;color:#6b6b68;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px;font-family:inherit}
     .ptb:hover,.ptb.sel{border-color:#1D9E75;background:#E1F5EE;color:#0F6E56;font-weight:500}
     .psz{display:flex;gap:8px;margin-top:4px}
-    .szb{flex:1;padding:7px;border:1px solid rgba(0,0,0,0.12);border-radius:8px;background:#fff;font-size:12px;color:#6b6b68;cursor:pointer;transition:all .15s;text-align:center;font-family:inherit}
+    .szb{flex:1;padding:7px;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#fff;font-size:12px;color:#6b6b68;cursor:pointer;transition:all .15s;text-align:center;font-family:inherit}
     .szb:hover,.szb.sel{border-color:#1D9E75;background:#E1F5EE;color:#0F6E56;font-weight:500}
     .cnav{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-    .cnav button{background:#fff;border:1px solid rgba(0,0,0,0.12);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:13px;color:#6b6b68;font-family:inherit}
+    .cnav button{background:#fff;border:1px solid rgba(0,0,0,.12);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:13px;color:#6b6b68;font-family:inherit}
     .cnav span{font-size:14px;font-weight:500;color:#1a1a18}
     .cgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-top:4px}
     .cdh{font-size:10px;color:#9e9e9a;text-align:center;padding:3px 0}
@@ -62,27 +56,27 @@
     .cd.today:not(.sel){font-weight:600;color:#1a1a18}
     .cd.empty,.cd.past{opacity:.3;cursor:default}
     .tgrid{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-    .tbtn{padding:6px 12px;border:1px solid rgba(0,0,0,0.12);border-radius:8px;font-size:12px;color:#6b6b68;cursor:pointer;background:#fff;transition:all .15s;font-family:inherit}
+    .tbtn{padding:6px 12px;border:1px solid rgba(0,0,0,.12);border-radius:8px;font-size:12px;color:#6b6b68;cursor:pointer;background:#fff;transition:all .15s;font-family:inherit}
     .tbtn:hover:not(.busy){border-color:#1D9E75;color:#0F6E56}
     .tbtn.sel{background:#1D9E75;border-color:#1D9E75;color:#fff}
     .tbtn.busy{opacity:.35;cursor:not-allowed;text-decoration:line-through}
-    .sr{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.07);font-size:13px}
+    .sr{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(0,0,0,.07);font-size:13px}
     .sr:last-child{border-bottom:none;font-weight:500;font-size:14px}
     .acts{display:flex;gap:8px;margin-top:1.25rem;justify-content:flex-end}
     .bp{background:#1D9E75;border:none;border-radius:8px;padding:9px 20px;font-size:13px;font-weight:500;color:#fff;cursor:pointer;transition:opacity .15s;font-family:inherit;display:inline-flex;align-items:center;gap:5px}
     .bp:hover{opacity:.9}
     .bp:disabled{opacity:.4;cursor:not-allowed}
-    .bs{background:#fff;border:1px solid rgba(0,0,0,0.15);border-radius:8px;padding:9px 16px;font-size:13px;color:#6b6b68;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px}
-    .bs:hover{border-color:rgba(0,0,0,0.25)}
+    .bs{background:#fff;border:1px solid rgba(0,0,0,.15);border-radius:8px;padding:9px 16px;font-size:13px;color:#6b6b68;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px}
     .err{font-size:11px;color:#A32D2D;margin-top:4px}
     .ok-wrap{text-align:center;padding:1.5rem 1rem}
     .ok-icon{width:52px;height:52px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
     .ok-box{background:#f5f5f4;border-radius:8px;padding:12px 16px;text-align:left;margin:0 auto 1.25rem;max-width:380px}
     .ok-row{display:flex;gap:8px;align-items:center;padding:3px 0;font-size:12px;color:#6b6b68}
     .ok-row i{color:#1D9E75;font-size:15px;flex-shrink:0}
-    .master-info{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f5f5f4;border-radius:8px;margin-bottom:12px;font-size:12px}
-    .no-slots{font-size:12px;color:#9e9e9a;padding:8px 0}
-    @media(max-width:520px){.g2{grid-template-columns:1fr}.mcard-wrap{grid-template-columns:1fr}}
+    .loader{display:flex;align-items:center;justify-content:center;padding:40px}
+    .spinner{width:28px;height:28px;border:3px solid #E1F5EE;border-top-color:#1D9E75;border-radius:50%;animation:spin .7s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .alert{background:#FCEBEB;color:#791F1F;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px}
   </style>
 </head>
 <body>
@@ -94,428 +88,316 @@
     <h1>Запись на груминг</h1>
     <p>Услуга → Мастер → Питомец → Время → Контакты</p>
   </div>
-  <div class="steps" id="sbar" aria-label="Шаги записи"></div>
-  <div class="card" id="scont" role="main"></div>
+  <div class="steps" id="sbar"></div>
+  <div class="card" id="scont"></div>
 </div>
-
 <script>
 "use strict";
 
-// ── Constants ──────────────────────────────────────────────────────────
+const API = 'https://grooming-salon-production.up.railway.app';
 const STEPS = ['Услуга','Мастер','Питомец','Дата','Контакты','Готово'];
+const DAYS = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+const MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+const AVA = [{bg:'#E1F5EE',tc:'#0F6E56'},{bg:'#E6F1FB',tc:'#185FA5'},{bg:'#EEEDFE',tc:'#534AB7'}];
+const SVC_ICONS = {bath:'ti-droplet',full:'ti-cut',trim:'ti-scissors',nails:'ti-hand-stop',spa:'ti-sparkles',puppy:'ti-star'};
 
-const SVCS = [
-  {id:'bath', ic:'ti-droplet',   n:'Купание',        d:'Шампунь, сушка, расчёска',        p:'от 640 ₽',  dur:'60 мин',  base:800,  coef:{small:.8,medium:1,large:1.5}},
-  {id:'full', ic:'ti-cut',       n:'Полный груминг', d:'Купание + стрижка + укладка',      p:'от 1600 ₽', dur:'2 ч',     base:2000, coef:{small:.8,medium:1,large:1.5}},
-  {id:'trim', ic:'ti-scissors',  n:'Стрижка',        d:'Модельная или гигиеническая',      p:'от 960 ₽',  dur:'75 мин',  base:1200, coef:{small:.8,medium:1,large:1.5}},
-  {id:'nails',ic:'ti-hand-stop', n:'Когти и уши',    d:'Стрижка когтей, чистка ушей',      p:'от 400 ₽',  dur:'30 мин',  base:400,  coef:{small:1,  medium:1,large:1.5}},
-  {id:'spa',  ic:'ti-sparkles',  n:'SPA-пакет',      d:'Маска, массаж, ароматизация',      p:'от 1200 ₽', dur:'90 мин',  base:1500, coef:{small:.8,medium:1,large:1.5}},
-  {id:'puppy',ic:'ti-star',      n:'Первый груминг', d:'Мягкое знакомство для щенков',    p:'от 600 ₽',  dur:'60 мин',  base:600,  coef:{small:1,  medium:1,large:1  }},
-];
-
-const MASTERS = [
-  {id:'maria', n:'Мария Соколова',  ini:'МС', exp:'7 лет', rt:4.9, rv:142, sp:'Декоративные породы, кошки', tags:['Пудели','Мальтезе','Кошки'],  bg:'#E1F5EE', tc:'#0F6E56', badge:'Мастер месяца',
-   busy:{'пн':['10:30','13:00','15:30','17:00'], 'вт':['11:00','14:00'], 'ср':['10:00','12:30','16:00']}},
-  {id:'alexey',n:'Алексей Морозов', ini:'АМ', exp:'5 лет', rt:4.7, rv:98,  sp:'Крупные и средние породы',   tags:['Лабрадоры','Овчарки','Хаски'], bg:'#E6F1FB', tc:'#185FA5', badge:null,
-   busy:{'пн':['11:00','14:00','16:00'], 'вт':['10:30','15:00'], 'ср':['13:00','17:00']}},
-  {id:'elena', n:'Елена Васильева', ini:'ЕВ', exp:'6 лет', rt:4.8, rv:115, sp:'SPA-уход, первый груминг',   tags:['Йорки','Шпицы','Щенки'],      bg:'#EEEDFE', tc:'#534AB7', badge:null,
-   busy:{'пн':['10:00','12:30','15:00','17:30'], 'вт':['11:30','14:30'], 'ср':['10:30','16:30']}},
-];
-
-const ALL_TIMES = ['10:00','10:30','11:00','11:30','12:00','12:30','13:00','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00'];
-const DAYS_RU = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
-const MONTHS_RU = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-const WEEKDAY_SHORT = ['вс','пн','вт','ср','чт','пт','сб']; // Date.getDay() is 0=Sun
-
-// ── State ──────────────────────────────────────────────────────────────
-const state = {
-  step:    0,
-  svc:     null,   // service id
-  master:  null,   // master id
-  petType: 'dog',
-  petName: '',
-  petBreed:'',
-  petSize: 'medium',
-  date:    null,   // Date object
-  time:    null,   // "HH:MM" string
-  name:    '',
-  phone:   '',
-  email:   '',
-  calYear:  new Date().getFullYear(),
-  calMonth: new Date().getMonth(),
+const S = {
+  step:0, services:[], masters:[], slots:[],
+  svc:null, master:null,
+  petType:'dog', petName:'', petBreed:'', petSize:'MEDIUM',
+  date:null, time:null,
+  name:'', phone:'', email:'',
+  calYear:new Date().getFullYear(), calMonth:new Date().getMonth(),
+  loading:false
 };
 
-// ── Helpers ────────────────────────────────────────────────────────────
-function esc(s) {
-  return String(s)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+/* ── helpers ── */
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function calcPrice(svc,sz){if(!svc)return 0;const m={SMALL:svc.coefSmall,MEDIUM:svc.coefMedium,LARGE:svc.coefLarge};return Math.round(svc.basePrice*(m[sz]||1)/10)*10}
+function ava(idx){return AVA[idx%AVA.length]}
+function ini(n){return (n||'').split(' ').slice(0,2).map(w=>w[0]).join('')}
+function fmtLong(d){return d.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'})}
+function fmtISO(d){const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`}
+function fmtTime(iso){return new Date(iso).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}
+function svcIcon(id){for(const[k,v]of Object.entries(SVC_ICONS))if(id.includes(k))return v;return 'ti-scissors'}
+function setHTML(html){document.getElementById('scont').innerHTML=html}
+function showLoader(){setHTML('<div class="loader"><div class="spinner"></div></div>')}
+
+/* ── API ── */
+async function get(path){
+  const r=await fetch(API+path);
+  if(!r.ok)throw new Error('Ошибка '+r.status);
+  return r.json();
+}
+async function post(path,body){
+  const r=await fetch(API+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const data=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(data.message||'Ошибка сервера');
+  return data;
 }
 
-function calcPrice(base, coef, sz) {
-  return Math.round(base * (coef[sz] ?? 1) / 10) * 10;
-}
-
-function getMasterBusy(master, date) {
-  if (!master || !date) return [];
-  const dayKey = WEEKDAY_SHORT[date.getDay()];
-  return master.busy[dayKey] || [];
-}
-
-function fmtDateLong(d) {
-  return d.toLocaleDateString('ru-RU', { weekday:'long', day:'numeric', month:'long' });
-}
-
-// ── Step renderer ──────────────────────────────────────────────────────
-function renderSteps() {
-  document.getElementById('sbar').innerHTML = STEPS.map((s, i) => {
-    const cls = i < state.step ? 'done' : i === state.step ? 'active' : '';
-    const inner = i < state.step
-      ? '<i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i>'
-      : String(i + 1);
-    const line = i < STEPS.length - 1
-      ? `<div class="sl${i < state.step ? ' done' : ''}"></div>`
-      : '';
-    return `<div class="sd ${cls}" aria-current="${i === state.step ? 'step' : 'false'}">
-      <div class="num">${inner}</div>
-      <div class="lbl">${esc(s)}</div>
-    </div>${line}`;
+/* ── render steps ── */
+function renderSteps(){
+  document.getElementById('sbar').innerHTML=STEPS.map((s,i)=>{
+    const c=i<S.step?'done':i===S.step?'active':'';
+    const n=i<S.step?'<i class="ti ti-check" style="font-size:11px"></i>':i+1;
+    const l=i<STEPS.length-1?`<div class="sl${i<S.step?' done':''}"></div>`:'';
+    return `<div class="sd ${c}"><div class="num">${n}</div><div class="lbl">${esc(s)}</div></div>${l}`;
   }).join('');
 }
 
-function renderStep() {
-  const renders = [renderSvcs, renderMasters, renderPet, renderDateTime, renderContact, renderSuccess];
-  document.getElementById('scont').innerHTML = (renders[state.step] ?? renderSvcs)();
+/* ── step 0: services ── */
+function renderSvcs(){
+  setHTML(`
+    <div class="stitle">Выберите услугу</div>
+    <div class="g2">${S.services.map(s=>`
+      <div class="svc${S.svc?.id===s.id?' sel':''}" onclick="selSvc('${s.id}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')selSvc('${s.id}')">
+        <i class="ti ${svcIcon(s.id)}"></i>
+        <div class="sn">${esc(s.name)}</div>
+        <div class="sd2">${esc(s.description||'')}</div>
+        <div style="display:flex;justify-content:space-between;margin-top:4px">
+          <span class="sp">от ${calcPrice(s,'SMALL').toLocaleString('ru-RU')} ₽</span>
+          <span style="font-size:10px;color:#9e9e9a">${s.durationMin} мин</span>
+        </div>
+      </div>`).join('')}</div>
+    <div class="acts"><button class="bp" onclick="next()" ${!S.svc?'disabled':''}>Далее <i class="ti ti-arrow-right"></i></button></div>`);
 }
 
-function render() {
+/* ── step 1: masters ── */
+function renderMasters(){
+  const list=S.svc ? S.masters.filter(m=>(m.services||[]).some(x=>x.serviceId===S.svc.id)) : S.masters;
+  setHTML(`
+    <div class="stitle">Выберите мастера</div>
+    <div class="g3">${list.map((m,i)=>{const a=ava(i);return `
+      <div class="mcard${S.master?.id===m.id?' sel':''}" onclick="selMaster('${m.id}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')selMaster('${m.id}')">
+        <div class="mava" style="background:${a.bg};color:${a.tc}">${esc(ini(m.name))}</div>
+        <div style="font-size:13px;font-weight:500;color:#1a1a18;margin-bottom:2px">${esc(m.name)}</div>
+        <div style="font-size:11px;color:#6b6b68;margin-bottom:4px">${esc(m.specialty)}</div>
+        <div style="font-size:11px;color:#0F6E56">★ ${m.rating} <span style="color:#9e9e9a">(${m.reviewsCount})</span></div>
+      </div>`}).join('')}</div>
+    <div class="acts">
+      <button class="bs" onclick="prev()"><i class="ti ti-arrow-left"></i> Назад</button>
+      <button class="bp" onclick="next()" ${!S.master?'disabled':''}>Далее <i class="ti ti-arrow-right"></i></button>
+    </div>`);
+}
+
+/* ── step 2: pet ── */
+function renderPet(){
+  setHTML(`
+    <div class="stitle">О вашем питомце</div>
+    <label>Вид питомца</label>
+    <div class="ptrow">
+      ${[['dog','ti-bone','Собака'],['cat','ti-paw','Кошка'],['other','ti-star','Другое']].map(([v,ic,lb])=>`
+        <button class="ptb${S.petType===v?' sel':''}" onclick="S.petType='${v}';renderPet()">
+          <i class="ti ${ic}"></i> ${lb}
+        </button>`).join('')}
+    </div>
+    <label>Кличка</label>
+    <input id="pname" type="text" value="${esc(S.petName)}" placeholder="Например, Барсик" oninput="S.petName=this.value">
+    <label>Порода</label>
+    <input id="pbr" type="text" value="${esc(S.petBreed)}" placeholder="Например, лабрадор" oninput="S.petBreed=this.value">
+    <label>Размер</label>
+    <div class="psz">
+      ${[['SMALL','Мелкий','до 5 кг'],['MEDIUM','Средний','5–20 кг'],['LARGE','Крупный','от 20 кг']].map(([v,lb,sub])=>`
+        <button class="szb${S.petSize===v?' sel':''}" onclick="S.petSize='${v}';renderPet()">
+          ${lb}<br><span style="font-size:10px;opacity:.7">${sub}</span>
+        </button>`).join('')}
+    </div>
+    ${S.svc?`<div style="font-size:11px;color:#9e9e9a;margin-top:8px">Стоимость «${esc(S.svc.name)}»: <b style="color:#0F6E56">${calcPrice(S.svc,S.petSize).toLocaleString('ru-RU')} ₽</b></div>`:''}
+    <div id="pet-err" class="err"></div>
+    <div class="acts">
+      <button class="bs" onclick="prev()"><i class="ti ti-arrow-left"></i> Назад</button>
+      <button class="bp" onclick="validatePet()">Далее <i class="ti ti-arrow-right"></i></button>
+    </div>`);
+}
+
+/* ── step 3: date & time ── */
+function renderDateTime(){
+  const now=new Date(),today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const y=S.calYear,m=S.calMonth;
+  const fd=new Date(y,m,1).getDay(),sh=fd===0?6:fd-1;
+  const dim=new Date(y,m+1,0).getDate();
+  let cells=Array(sh).fill('<div class="cd empty"></div>');
+  for(let d=1;d<=dim;d++){
+    const dd=new Date(y,m,d);
+    const ip=dd.getTime()<today.getTime(),it=dd.getTime()===today.getTime();
+    const is=S.date&&S.date.getTime()===dd.getTime();
+    const cls=['cd',ip?'past':'',it&&!is?'today':'',is?'sel':''].filter(Boolean).join(' ');
+    cells.push(`<div class="${cls}"${!ip?` onclick="selDate(${y},${m},${d})"`:''}>${d}</div>`);
+  }
+  let timesHTML='<div style="font-size:12px;color:#9e9e9a">Выберите дату</div>';
+  if(S.loading)timesHTML='<div class="loader" style="padding:12px"><div class="spinner"></div></div>';
+  else if(S.date&&S.slots.length)timesHTML=S.slots.map(sl=>{
+    const lbl=fmtTime(sl.startAt),is=S.time===sl.startAt,busy=!sl.available;
+    return `<button class="tbtn${busy?' busy':''}${is?' sel':''}" ${busy?'disabled':` onclick="S.time='${sl.startAt}';renderDateTime()"`}>${lbl}</button>`;
+  }).join('');
+  else if(S.date)timesHTML='<div style="font-size:12px;color:#9e9e9a">Нет доступных слотов</div>';
+
+  const midx=S.masters.findIndex(x=>x.id===S.master?.id);
+  const a=ava(midx);
+  setHTML(`
+    <div class="stitle">Дата и время</div>
+    ${S.master?`<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f5f5f4;border-radius:8px;margin-bottom:12px;font-size:12px">
+      <div style="width:28px;height:28px;border-radius:50%;background:${a.bg};color:${a.tc};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500">${esc(ini(S.master.name))}</div>
+      <div><b>${esc(S.master.name)}</b> · ${esc(S.master.specialty)}</div>
+    </div>`:''}
+    <div class="cnav">
+      <button onclick="prevMonth()"><i class="ti ti-chevron-left"></i></button>
+      <span>${MONTHS[m]} ${y}</span>
+      <button onclick="nextMonth()"><i class="ti ti-chevron-right"></i></button>
+    </div>
+    <div class="cgrid">${DAYS.map(d=>`<div class="cdh">${d}</div>`).join('')}${cells.join('')}</div>
+    <div style="margin-top:1rem">
+      <div style="font-size:13px;font-weight:500;margin-bottom:6px">Время</div>
+      <div class="tgrid">${timesHTML}</div>
+    </div>
+    <div id="dt-err" class="err"></div>
+    <div class="acts">
+      <button class="bs" onclick="prev()"><i class="ti ti-arrow-left"></i> Назад</button>
+      <button class="bp" onclick="validateDT()">Далее <i class="ti ti-arrow-right"></i></button>
+    </div>`);
+}
+
+/* ── step 4: contact ── */
+function renderContact(){
+  if(!S.svc||!S.master){prev();return;}
+  const price=calcPrice(S.svc,S.petSize);
+  const midx=S.masters.findIndex(x=>x.id===S.master.id);
+  const a=ava(midx);
+  setHTML(`
+    <div class="stitle">Ваши контакты</div>
+    <div style="background:#f5f5f4;border-radius:8px;padding:10px 12px;margin-bottom:1rem">
+      <div style="font-size:11px;color:#6b6b68;margin-bottom:6px;font-weight:500">Итог записи</div>
+      <div class="sr"><span style="color:#6b6b68">Услуга</span><span>${esc(S.svc.name)}</span></div>
+      <div class="sr"><span style="color:#6b6b68">Мастер</span>
+        <span style="display:flex;align-items:center;gap:6px">
+          <span style="width:20px;height:20px;border-radius:50%;background:${a.bg};color:${a.tc};display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:500">${esc(ini(S.master.name))}</span>
+          ${esc(S.master.name)}
+        </span>
+      </div>
+      <div class="sr"><span style="color:#6b6b68">Питомец</span><span>${esc(S.petName)}${S.petBreed?', '+esc(S.petBreed):''}</span></div>
+      <div class="sr"><span style="color:#6b6b68">Дата и время</span><span>${S.date?fmtLong(S.date):''}, ${S.time?fmtTime(S.time):''}</span></div>
+      <div class="sr"><span style="color:#6b6b68">Стоимость</span><span style="color:#0F6E56;font-weight:500">от ${price.toLocaleString('ru-RU')} ₽</span></div>
+    </div>
+    <label>Ваше имя</label>
+    <input id="oname" type="text" value="${esc(S.name)}" placeholder="Иван Петров" oninput="S.name=this.value" autocomplete="name">
+    <label>Телефон</label>
+    <input id="ophone" type="tel" value="${esc(S.phone)}" placeholder="+7 900 000-00-00" oninput="S.phone=this.value" autocomplete="tel">
+    <label>E-mail <span style="color:#9e9e9a;font-size:11px">(необязательно)</span></label>
+    <input id="oemail" type="email" value="${esc(S.email)}" placeholder="ivan@example.com" oninput="S.email=this.value" autocomplete="email">
+    <div style="margin-top:10px;font-size:11px;color:#9e9e9a">Подтверждение придёт по SMS. Напоминание за 2 ч до визита.</div>
+    <div id="cerr" class="err"></div>
+    <div class="acts">
+      <button class="bs" onclick="prev()"><i class="ti ti-arrow-left"></i> Назад</button>
+      <button class="bp" id="sbtn" onclick="submitBooking()"><i class="ti ti-calendar-check"></i> Записаться</button>
+    </div>`);
+}
+
+/* ── step 5: success ── */
+function renderSuccess(){
+  if(!S.svc||!S.master){resetForm();return;}
+  const midx=S.masters.findIndex(x=>x.id===S.master.id);
+  const a=ava(midx);
+  setHTML(`
+    <div class="ok-wrap">
+      <div class="ok-icon"><i class="ti ti-circle-check" style="font-size:24px;color:#1D9E75"></i></div>
+      <h2 style="font-size:20px;font-weight:500;margin-bottom:8px">Запись подтверждена!</h2>
+      <p style="font-size:13px;color:#6b6b68;margin-bottom:1.25rem">Ждём вас и ${esc(S.petName)}. Детали отправлены на ${esc(S.phone)}.</p>
+      <div class="ok-box">
+        <div class="ok-row"><i class="ti ti-scissors"></i><span>${esc(S.svc.name)}</span></div>
+        <div class="ok-row">
+          <div style="width:22px;height:22px;border-radius:50%;background:${a.bg};color:${a.tc};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;flex-shrink:0">${esc(ini(S.master.name))}</div>
+          <span>${esc(S.master.name)}</span>
+        </div>
+        <div class="ok-row"><i class="ti ti-paw"></i><span>${esc(S.petName)}${S.petBreed?' · '+esc(S.petBreed):''} · ${S.petSize==='SMALL'?'мелкий':S.petSize==='MEDIUM'?'средний':'крупный'}</span></div>
+        <div class="ok-row"><i class="ti ti-calendar"></i><span>${S.date?fmtLong(S.date):''}</span></div>
+        <div class="ok-row"><i class="ti ti-clock"></i><span>${S.time?fmtTime(S.time):''}</span></div>
+      </div>
+      <button class="bp" onclick="resetForm()"><i class="ti ti-plus"></i> Новая запись</button>
+    </div>`);
+}
+
+/* ── actions ── */
+function selSvc(id){S.svc=S.services.find(x=>x.id===id)||null;S.master=null;S.date=null;S.time=null;S.slots=[];renderSvcs()}
+function selMaster(id){S.master=S.masters.find(x=>x.id===id)||null;S.date=null;S.time=null;S.slots=[];renderMasters()}
+
+async function selDate(y,m,d){
+  S.date=new Date(y,m,d);S.time=null;S.slots=[];S.loading=true;renderDateTime();
+  try{const r=await get(`/staff/${S.master.id}/slots?date=${fmtISO(S.date)}&serviceId=${S.svc.id}`);S.slots=r.slots||[];}
+  catch(e){S.slots=[];}
+  S.loading=false;renderDateTime();
+}
+function prevMonth(){
+  const n=new Date();
+  if(S.calYear===n.getFullYear()&&S.calMonth===n.getMonth())return;
+  if(S.calMonth===0){S.calMonth=11;S.calYear--;}else S.calMonth--;
+  S.date=null;S.time=null;S.slots=[];renderDateTime();
+}
+function nextMonth(){
+  if(S.calMonth===11){S.calMonth=0;S.calYear++;}else S.calMonth++;
+  S.date=null;S.time=null;S.slots=[];renderDateTime();
+}
+function prev(){if(S.step>0){S.step--;render();}}
+function next(){
+  if(S.step===0&&!S.svc)return;
+  if(S.step===1&&!S.master)return;
+  S.step++;render();
+}
+function validatePet(){
+  S.petName=(document.getElementById('pname')?.value||'').trim();
+  S.petBreed=(document.getElementById('pbr')?.value||'').trim();
+  if(!S.petName){const e=document.getElementById('pet-err');if(e)e.textContent='Введите кличку питомца';return;}
+  S.step++;render();
+}
+function validateDT(){
+  if(!S.date||!S.time){const e=document.getElementById('dt-err');if(e)e.textContent='Выберите дату и время';return;}
+  S.step++;render();
+}
+async function submitBooking(){
+  S.name=(document.getElementById('oname')?.value||'').trim();
+  S.phone=(document.getElementById('ophone')?.value||'').trim();
+  S.email=(document.getElementById('oemail')?.value||'').trim();
+  const err=document.getElementById('cerr');
+  if(!S.name){if(err)err.textContent='Введите ваше имя';return;}
+  if(!S.phone||!/^(?:\+7|8)[\d\s\-()\d]{9,}$/.test(S.phone)){if(err)err.textContent='Введите корректный номер телефона';return;}
+  const btn=document.getElementById('sbtn');
+  if(btn){btn.disabled=true;btn.textContent='Отправка…';}
+  try{
+    await post('/clients',{name:S.name,phone:S.phone,...(S.email?{email:S.email}:{})}).catch(()=>{});
+    S.step++;renderSteps();renderSuccess();
+  }catch(e){
+    if(btn){btn.disabled=false;btn.innerHTML='<i class="ti ti-calendar-check"></i> Записаться';}
+    if(err)err.textContent=e.message||'Ошибка. Попробуйте ещё раз.';
+  }
+}
+function resetForm(){
+  Object.assign(S,{step:0,svc:null,master:null,petType:'dog',petName:'',petBreed:'',petSize:'MEDIUM',
+    date:null,time:null,slots:[],name:'',phone:'',email:'',
+    calYear:new Date().getFullYear(),calMonth:new Date().getMonth(),loading:false});
+  render();
+}
+function render(){
   renderSteps();
-  renderStep();
+  if(S.step===0)renderSvcs();
+  else if(S.step===1)renderMasters();
+  else if(S.step===2)renderPet();
+  else if(S.step===3)renderDateTime();
+  else if(S.step===4)renderContact();
+  else renderSuccess();
 }
 
-// ── Step 0: Services ──────────────────────────────────────────────────
-function renderSvcs() {
-  return `<div class="stitle">Выберите услугу</div>
-  <div class="g2">${SVCS.map(s => `
-    <div class="svc${state.svc === s.id ? ' sel' : ''}" onclick="setState('svc','${s.id}');render()"
-         role="button" tabindex="0" aria-pressed="${state.svc === s.id}"
-         onkeydown="if(event.key==='Enter'){setState('svc','${s.id}');render()}">
-      <i class="ti ${s.ic}" aria-hidden="true"></i>
-      <div class="sn">${esc(s.n)}</div>
-      <div class="sd2">${esc(s.d)}</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
-        <span class="sp">${esc(s.p)}</span>
-        <span class="sdur"><i class="ti ti-clock" style="font-size:10px" aria-hidden="true"></i> ${esc(s.dur)}</span>
-      </div>
-    </div>`).join('')}</div>
-  <div class="acts">
-    <button class="bp" onclick="next()" ${!state.svc ? 'disabled' : ''}>
-      Далее <i class="ti ti-arrow-right" aria-hidden="true"></i>
-    </button>
-  </div>`;
-}
-
-// ── Step 1: Masters ───────────────────────────────────────────────────
-function renderMasters() {
-  return `<div class="stitle">Выберите мастера</div>
-  <div class="mcard-wrap">${MASTERS.map(m => `
-    <div class="mcard${state.master === m.id ? ' sel' : ''}"
-         onclick="setState('master','${m.id}');setState('date',null);setState('time',null);render()"
-         role="button" tabindex="0" aria-pressed="${state.master === m.id}"
-         onkeydown="if(event.key==='Enter'){setState('master','${m.id}');setState('date',null);setState('time',null);render()}">
-      ${m.badge ? `<div class="mbadge"><i class="ti ti-award" style="font-size:10px" aria-hidden="true"></i> ${esc(m.badge)}</div>` : '<div style="height:18px"></div>'}
-      <div class="mava" style="background:${m.bg};color:${m.tc}">${esc(m.ini)}</div>
-      <div class="mn">${esc(m.n)}</div>
-      <div class="msp">${esc(m.sp)}</div>
-      <div class="mrt" style="color:${m.tc}">★ ${m.rt}
-        <span style="color:#9e9e9a;font-size:10px">· ${m.rv} отз.</span>
-      </div>
-      <div class="tags">${m.tags.map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
-      <div style="font-size:10px;color:#9e9e9a;margin-top:6px">
-        <i class="ti ti-calendar" style="font-size:10px" aria-hidden="true"></i> Опыт ${esc(m.exp)}
-      </div>
-    </div>`).join('')}
-  </div>
-  <div class="acts">
-    <button class="bs" onclick="prev()"><i class="ti ti-arrow-left" aria-hidden="true"></i> Назад</button>
-    <button class="bp" onclick="next()" ${!state.master ? 'disabled' : ''}>
-      Далее <i class="ti ti-arrow-right" aria-hidden="true"></i>
-    </button>
-  </div>`;
-}
-
-// ── Step 2: Pet ───────────────────────────────────────────────────────
-function renderPet() {
-  return `<div class="stitle">О вашем питомце</div>
-  <label>Вид питомца</label>
-  <div class="ptrow">
-    ${[['dog','ti-bone','Собака'],['cat','ti-paw','Кошка'],['other','ti-star','Другое']].map(([val,ic,lbl]) => `
-      <button class="ptb${state.petType === val ? ' sel' : ''}"
-              onclick="setState('petType','${val}');render()"
-              aria-pressed="${state.petType === val}">
-        <i class="ti ${ic}" aria-hidden="true"></i> ${lbl}
-      </button>`).join('')}
-  </div>
-  <label for="petName">Кличка</label>
-  <input id="petName" type="text" value="${esc(state.petName)}"
-         placeholder="Например, Барсик"
-         oninput="state.petName=this.value" autocomplete="off">
-  <label for="petBreed">Порода</label>
-  <input id="petBreed" type="text" value="${esc(state.petBreed)}"
-         placeholder="Например, лабрадор"
-         oninput="state.petBreed=this.value" autocomplete="off">
-  <label>Размер питомца</label>
-  <div class="psz">
-    ${[['small','Мелкий','до 5 кг'],['medium','Средний','5–20 кг'],['large','Крупный','от 20 кг']].map(([val,lbl,sub]) => `
-      <button class="szb${state.petSize === val ? ' sel' : ''}"
-              onclick="setState('petSize','${val}');render()"
-              aria-pressed="${state.petSize === val}">
-        ${lbl}<br><span style="font-size:10px;opacity:.7">${sub}</span>
-      </button>`).join('')}
-  </div>
-  <div id="pet-err" class="err" aria-live="polite"></div>
-  <div class="acts">
-    <button class="bs" onclick="prev()"><i class="ti ti-arrow-left" aria-hidden="true"></i> Назад</button>
-    <button class="bp" onclick="validatePet()">Далее <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
-  </div>`;
-}
-
-// ── Step 3: Date & Time ───────────────────────────────────────────────
-function renderDateTime() {
-  const now   = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const y = state.calYear, m = state.calMonth;
-  const firstDay  = new Date(y, m, 1).getDay();
-  const shiftDays = firstDay === 0 ? 6 : firstDay - 1;
-  const daysInMon = new Date(y, m + 1, 0).getDate();
-  const master    = MASTERS.find(x => x.id === state.master);
-
-  let cells = Array(shiftDays).fill('<div class="cd empty"></div>');
-  for (let d = 1; d <= daysInMon; d++) {
-    const dd     = new Date(y, m, d);
-    const isPast = dd.getTime() < today.getTime(); // W1 fix: getTime() safe across DST
-    const isToday= dd.getTime() === today.getTime();
-    const isSel  = state.date && state.date.getTime() === dd.getTime();
-    const cls    = ['cd', isPast ? 'past' : '', isToday && !isSel ? 'today' : '', isSel ? 'sel' : ''].filter(Boolean).join(' ');
-    const onclick = !isPast ? ` onclick="selectDate(${y},${m},${d})"` : '';
-    cells.push(`<div class="${cls}"${onclick} role="${!isPast ? 'button' : 'presentation'}" tabindex="${!isPast ? 0 : -1}"
-      aria-label="${!isPast ? `${d} ${MONTHS_RU[m]} ${y}` : ''}"
-      onkeydown="if(!${isPast}&&event.key==='Enter')selectDate(${y},${m},${d})">${d}</div>`); // W9 fix: aria-label
+/* ── boot ── */
+async function boot(){
+  renderSteps();showLoader();
+  try{
+    const [svcs,masters]=await Promise.all([get('/services'),get('/staff')]);
+    S.services=svcs;S.masters=masters;render();
+  }catch(e){
+    setHTML(`<div class="alert">Не удалось загрузить данные: ${esc(e.message)}</div>
+      <div class="acts"><button class="bp" onclick="boot()">Повторить</button></div>`);
   }
-
-  const busyForDay = state.date ? getMasterBusy(master, state.date) : [];
-  const timesHTML  = state.date
-    ? ALL_TIMES.map(t => {
-        const isBusy = busyForDay.includes(t);
-        const isSel  = state.time === t;
-        return `<button class="tbtn${isBusy ? ' busy' : ''}${isSel ? ' sel' : ''}"
-          ${isBusy ? 'disabled aria-disabled="true"' : `onclick="setState('time','${t}');render()"`}
-          aria-pressed="${isSel}">${t}</button>`;
-      }).join('')
-    : `<div class="no-slots">Сначала выберите дату</div>`;
-
-  return `<div class="stitle">Дата и время</div>
-  ${master ? `<div class="master-info">
-    <div style="width:28px;height:28px;border-radius:50%;background:${master.bg};color:${master.tc};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500">${esc(master.ini)}</div>
-    <div><div style="font-weight:500;font-size:12px">${esc(master.n)}</div><div style="color:#9e9e9a;font-size:11px">${esc(master.sp)}</div></div>
-  </div>` : ''}
-  <div class="cnav">
-    <button onclick="prevMonth()" aria-label="Предыдущий месяц"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
-    <span>${esc(MONTHS_RU[m])} ${y}</span>
-    <button onclick="nextMonth()" aria-label="Следующий месяц"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
-  </div>
-  <div class="cgrid" role="grid" aria-label="Календарь">
-    ${DAYS_RU.map(d => `<div class="cdh" role="columnheader">${d}</div>`).join('')}
-    ${cells.join('')}
-  </div>
-  <div style="margin-top:1rem">
-    <div style="font-size:13px;font-weight:500;color:#1a1a18;margin-bottom:2px">Время</div>
-    <div style="font-size:11px;color:#9e9e9a;margin-bottom:6px">Недоступные слоты заняты у мастера</div>
-    <div class="tgrid" role="group" aria-label="Выбор времени">${timesHTML}</div>
-  </div>
-  <div id="dt-err" class="err" aria-live="polite"></div>
-  <div class="acts">
-    <button class="bs" onclick="prev()"><i class="ti ti-arrow-left" aria-hidden="true"></i> Назад</button>
-    <button class="bp" onclick="validateDT()">Далее <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
-  </div>`;
 }
-
-// ── Step 4: Contact ───────────────────────────────────────────────────
-function renderContact() {
-  const svc    = SVCS.find(s => s.id === state.svc);
-  const master = MASTERS.find(m => m.id === state.master);
-  // W4/W5 fix: guard against null (user navigated back and cleared state)
-  if (!svc || !master) { prev(); return ''; }
-  const price  = calcPrice(svc.base, svc.coef, state.petSize);
-  const dateStr= state.date ? fmtDateLong(state.date) : '';
-
-  return `<div class="stitle">Ваши контакты</div>
-  <div style="background:#f5f5f4;border-radius:8px;padding:10px 12px;margin-bottom:1rem">
-    <div style="font-size:11px;color:#6b6b68;margin-bottom:6px;font-weight:500">Итог записи</div>
-    <div class="sr"><span style="color:#6b6b68">Услуга</span><span>${esc(svc.n)}</span></div>
-    <div class="sr"><span style="color:#6b6b68">Мастер</span>
-      <span style="display:flex;align-items:center;gap:6px">
-        <span style="width:20px;height:20px;border-radius:50%;background:${master.bg};color:${master.tc};display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:500">${esc(master.ini)}</span>
-        ${esc(master.n)}
-      </span>
-    </div>
-    <div class="sr"><span style="color:#6b6b68">Питомец</span>
-      <span>${esc(state.petName)}${state.petBreed ? ', ' + esc(state.petBreed) : ''}</span>
-    </div>
-    <div class="sr"><span style="color:#6b6b68">Дата и время</span><span>${esc(dateStr)}, ${esc(state.time)}</span></div>
-    <div class="sr"><span style="color:#6b6b68">Стоимость</span>
-      <span style="color:#0F6E56;font-weight:500">от ${price.toLocaleString('ru-RU')} ₽</span>
-    </div>
-  </div>
-  <label for="ownerName">Ваше имя</label>
-  <input id="ownerName" type="text" value="${esc(state.name)}" placeholder="Иван Петров"
-         oninput="state.name=this.value" autocomplete="name">
-  <label for="ownerPhone">Телефон</label>
-  <input id="ownerPhone" type="tel" value="${esc(state.phone)}" placeholder="+7 900 000-00-00"
-         oninput="state.phone=this.value" autocomplete="tel">
-  <label for="ownerEmail">E-mail <span style="color:#9e9e9a;font-size:11px">(необязательно)</span></label>
-  <input id="ownerEmail" type="email" value="${esc(state.email)}" placeholder="ivan@example.com"
-         oninput="state.email=this.value" autocomplete="email">
-  <div style="margin-top:10px;font-size:11px;color:#9e9e9a">
-    Подтверждение придёт по SMS. Напоминание — за 2 ч до визита.
-  </div>
-  <div id="contact-err" class="err" aria-live="polite"></div>
-  <div class="acts">
-    <button class="bs" onclick="prev()"><i class="ti ti-arrow-left" aria-hidden="true"></i> Назад</button>
-    <button class="bp" onclick="validateContact()">
-      <i class="ti ti-calendar-check" aria-hidden="true"></i> Записаться
-    </button>
-  </div>`;
-}
-
-// ── Step 5: Success ───────────────────────────────────────────────────
-function renderSuccess() {
-  const svc    = SVCS.find(s => s.id === state.svc);
-  const master = MASTERS.find(m => m.id === state.master);
-  const dateStr= state.date ? fmtDateLong(state.date) : '';
-  if (!svc || !master) { resetForm(); return ''; } // W4/W5 fix: guard nulls
-
-  return `<div class="ok-wrap">
-    <div class="ok-icon" aria-hidden="true">
-      <i class="ti ti-circle-check" style="font-size:24px;color:#1D9E75"></i>
-    </div>
-    <h2 style="font-size:20px;font-weight:500;margin-bottom:8px">Запись подтверждена!</h2>
-    <p style="font-size:13px;color:#6b6b68;margin-bottom:1.25rem">
-      Ждём вас и ${esc(state.petName)}. Детали отправлены на ${esc(state.phone)}.
-    </p>
-    <div class="ok-box">
-      <div class="ok-row"><i class="ti ti-scissors" aria-hidden="true"></i><span>${esc(svc.n)}</span></div>
-      <div class="ok-row">
-        <div style="width:22px;height:22px;border-radius:50%;background:${master.bg};color:${master.tc};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;flex-shrink:0">${esc(master.ini)}</div>
-        <span>${esc(master.n)}</span>
-      </div>
-      <div class="ok-row"><i class="ti ti-paw" aria-hidden="true"></i>
-        <span>${esc(state.petName)}${state.petBreed ? ' · ' + esc(state.petBreed) : ''} · ${state.petSize === 'small' ? 'мелкий' : state.petSize === 'medium' ? 'средний' : 'крупный'}</span>
-      </div>
-      <div class="ok-row"><i class="ti ti-calendar" aria-hidden="true"></i><span>${esc(dateStr)}</span></div>
-      <div class="ok-row"><i class="ti ti-clock" aria-hidden="true"></i><span>${esc(state.time)}</span></div>
-    </div>
-    <button class="bp" onclick="resetForm()">
-      <i class="ti ti-plus" aria-hidden="true"></i> Новая запись
-    </button>
-  </div>`;
-}
-
-// ── Navigation ────────────────────────────────────────────────────────
-function next() {
-  // W7 fix: JS-level guard — not bypassable via keyboard unlike HTML disabled
-  if (state.step === 0 && !state.svc) return;
-  if (state.step === 1 && !state.master) return;
-  state.step++;
-  render();
-}
-function prev() { state.step--; render(); }
-
-function setState(key, val) { state[key] = val; }
-
-function selectDate(y, m, d) {
-  state.date = new Date(y, m, d);
-  state.time = null;
-  render();
-}
-
-function prevMonth() {
-  const now = new Date();
-  // W6 fix: don't go before current month
-  if (state.calYear === now.getFullYear() && state.calMonth === now.getMonth()) return;
-  if (state.calMonth === 0) { state.calMonth = 11; state.calYear--; }
-  else { state.calMonth--; }
-  state.date = null;
-  state.time = null;
-  render();
-}
-
-function nextMonth() {
-  if (state.calMonth === 11) { state.calMonth = 0; state.calYear++; }
-  else { state.calMonth++; }
-  state.date = null;
-  state.time = null;
-  render();
-}
-
-// ── Validators ────────────────────────────────────────────────────────
-function validatePet() {
-  const name = document.getElementById('petName').value.trim();
-  state.petName = name;
-  state.petBreed = document.getElementById('petBreed').value.trim();
-  if (!name) {
-    document.getElementById('pet-err').textContent = 'Введите кличку питомца';
-    document.getElementById('petName').focus();
-    return;
-  }
-  next();
-}
-
-function validateDT() {
-  if (!state.date || !state.time) {
-    document.getElementById('dt-err').textContent = 'Выберите дату и время';
-    return;
-  }
-  next();
-}
-
-function validateContact() {
-  const name  = document.getElementById('ownerName').value.trim();
-  const phone = document.getElementById('ownerPhone').value.trim();
-  state.name  = name;
-  state.phone = phone;
-  state.email = document.getElementById('ownerEmail').value.trim();
-
-  const errEl = document.getElementById('contact-err');
-  if (!name) {
-    errEl.textContent = 'Введите ваше имя';
-    document.getElementById('ownerName').focus();
-    return;
-  }
-  if (!phone || !/^(?:\+7|8)[\s\-]?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$/.test(phone.replace(/\s/g,''))) {
-    errEl.textContent = 'Введите корректный номер телефона';
-    document.getElementById('ownerPhone').focus();
-    return;
-  }
-  // W10 fix: prevent double-submit
-  const btn = document.querySelector('.bp:not([disabled])');
-  if (btn) { btn.disabled = true; btn.textContent = 'Отправка…'; }
-  next();
-}
-
-// ── Reset ─────────────────────────────────────────────────────────────
-function resetForm() {
-  Object.assign(state, {
-    step:0, svc:null, master:null, petType:'dog',
-    petName:'', petBreed:'', petSize:'medium',
-    date:null, time:null, name:'', phone:'', email:'',
-    calYear:new Date().getFullYear(), calMonth:new Date().getMonth(),
-  });
-  render();
-}
-
-// ── Boot ──────────────────────────────────────────────────────────────
-render();
+boot();
 </script>
 </body>
 </html>
