@@ -172,3 +172,13 @@ async function main() {
 main()
   .catch(e => { console.error(e); process.exit(1); })
   .finally(() => prisma.$disconnect());
+
+// Admin user
+import * as bcrypt from 'bcryptjs';
+const adminHash = await bcrypt.hash('admin123', 10);
+await prisma.user.upsert({
+  where:  { email: 'admin@lyubi-grooming.ru' },
+  update: {},
+  create: { email: 'admin@lyubi-grooming.ru', password: adminHash, role: 'ADMIN' },
+});
+console.log('  ✓ Admin user created: admin@lyubi-grooming.ru / admin123');
