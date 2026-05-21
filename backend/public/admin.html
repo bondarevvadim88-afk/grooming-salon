@@ -3,23 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="ГрумПро — административная панель управления записями, мастерами и услугами">
-  <title>ГрумПро — Административная панель</title>
+  <title>ГрумПро — Панель управления</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/dist/tabler-icons.min.css">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    /* FIX #3 — sr-only was used but never defined */
-    .sr-only { position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
-    :root {
-      --bg:#fff; --bg2:#f5f5f4; --bg3:#f0efed;
-      --text:#1a1a18; --text2:#6b6b68; --text3:#9e9e9a;
-      --border:rgba(0,0,0,.10); --border2:rgba(0,0,0,.20);
-      --teal:#1D9E75; --teal-bg:#E1F5EE; --teal-dark:#0F6E56;
-      --amber:#854F0B; --amber-bg:#FAEEDA;
-      --blue:#185FA5; --blue-bg:#E6F1FB;
-      --purple:#534AB7; --purple-bg:#EEEDFE;
-      --danger:#A32D2D; --danger-bg:#FCEBEB;
-      --r:8px; --rl:12px;
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#fff;--bg2:#f5f5f4;--bg3:#f0efed;
+      --text:#1a1a18;--text2:#6b6b68;--text3:#9e9e9a;
+      --border:rgba(0,0,0,.10);--border2:rgba(0,0,0,.18);
+      --teal:#1D9E75;--teal-bg:#E1F5EE;--teal-dark:#0F6E56;
+      --amber:#854F0B;--danger:#A32D2D;--danger-bg:#FCEBEB;
+      --blue:#185FA5;--blue-bg:#E6F1FB;
+      --purple:#534AB7;--purple-bg:#EEEDFE;
+      --r:8px;--rl:12px;
       --font:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     }
     @media(prefers-color-scheme:dark){:root{
@@ -29,49 +25,70 @@
       --teal-bg:#04342C;
     }}
     body{font-family:var(--font);background:var(--bg3);color:var(--text);font-size:14px;min-height:100vh}
+
+    /* ── Login ── */
+    .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+    .login-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:32px;width:100%;max-width:380px}
+    .login-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:24px}
+    .login-logo .ico{width:40px;height:40px;border-radius:10px;background:var(--teal-bg);display:flex;align-items:center;justify-content:center}
+    .login-logo span{font-size:18px;font-weight:500}
+    .login-title{font-size:16px;font-weight:500;margin-bottom:4px;text-align:center}
+    .login-sub{font-size:13px;color:var(--text2);margin-bottom:24px;text-align:center}
+    .field{margin-bottom:14px}
+    .field label{display:block;font-size:12px;color:var(--text2);margin-bottom:5px}
+    .field input{width:100%;padding:9px 12px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font);outline:none;transition:border-color .15s}
+    .field input:focus{border-color:var(--teal)}
+    .btn-primary{width:100%;background:var(--teal);border:none;border-radius:var(--r);padding:10px;font-size:14px;font-weight:500;color:#fff;cursor:pointer;transition:opacity .15s;font-family:var(--font)}
+    .btn-primary:hover{opacity:.9}
+    .btn-primary:disabled{opacity:.4;cursor:not-allowed}
+    .login-err{font-size:12px;color:var(--danger);margin-top:10px;text-align:center;min-height:18px}
+
+    /* ── App layout ── */
     .app{display:flex;min-height:100vh}
-    .sidebar{width:200px;flex-shrink:0;background:var(--bg);border-right:.5px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+    .sidebar{width:200px;flex-shrink:0;background:var(--bg);border-right:0.5px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
     .main{flex:1;min-width:0;padding:24px;overflow-y:auto}
-    .s-logo{display:flex;align-items:center;gap:9px;padding:16px 16px 14px;border-bottom:.5px solid var(--border)}
+    .s-logo{display:flex;align-items:center;gap:9px;padding:16px 16px 14px;border-bottom:0.5px solid var(--border)}
     .s-logo .ico{width:30px;height:30px;border-radius:8px;background:var(--teal-bg);display:flex;align-items:center;justify-content:center}
     .s-logo span{font-size:14px;font-weight:500}
-    .snav{padding:8px 0;flex:1}
-    /* FIX #5 — keyboard nav via tabindex + onkeydown */
+    .s-user{padding:10px 16px;font-size:11px;background:var(--bg2);margin:8px;border-radius:var(--r);display:flex;align-items:center;justify-content:space-between}
+    .s-user .role{font-size:10px;padding:2px 6px;border-radius:6px;font-weight:500}
+    .role-admin{background:var(--teal-bg);color:var(--teal-dark)}
+    .role-master{background:var(--blue-bg);color:var(--blue)}
+    .snav{padding:4px 0;flex:1}
     .snav a{display:flex;align-items:center;gap:9px;padding:9px 16px;font-size:13px;cursor:pointer;color:var(--text2);text-decoration:none;transition:background .12s,color .12s}
     .snav a:hover{background:var(--bg2);color:var(--text)}
     .snav a:focus{outline:2px solid var(--teal);outline-offset:-2px}
     .snav a.active{background:var(--teal-bg);color:var(--teal-dark);font-weight:500}
     .snav a i{font-size:16px;flex-shrink:0}
-    .snav .sep{height:.5px;background:var(--border);margin:6px 14px}
-    .s-version{padding:10px 16px;font-size:11px;color:var(--text3)}
+    .snav .sep{height:0.5px;background:var(--border);margin:6px 14px}
+    .s-logout{padding:12px 16px;border-top:0.5px solid var(--border)}
+    .s-logout button{width:100%;background:none;border:0.5px solid var(--border2);border-radius:var(--r);padding:7px;font-size:12px;color:var(--text2);cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:6px}
+    .s-logout button:hover{border-color:var(--danger);color:var(--danger)}
+
+    /* ── Cards ── */
+    .card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:14px 16px;margin-bottom:14px}
+    .card h3{font-size:13px;font-weight:500;margin-bottom:12px;display:flex;align-items:center;gap:6px}
     .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
     .topbar h2{font-size:17px;font-weight:500}
     .topbar .acts{display:flex;gap:8px}
-    .card{background:var(--bg);border:.5px solid var(--border);border-radius:var(--rl);padding:14px 16px;margin-bottom:14px}
-    .card h3{font-size:13px;font-weight:500;margin-bottom:12px;display:flex;align-items:center;gap:6px}
     .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
     .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:14px}
     @media(max-width:900px){.g2{grid-template-columns:1fr}}
     @media(max-width:700px){.g4{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:480px){.g4{grid-template-columns:1fr}.sidebar{width:56px}.s-logo span,.s-version{display:none}.snav a{padding:10px;justify-content:center}.snav a i{font-size:18px}.main{padding:12px}}
     .mcard{background:var(--bg2);border-radius:var(--r);padding:12px 14px}
     .mcard .ml{font-size:11px;color:var(--text2);margin-bottom:4px}
     .mcard .mv{font-size:22px;font-weight:500}
-    .mcard .md{font-size:11px;margin-top:2px}
-    .ib{background:none;border:.5px solid var(--border2);border-radius:var(--r);padding:6px 12px;font-size:12px;color:var(--text2);cursor:pointer;transition:border-color .12s,color .12s;display:inline-flex;align-items:center;gap:5px}
+    .ib{background:none;border:0.5px solid var(--border2);border-radius:var(--r);padding:6px 12px;font-size:12px;color:var(--text2);cursor:pointer;transition:border-color .12s,color .12s;display:inline-flex;align-items:center;gap:5px;font-family:var(--font)}
     .ib:hover{border-color:var(--teal);color:var(--teal-dark)}
-    .ib:focus{outline:2px solid var(--teal);outline-offset:2px}
     .badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500}
     .badge.confirmed{background:#E1F5EE;color:#085041}
     .badge.pending{background:#FAEEDA;color:#633806}
     .badge.cancelled{background:#FCEBEB;color:#791F1F}
     .badge.completed{background:#E6F1FB;color:#0C447C}
     .badge.inprog{background:#EEEDFE;color:#3C3489}
-    .badge.delivered{background:#E1F5EE;color:#085041}
-    .badge.failed{background:#FCEBEB;color:#791F1F}
     .tbl{width:100%;border-collapse:collapse;font-size:12px}
-    .tbl th{text-align:left;padding:6px 8px;font-size:11px;font-weight:500;color:var(--text2);border-bottom:.5px solid var(--border)}
-    .tbl td{padding:8px;border-bottom:.5px solid var(--border);color:var(--text);vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .tbl th{text-align:left;padding:6px 8px;font-size:11px;font-weight:500;color:var(--text2);border-bottom:0.5px solid var(--border)}
+    .tbl td{padding:8px;border-bottom:0.5px solid var(--border);color:var(--text);vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .tbl tr:last-child td{border-bottom:none}
     .tbl tr:hover td{background:var(--bg2)}
     .ava{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;font-weight:500;flex-shrink:0}
@@ -81,18 +98,17 @@
     .bar-fill{height:6px;border-radius:3px}
     .tag{display:inline-block;font-size:10px;padding:2px 6px;border-radius:8px;background:var(--bg2);color:var(--text2);margin:2px 2px 0 0}
     .sched-wrap{overflow-x:auto}
-    /* FIX #12 — grid-template-columns set dynamically via JS */
     .sched-grid{display:grid;gap:3px}
     .sched-hdr{font-size:11px;font-weight:500;color:var(--text2);text-align:center;padding:4px;background:var(--bg2);border-radius:var(--r)}
     .sched-time{font-size:11px;color:var(--text3);text-align:right;padding:5px 6px 0 0}
-    .sched-slot{border-radius:5px;padding:4px 5px;min-height:28px;font-size:10px;cursor:pointer;border:.5px solid transparent;transition:all .12s}
+    .sched-slot{border-radius:5px;padding:4px 5px;min-height:28px;font-size:10px;cursor:pointer;border:0.5px solid transparent;transition:all .12s}
     .sched-slot.free{background:var(--bg2)}
     .sched-slot.free:hover{border-color:var(--teal);background:var(--teal-bg)}
     .sched-slot.booked{background:var(--teal-bg);color:#085041;border-color:#9FE1CB}
     .sched-slot.wait{background:#FAEEDA;color:#633806;border-color:#FAC775}
     .sched-slot.done{background:#E6F1FB;color:#0C447C;border-color:#B5D4F4}
     .filter-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
-    .filter-row select,.filter-row input{font-size:12px;padding:5px 8px;border:.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text)}
+    .filter-row select,.filter-row input{font-size:12px;padding:5px 8px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text);font-family:var(--font)}
     .filter-row input{flex:1;min-width:140px}
     .toggle{position:relative;width:30px;height:17px;display:inline-block}
     .toggle input{opacity:0;width:0;height:0;position:absolute}
@@ -100,426 +116,567 @@
     .tslider::before{content:'';position:absolute;width:13px;height:13px;left:2px;top:2px;border-radius:50%;background:#fff;transition:.2s}
     .toggle input:checked+.tslider{background:var(--teal)}
     .toggle input:checked+.tslider::before{transform:translateX(13px)}
-    .svc-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:.5px solid var(--border);gap:10px}
+    .svc-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--border);gap:10px}
     .svc-row:last-child{border-bottom:none}
-    .tl-item{position:relative;padding:0 0 12px 16px;border-left:.5px solid var(--border)}
-    .tl-item:last-child{border-left:.5px solid transparent;padding-bottom:0}
-    .tl-dot{position:absolute;left:-5px;top:3px;width:9px;height:9px;border-radius:50%;border:.5px solid var(--border);background:var(--bg)}
+    .tl-item{position:relative;padding:0 0 12px 16px;border-left:0.5px solid var(--border)}
+    .tl-item:last-child{border-left:0.5px solid transparent;padding-bottom:0}
+    .tl-dot{position:absolute;left:-5px;top:3px;width:9px;height:9px;border-radius:50%;border:0.5px solid var(--border);background:var(--bg)}
     .tl-dot.ok{background:var(--teal);border-color:var(--teal)}
-    .tl-dot.warn{background:#EF9F27;border-color:#EF9F27}
-    .stat-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:.5px solid var(--border);font-size:12px}
+    .stat-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--border);font-size:12px}
     .stat-row:last-child{border-bottom:none}
-    /* FIX #11 — removed unused .nch-badge */
+    .alert{background:var(--danger-bg);color:var(--danger);border-radius:var(--r);padding:10px 14px;font-size:13px;margin-bottom:12px}
+    .loader{display:flex;align-items:center;justify-content:center;padding:40px}
+    .spinner{width:24px;height:24px;border:3px solid var(--teal-bg);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* ── Schedule editor ── */
+    .day-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:0.5px solid var(--border)}
+    .day-row:last-child{border-bottom:none}
+    .day-name{width:36px;font-size:12px;font-weight:500;color:var(--text)}
+    .day-times{display:flex;gap:8px;align-items:center;flex:1;flex-wrap:wrap}
+    .day-times input[type=time]{padding:4px 6px;border:0.5px solid var(--border2);border-radius:var(--r);font-size:12px;background:var(--bg);color:var(--text);font-family:var(--font)}
+    .day-times input[type=time]:disabled{opacity:.4}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
+    .modal{background:var(--bg);border-radius:var(--rl);padding:24px;width:100%;max-width:420px;max-height:90vh;overflow-y:auto}
+    .modal h3{font-size:15px;font-weight:500;margin-bottom:16px}
+    .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+    .btn-save{background:var(--teal);border:none;border-radius:var(--r);padding:8px 20px;font-size:13px;font-weight:500;color:#fff;cursor:pointer;font-family:var(--font)}
+    .btn-cancel{background:none;border:0.5px solid var(--border2);border-radius:var(--r);padding:8px 16px;font-size:13px;color:var(--text2);cursor:pointer;font-family:var(--font)}
   </style>
 </head>
 <body>
-<div class="app">
-  <aside class="sidebar" aria-label="Боковая навигация">
-    <div class="s-logo">
-      <div class="ico" aria-hidden="true"><i class="ti ti-scissors" style="font-size:15px;color:var(--teal-dark)"></i></div>
+
+<!-- ── Login screen ── -->
+<div id="login-screen" class="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="ico"><i class="ti ti-scissors" style="font-size:18px;color:#0F6E56" aria-hidden="true"></i></div>
       <span>ГрумПро</span>
     </div>
-    <nav class="snav">
-      <!-- FIX #5 — tabindex + role + onkeydown for keyboard navigation -->
-      <a class="active" tabindex="0" role="button" onclick="nav('dash',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();nav('dash',this)}">
-        <i class="ti ti-layout-dashboard" aria-hidden="true"></i>Дашборд</a>
-      <a tabindex="0" role="button" onclick="nav('sched',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();nav('sched',this)}">
-        <i class="ti ti-calendar" aria-hidden="true"></i>Расписание</a>
-      <a tabindex="0" role="button" onclick="nav('hist',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();nav('hist',this)}">
-        <i class="ti ti-clock-history" aria-hidden="true"></i>История</a>
-      <div class="sep" role="separator"></div>
-      <a tabindex="0" role="button" onclick="nav('masters',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();nav('masters',this)}">
-        <i class="ti ti-users" aria-hidden="true"></i>Мастера</a>
-      <a tabindex="0" role="button" onclick="nav('svcs',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();nav('svcs',this)}">
-        <i class="ti ti-cut" aria-hidden="true"></i>Услуги</a>
-      <div class="sep" role="separator"></div>
-      <a tabindex="0" role="button" onclick="nav('notif',this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();nav('notif',this)}">
-        <i class="ti ti-bell" aria-hidden="true"></i>Уведомления</a>
-    </nav>
-    <div class="s-version">v1.1.0 · ГрумПро</div>
+    <div class="login-title">Вход в панель управления</div>
+    <div class="login-sub">Введите email и пароль</div>
+    <div class="field">
+      <label>Email</label>
+      <input id="login-email" type="email" placeholder="admin@lyubi-grooming.ru" autocomplete="email">
+    </div>
+    <div class="field">
+      <label>Пароль</label>
+      <input id="login-password" type="password" placeholder="••••••••" autocomplete="current-password"
+             onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn-primary" id="login-btn" onclick="doLogin()">Войти</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- ── App screen ── -->
+<div id="app-screen" class="app" style="display:none">
+  <aside class="sidebar">
+    <div class="s-logo">
+      <div class="ico" aria-hidden="true"><i class="ti ti-scissors" style="font-size:15px;color:#0F6E56"></i></div>
+      <span>ГрумПро</span>
+    </div>
+    <div class="s-user">
+      <span id="user-email" style="font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100px"></span>
+      <span class="role" id="user-role-badge"></span>
+    </div>
+    <nav class="snav" id="sidebar-nav"></nav>
+    <div class="s-logout">
+      <button onclick="doLogout()"><i class="ti ti-logout" aria-hidden="true"></i> Выйти</button>
+    </div>
   </aside>
   <main class="main" id="main-content" aria-live="polite"></main>
 </div>
+
+<!-- ── Schedule modal ── -->
+<div id="schedule-modal" class="modal-overlay" style="display:none">
+  <div class="modal">
+    <h3>Моё расписание</h3>
+    <div id="schedule-editor"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeSchedule()">Отмена</button>
+      <button class="btn-save" onclick="saveSchedule()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
 <script>
 "use strict";
-// ── Data ──────────────────────────────────────────────────────────────
-// ── DEMO MODE ─────────────────────────────────────────────────────────
-// A8 fix: set IS_DEMO=false and remove DEMO_TODAY references for production
-const IS_DEMO    = true;
-const DEMO_TODAY = '14.05.2025';
-// Production: const DEMO_TODAY = new Date().toLocaleDateString('ru-RU');
-// ──────────────────────────────────────────────────────────────────────
-let MASTERS = [
-  {id:'ms',ini:'МС',n:'Мария Соколова', sp:'Декоративные породы, кошки',exp:'7 лет',rt:4.9,rv:142,active:true, bg:'#E1F5EE',tc:'#0F6E56', tags:['Пудели','Мальтезе','Кошки'],  sched:'Пн–Пт 9:00–19:00', visits:142,rev:218000,badge:'Мастер месяца'},
-  {id:'am',ini:'АМ',n:'Алексей Морозов',sp:'Крупные и средние породы',  exp:'5 лет',rt:4.7,rv:98, active:true, bg:'#E6F1FB',tc:'#185FA5',tags:['Лабрадоры','Овчарки','Хаски'], sched:'Вт–Сб 10:00–20:00',visits:98, rev:176000,badge:null},
-  {id:'ev',ini:'ЕВ',n:'Елена Васильева',sp:'SPA-уход, первый груминг',  exp:'6 лет',rt:4.8,rv:115,active:true, bg:'#EEEDFE',tc:'#534AB7',tags:['Йорки','Шпицы','Щенки'],       sched:'Пн–Пт 10:00–18:00',visits:115,rev:194000,badge:null},
-];
-let SVCS = [
-  {id:'bath', ic:'ti-droplet',  n:'Купание',        d:'Шампунь, сушка, расчёска',     base:800, dur:60, active:true, coef:{small:.8,medium:1,large:1.5}},
-  {id:'full', ic:'ti-cut',      n:'Полный груминг', d:'Купание + стрижка + укладка',   base:2000,dur:120,active:true, coef:{small:.8,medium:1,large:1.5}},
-  {id:'trim', ic:'ti-scissors', n:'Стрижка',        d:'Модельная или гигиеническая',   base:1200,dur:75, active:true, coef:{small:.8,medium:1,large:1.5}},
-  {id:'nails',ic:'ti-hand-stop',n:'Когти и уши',    d:'Стрижка когтей, чистка ушей',   base:400, dur:30, active:true, coef:{small:1, medium:1,large:1.5}},
-  {id:'spa',  ic:'ti-sparkles', n:'SPA-пакет',      d:'Маска, массаж, ароматизация',   base:1500,dur:90, active:true, coef:{small:.8,medium:1,large:1.5}},
-  {id:'puppy',ic:'ti-star',     n:'Первый груминг', d:'Мягкое знакомство для щенков', base:600, dur:60, active:false,coef:{small:1, medium:1,large:1  }},
-];
-const APPTS = [
-  {id:'A001',client:'Анна Смирнова',  phone:'+7 916 123-45-67',pet:'Бублик',breed:'Пудель',     sz:'small', svc:'Полный груминг',  mi:'МС',mn:'Мария Соколова', mbg:'#E1F5EE',mtc:'#0F6E56', date:DEMO_TODAY,  time:'10:00',price:1600,status:'inprog',   dur:120},
-  {id:'A002',client:'Игорь Петров',   phone:'+7 903 234-56-78',pet:'Рекс',  breed:'Овчарка',   sz:'large', svc:'Купание',         mi:'АМ',mn:'Алексей Морозов',mbg:'#E6F1FB',mtc:'#185FA5',date:DEMO_TODAY,  time:'11:30',price:1200,status:'confirmed',dur:90},
-  {id:'A003',client:'Светлана Ким',   phone:'+7 926 345-67-89',pet:'Муся',  breed:'Перс',      sz:'medium',svc:'Купание+стрижка', mi:'ЕВ',mn:'Елена Васильева',mbg:'#EEEDFE',mtc:'#534AB7',date:DEMO_TODAY,  time:'12:00',price:2000,status:'confirmed',dur:100},
-  {id:'A004',client:'Дмитрий Орлов',  phone:'+7 999 456-78-90',pet:'Зефир', breed:'Шпиц',     sz:'small', svc:'Первый груминг',  mi:'ЕВ',mn:'Елена Васильева',mbg:'#EEEDFE',mtc:'#534AB7',date:DEMO_TODAY,  time:'14:00',price:480, status:'pending',  dur:60},
-  {id:'A005',client:'Ольга Новак',    phone:'+7 905 567-89-01',pet:'Тедди', breed:'Лабрадор',  sz:'large', svc:'Полный груминг',  mi:'АМ',mn:'Алексей Морозов',mbg:'#E6F1FB',mtc:'#185FA5',date:DEMO_TODAY,  time:'15:00',price:3000,status:'confirmed',dur:150},
-  {id:'A006',client:'Мария Зайцева',  phone:'+7 916 678-90-12',pet:'Кексик',breed:'Йорк',     sz:'small', svc:'SPA-пакет',       mi:'МС',mn:'Мария Соколова', mbg:'#E1F5EE',mtc:'#0F6E56', date:DEMO_TODAY,  time:'16:30',price:1200,status:'confirmed',dur:90},
-  {id:'A007',client:'Никита Волков',  phone:'+7 929 789-01-23',pet:'Джек',  breed:'Хаски',    sz:'large', svc:'Стрижка когтей',  mi:'АМ',mn:'Алексей Морозов',mbg:'#E6F1FB',mtc:'#185FA5',date:'13.05.2025',time:'10:00',price:600, status:'completed',dur:30},
-  {id:'A008',client:'Анна Смирнова',  phone:'+7 916 123-45-67',pet:'Бублик',breed:'Пудель',   sz:'small', svc:'Купание',         mi:'МС',mn:'Мария Соколова', mbg:'#E1F5EE',mtc:'#0F6E56', date:'01.05.2025',time:'11:00',price:640, status:'completed',dur:60},
-  {id:'A009',client:'Светлана Ким',   phone:'+7 926 345-67-89',pet:'Муся',  breed:'Перс',     sz:'medium',svc:'SPA-пакет',       mi:'ЕВ',mn:'Елена Васильева',mbg:'#EEEDFE',mtc:'#534AB7',date:'22.04.2025',time:'13:00',price:1500,status:'completed',dur:90},
-  {id:'A010',client:'Сергей Белов',   phone:'+7 911 890-12-34',pet:'Фокси', breed:'Фокстерьер',sz:'small',svc:'Стрижка',         mi:'МС',mn:'Мария Соколова', mbg:'#E1F5EE',mtc:'#0F6E56', date:'10.05.2025',time:'14:00',price:960, status:'cancelled',dur:60},
-];
-const NOTIF_TYPES=[
-  {key:'BOOKING_CONFIRMED',label:'Подтверждение записи',channels:['SMS','Email','Telegram']},
-  {key:'REMINDER_24H',     label:'Напоминание за 24 ч', channels:['SMS','Telegram','Push']},
-  {key:'REMINDER_2H',      label:'Напоминание за 2 ч',  channels:['SMS','Push']},
-  {key:'BOOKING_CANCELLED',label:'Отмена записи',       channels:['SMS','Email']},
-  {key:'REVIEW_REQUEST',   label:'Запрос отзыва (+3 ч)', channels:['SMS','Telegram','VK']},
-  {key:'BOOKING_CHANGED',  label:'Перенос записи',      channels:['SMS','Email','Telegram']},
-];
-const ALL_CHANNELS=['SMS','Email','Telegram','VK','MAX','Push'];
-let notifState=JSON.parse(JSON.stringify(NOTIF_TYPES));
-const STATUS_LABEL={confirmed:'Подтверждена',pending:'Ожидает',cancelled:'Отменена',completed:'Завершена',inprog:'В работе'};
 
-// ── Filter & Schedule state ─────────────────────────────────────────
-let fMaster='all',fStatus='all',fSearch='';
-let schedDate=new Date(); // A7 fix: default to today
+const API = 'https://grooming-salon-production.up.railway.app';
+const AVA = [{bg:'#E1F5EE',tc:'#0F6E56'},{bg:'#E6F1FB',tc:'#185FA5'},{bg:'#EEEDFE',tc:'#534AB7'}];
+const STATUS_LABEL = {confirmed:'Подтверждена',pending:'Ожидает',cancelled:'Отменена',completed:'Завершена',inprog:'В работе'};
+const DAYS_RU = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+const SCHED_TIMES = ['09:00','09:30','10:00','10:30','11:00','11:30','12:00','13:00','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00'];
 
-// ── Helpers ─────────────────────────────────────────────────────────
-function ava(ini,bg,tc,sz=20){
-  return `<div class="ava" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.42)}px;background:${bg};color:${tc}">${ini}</div>`;
-}
-function calcPrice(base,coef,sz){
-  return Math.round(base*(coef[sz]??1)/10)*10;
-}
-function esc(s){
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-}
-function fmtDate(d){return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric'})}
+// ── State ──
+let AUTH = JSON.parse(localStorage.getItem('groomauth') || 'null');
+let CACHE = { appointments:[], staff:[], services:[] };
+let fMaster='all', fStatus='all', fSearch='';
+let schedDate = new Date();
 
-// ── Navigation ───────────────────────────────────────────────────────
-function nav(page,el){
-  document.querySelectorAll('.snav a').forEach(a=>a.classList.remove('active'));
-  if(el)el.classList.add('active');
-  const pages={dash:renderDash,sched:renderSched,hist:renderHist,masters:renderMasters,svcs:renderSvcs,notif:renderNotif};
-  // A9 fix: try/catch prevents blank screen on render error
+// ── Helpers ──
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function ava(idx,sz=20){const a=AVA[idx%AVA.length];return `<div class="ava" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.42)}px;background:${a.bg};color:${a.tc}">${esc(AUTH?.user?.role)}</div>`}
+function avaOf(name,idx,sz=20){const a=AVA[idx%AVA.length];const i=(name||'').split(' ').slice(0,2).map(w=>w[0]).join('');return `<div class="ava" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.42)}px;background:${a.bg};color:${a.tc}">${esc(i)}</div>`}
+function fmtDate(d){return new Date(d).toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric'})}
+function fmtTime(d){return new Date(d).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}
+function setHTML(html){document.getElementById('main-content').innerHTML=html}
+function showLoader(){setHTML('<div class="loader"><div class="spinner"></div></div>')}
+function isAdmin(){return AUTH?.user?.role==='ADMIN'}
+
+// ── API ──
+async function apiFetch(path, opts={}){
+  const headers = {'Content-Type':'application/json'};
+  if(AUTH?.access_token) headers['Authorization'] = 'Bearer '+AUTH.access_token;
+  const r = await fetch(API+path, {...opts, headers:{...headers,...(opts.headers||{})}});
+  if(r.status===401){doLogout();throw new Error('Сессия истекла')}
+  if(!r.ok){const d=await r.json().catch(()=>({}));throw new Error(d.message||'Ошибка '+r.status)}
+  return r.json();
+}
+
+// ── Auth ──
+async function doLogin(){
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-password').value;
+  const err   = document.getElementById('login-err');
+  const btn   = document.getElementById('login-btn');
+  if(!email||!pass){err.textContent='Введите email и пароль';return;}
+  btn.disabled=true; btn.textContent='Вход…'; err.textContent='';
   try {
-    document.getElementById('main-content').innerHTML=(pages[page]??renderDash)();
-  } catch(err) {
-    document.getElementById('main-content').innerHTML=`<div style="padding:24px;color:var(--danger)"><b>Ошибка рендера: ${err.message}</b><br><pre style="font-size:11px;margin-top:8px;opacity:.7">${err.stack}</pre></div>`;
-    console.error('nav render error:', err);
+    const data = await fetch(API+'/auth/login',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({email, password:pass})
+    }).then(r=>r.json());
+    if(!data.access_token) throw new Error(data.message||'Ошибка входа');
+    AUTH = data;
+    localStorage.setItem('groomauth', JSON.stringify(AUTH));
+    showApp();
+  } catch(e){
+    err.textContent = e.message||'Неверный email или пароль';
+    btn.disabled=false; btn.textContent='Войти';
   }
 }
 
-// ── DASHBOARD ────────────────────────────────────────────────────────
+function doLogout(){
+  AUTH=null; localStorage.removeItem('groomauth');
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('app-screen').style.display='none';
+  document.getElementById('login-password').value='';
+  document.getElementById('login-err').textContent='';
+  document.getElementById('login-btn').disabled=false;
+  document.getElementById('login-btn').textContent='Войти';
+}
+
+// ── App init ──
+async function showApp(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app-screen').style.display='flex';
+  document.getElementById('user-email').textContent = AUTH.user.email;
+  const rb = document.getElementById('user-role-badge');
+  rb.textContent = isAdmin() ? 'Администратор' : 'Мастер';
+  rb.className = 'role ' + (isAdmin() ? 'role-admin' : 'role-master');
+  buildNav();
+  await loadData();
+  navTo('dash', document.querySelector('.snav a.active'));
+}
+
+function buildNav(){
+  const nav = document.getElementById('sidebar-nav');
+  const adminLinks = [
+    {id:'dash',   icon:'ti-layout-dashboard', label:'Дашборд'},
+    {id:'sched',  icon:'ti-calendar',          label:'Расписание'},
+    {id:'hist',   icon:'ti-clock-history',     label:'История'},
+    {sep:true},
+    {id:'masters',icon:'ti-users',             label:'Мастера'},
+    {id:'svcs',   icon:'ti-cut',               label:'Услуги'},
+    {sep:true},
+    {id:'notif',  icon:'ti-bell',              label:'Уведомления'},
+  ];
+  const masterLinks = [
+    {id:'my-sched', icon:'ti-calendar',        label:'Моё расписание'},
+    {id:'my-appts', icon:'ti-clock-history',   label:'Мои записи'},
+  ];
+  const links = isAdmin() ? adminLinks : masterLinks;
+  nav.innerHTML = links.map((l,i)=>{
+    if(l.sep) return '<div class="sep" role="separator"></div>';
+    const active = i===0 ? ' active' : '';
+    return `<a class="${active}" tabindex="0" role="button"
+      onclick="navTo('${l.id}',this)"
+      onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();navTo('${l.id}',this)}">
+      <i class="ti ${l.icon}" aria-hidden="true"></i>${esc(l.label)}
+    </a>`;
+  }).join('');
+}
+
+async function loadData(){
+  try {
+    const [appts, staff, services] = await Promise.all([
+      apiFetch('/appointments').catch(()=>[]),
+      apiFetch('/staff').catch(()=>[]),
+      apiFetch('/services').catch(()=>[]),
+    ]);
+    CACHE.appointments = Array.isArray(appts) ? appts : [];
+    CACHE.staff = Array.isArray(staff) ? staff : [];
+    CACHE.services = Array.isArray(services) ? services : [];
+  } catch(e){ console.error('loadData error', e); }
+}
+
+function navTo(page, el){
+  document.querySelectorAll('.snav a').forEach(a=>a.classList.remove('active'));
+  if(el) el.classList.add('active');
+  try {
+    const pages = {
+      dash: renderDash, sched: renderSched, hist: renderHist,
+      masters: renderMasters, svcs: renderSvcs, notif: renderNotif,
+      'my-sched': renderMySchedule, 'my-appts': renderMyAppts,
+    };
+    (pages[page]||renderDash)();
+  } catch(e){
+    setHTML(`<div class="alert">Ошибка: ${esc(e.message)}</div>`);
+    console.error(e);
+  }
+}
+
+// ══════════════════════════════════════════
+// ADMIN VIEWS
+// ══════════════════════════════════════════
+
 function renderDash(){
-  const todayA=APPTS.filter(a=>a.date===DEMO_TODAY);
-  const dayRev=todayA.filter(a=>a.status==='completed'||a.status==='inprog').reduce((s,a)=>s+a.price,0);
-  const monthRev=APPTS.reduce((s,a)=>s+a.price,0);
-  const noPct=Math.round(APPTS.filter(a=>a.status==='cancelled').length/APPTS.length*100);
-  return `
-  <div class="topbar"><h2>Дашборд</h2><div class="acts">
-    <button class="ib"><i class="ti ti-refresh" aria-hidden="true"></i> Обновить</button>
-    <button class="ib"><i class="ti ti-download" aria-hidden="true"></i> Отчёт</button>
-  </div></div>
+  const today = new Date().toLocaleDateString('ru-RU');
+  const todayA = CACHE.appointments.filter(a=>fmtDate(a.startAt)===today);
+  const dayRev = todayA.filter(a=>['completed','inprog'].includes(a.status)).reduce((s,a)=>s+a.totalPrice,0);
+  const monthRev = CACHE.appointments.reduce((s,a)=>s+a.totalPrice,0);
+  const noPct = CACHE.appointments.length ? Math.round(CACHE.appointments.filter(a=>a.status==='cancelled').length/CACHE.appointments.length*100) : 0;
+
+  setHTML(`
+  <div class="topbar"><h2>Дашборд</h2>
+    <div class="acts"><button class="ib" onclick="loadData().then(renderDash)"><i class="ti ti-refresh" aria-hidden="true"></i> Обновить</button></div>
+  </div>
   <div class="g4">
-    <div class="mcard"><div class="ml">Записей сегодня</div><div class="mv">${todayA.length}</div><div class="md" style="color:var(--teal-dark)"><i class="ti ti-trending-up" style="font-size:11px" aria-hidden="true"></i> +2 к вчера</div></div>
-    <div class="mcard"><div class="ml">Выручка сегодня</div><div class="mv">${dayRev.toLocaleString('ru-RU')} ₽</div><div class="md" style="color:var(--teal-dark)"><i class="ti ti-trending-up" style="font-size:11px" aria-hidden="true"></i> +14%</div></div>
-    <div class="mcard"><div class="ml">Выручка за месяц</div><div class="mv">${monthRev.toLocaleString('ru-RU')} ₽</div><div class="md" style="color:var(--text2)">план: 180 000 ₽</div></div>
-    <div class="mcard"><div class="ml">% отмен / неявок</div><div class="mv">${noPct}%</div><div class="md" style="color:var(--amber)"><i class="ti ti-trending-down" style="font-size:11px" aria-hidden="true"></i> −2% к пр. нед.</div></div>
+    <div class="mcard"><div class="ml">Записей сегодня</div><div class="mv">${todayA.length}</div></div>
+    <div class="mcard"><div class="ml">Выручка сегодня</div><div class="mv">${dayRev.toLocaleString('ru-RU')} ₽</div></div>
+    <div class="mcard"><div class="ml">Выручка за всё время</div><div class="mv">${monthRev.toLocaleString('ru-RU')} ₽</div></div>
+    <div class="mcard"><div class="ml">% отмен</div><div class="mv">${noPct}%</div></div>
   </div>
   <div class="g2">
     <div class="card">
-      <h3><i class="ti ti-calendar" style="font-size:15px;color:var(--teal)" aria-hidden="true"></i> Записи сегодня</h3>
+      <h3><i class="ti ti-calendar" style="color:var(--teal)" aria-hidden="true"></i> Записи сегодня</h3>
+      ${todayA.length===0?'<div style="color:var(--text3);font-size:13px">Записей нет</div>':''}
       <table class="tbl" style="table-layout:fixed">
-        <colgroup><col style="width:44px"><col><col style="width:82px"><col style="width:110px"><col style="width:92px"></colgroup>
+        <colgroup><col style="width:44px"><col><col style="width:82px"><col style="width:100px"><col style="width:90px"></colgroup>
         <thead><tr><th>Вр.</th><th>Клиент / питомец</th><th>Мастер</th><th>Услуга</th><th>Статус</th></tr></thead>
         <tbody>${todayA.map(a=>`<tr>
-          <td style="color:var(--text2)">${esc(a.time)}</td>
-          <td><div style="font-size:12px;font-weight:500">${esc(a.client)}</div><div style="font-size:10px;color:var(--text2)">${esc(a.pet)}, ${esc(a.breed)}</div></td>
-          <td><div style="display:flex;align-items:center;gap:4px">${ava(a.mi,a.mbg,a.mtc,20)}<span style="font-size:11px;color:var(--text2)">${esc(a.mn.split(' ')[0])}</span></div></td>
-          <td style="font-size:11px">${esc(a.svc)}</td>
-          <td><span class="badge ${a.status}">${STATUS_LABEL[a.status]??a.status}</span></td>
+          <td style="color:var(--text2)">${fmtTime(a.startAt)}</td>
+          <td><div style="font-size:12px;font-weight:500">${esc(a.client?.name||'—')}</div><div style="font-size:10px;color:var(--text2)">${esc(a.pet?.name||'—')}</div></td>
+          <td style="font-size:11px;color:var(--text2)">${esc(a.staff?.name?.split(' ')[0]||'—')}</td>
+          <td style="font-size:11px">${esc(a.service?.name||'—')}</td>
+          <td><span class="badge ${a.status}">${STATUS_LABEL[a.status]||a.status}</span></td>
         </tr>`).join('')}</tbody>
       </table>
     </div>
-    <div>
-      <div class="card">
-        <h3><i class="ti ti-chart-bar" style="font-size:15px;color:var(--teal)" aria-hidden="true"></i> Загрузка мастеров</h3>
-        ${MASTERS.map(m=>{
-          const cnt=todayA.filter(a=>a.mi===m.ini).length;
-          const pct=Math.round(cnt/8*100);
-          return `<div class="bar-wrap"><div class="bar-label"><span style="display:flex;align-items:center;gap:5px">${ava(m.ini,m.bg,m.tc,18)} ${esc(m.n.split(' ')[0])}</span><span>${cnt} зап. · ${pct}%</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${m.tc};opacity:.85"></div></div></div>`;
-        }).join('')}
-      </div>
-      <div class="card">
-        <h3><i class="ti ti-star" style="font-size:15px;color:var(--teal)" aria-hidden="true"></i> Топ услуг (месяц)</h3>
-        ${[{n:'Полный груминг',cnt:4,pct:36},{n:'Купание',cnt:3,pct:27},{n:'SPA-пакет',cnt:2,pct:18},{n:'Стрижка',cnt:2,pct:18}].map(s=>`<div class="bar-wrap"><div class="bar-label"><span>${esc(s.n)}</span><span>${s.cnt} зап.</span></div><div class="bar-track"><div class="bar-fill" style="width:${s.pct}%;background:#1D9E75"></div></div></div>`).join('')}
-      </div>
+    <div class="card">
+      <h3><i class="ti ti-users" style="color:var(--teal)" aria-hidden="true"></i> Мастера</h3>
+      ${CACHE.staff.map((m,i)=>{
+        const cnt=CACHE.appointments.filter(a=>a.staffId===m.id).length;
+        return `<div class="bar-wrap">
+          <div class="bar-label"><span style="display:flex;align-items:center;gap:5px">${avaOf(m.name,i,18)} ${esc(m.name.split(' ')[0])}</span><span>${cnt} зап.</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:${Math.min(cnt*10,100)}%;background:${AVA[i%AVA.length].tc}"></div></div>
+        </div>`;
+      }).join('')}
     </div>
-  </div>`;
+  </div>`);
 }
 
-// ── SCHEDULE ────────────────────────────────────────────────────────
-const SCHED_TIMES=['09:00','09:30','10:00','10:30','11:00','11:30','12:00','13:00','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00'];
-
 function renderSched(){
-  const dateStr=fmtDate(schedDate);
-  const todayA=APPTS.filter(a=>a.date===dateStr);
-  const cols=`64px repeat(${MASTERS.length},1fr)`;
-  return `
-  <div class="topbar">
-    <h2>Расписание</h2>
-    <div class="acts">
-      <!-- FIX #13: prev/next now call schedNav() and actually re-render -->
-      <button class="ib" onclick="schedNav(-1)"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
-      <button class="ib" onclick="schedNav(0)">Сегодня</button>
-      <button class="ib" onclick="schedNav(1)"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
-    </div>
-  </div>
+  const todayStr = new Date().toLocaleDateString('ru-RU');
+  const todayA = CACHE.appointments.filter(a=>fmtDate(a.startAt)===todayStr);
+  const cols = `64px repeat(${CACHE.staff.length},1fr)`;
+  setHTML(`
+  <div class="topbar"><h2>Расписание — сегодня</h2></div>
   <div class="card">
-    <div style="font-size:13px;font-weight:500;margin-bottom:10px;color:var(--text2)">
-      ${schedDate.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
-    </div>
     <div class="sched-wrap">
       <div class="sched-grid" style="grid-template-columns:${cols}">
         <div class="sched-hdr"></div>
-        ${MASTERS.map(m=>`<div class="sched-hdr"><div style="display:flex;align-items:center;justify-content:center;gap:5px">${ava(m.ini,m.bg,m.tc,22)}<span>${esc(m.n.split(' ')[0])}</span></div></div>`).join('')}
+        ${CACHE.staff.map((m,i)=>`<div class="sched-hdr"><div style="display:flex;align-items:center;justify-content:center;gap:5px">${avaOf(m.name,i,22)}<span>${esc(m.name.split(' ')[0])}</span></div></div>`).join('')}
         ${SCHED_TIMES.map(t=>`
           <div class="sched-time">${t}</div>
-          ${MASTERS.map(m=>{
-            const a=todayA.find(x=>x.time===t&&x.mi===m.ini);
+          ${CACHE.staff.map(m=>{
+            const a=todayA.find(x=>fmtTime(x.startAt)===t&&x.staffId===m.id);
             if(a){const cls=a.status==='pending'?'wait':a.status==='completed'?'done':'booked';
-              return `<div class="sched-slot ${cls}" title="${esc(a.client)} — ${esc(a.svc)}"><div style="font-weight:500">${esc(a.pet)}</div><div style="opacity:.8;font-size:9px">${esc(a.svc)}</div></div>`;}
-            return `<div class="sched-slot free" title="Свободно"></div>`;
+              return `<div class="sched-slot ${cls}" title="${esc(a.client?.name)} — ${esc(a.service?.name)}"><div style="font-weight:500">${esc(a.pet?.name||'—')}</div><div style="opacity:.8;font-size:9px">${esc(a.service?.name||'')}</div></div>`;}
+            return `<div class="sched-slot free"></div>`;
           }).join('')}
         `).join('')}
       </div>
     </div>
     <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
-      ${[['booked','Подтверждено / в работе'],['wait','Ожидает'],['done','Завершено']].map(([c,l])=>`<div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><div class="sched-slot ${c}" style="width:14px;height:14px;min-height:0;flex-shrink:0"></div>${l}</div>`).join('')}
+      ${[['booked','Подтверждено'],['wait','Ожидает'],['done','Завершено']].map(([c,l])=>`<div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><div class="sched-slot ${c}" style="width:14px;height:14px;min-height:0;flex-shrink:0"></div>${l}</div>`).join('')}
     </div>
-  </div>`;
-}
-function schedNav(dir){
-  if(dir===0){schedDate=new Date();}
-  else{schedDate=new Date(schedDate);schedDate.setDate(schedDate.getDate()+dir);}
-  document.getElementById('main-content').innerHTML=renderSched();
+  </div>`);
 }
 
-// ── HISTORY ─────────────────────────────────────────────────────────
 function getFiltered(){
-  return APPTS.filter(a=>{
-    if(fMaster!=='all'&&a.mi!==fMaster)return false;
+  return CACHE.appointments.filter(a=>{
+    if(fMaster!=='all'&&a.staffId!==fMaster)return false;
     if(fStatus!=='all'&&a.status!==fStatus)return false;
-    if(fSearch){const q=fSearch.toLowerCase();if(!a.client.toLowerCase().includes(q)&&!a.pet.toLowerCase().includes(q))return false;}
+    if(fSearch){const q=fSearch.toLowerCase();if(!(a.client?.name||'').toLowerCase().includes(q)&&!(a.pet?.name||'').toLowerCase().includes(q))return false;}
     return true;
   });
 }
+
 function renderHistRow(a){
+  const si=CACHE.staff.findIndex(x=>x.id===a.staffId);
   return `<tr>
-    <td style="color:var(--text2)">${esc(a.date)}<div style="font-size:10px">${esc(a.time)}</div></td>
-    <td><div style="font-weight:500">${esc(a.client)}</div><div style="font-size:10px;color:var(--text2)">${esc(a.pet)}, ${esc(a.breed)}</div></td>
-    <td><div style="display:flex;align-items:center;gap:4px">${ava(a.mi,a.mbg,a.mtc,18)}<span style="font-size:10px">${esc(a.mn.split(' ')[0])}</span></div></td>
-    <td style="font-size:11px">${esc(a.svc)}</td>
-    <td style="font-weight:500">${a.price.toLocaleString('ru-RU')} ₽</td>
-    <td><span class="badge ${a.status}">${STATUS_LABEL[a.status]??a.status}</span></td>
+    <td style="color:var(--text2)">${fmtDate(a.startAt)}<div style="font-size:10px">${fmtTime(a.startAt)}</div></td>
+    <td><div style="font-weight:500">${esc(a.client?.name||'—')}</div><div style="font-size:10px;color:var(--text2)">${esc(a.pet?.name||'—')}</div></td>
+    <td><div style="display:flex;align-items:center;gap:4px">${avaOf(a.staff?.name||'',si,18)}<span style="font-size:10px">${esc((a.staff?.name||'').split(' ')[0])}</span></div></td>
+    <td style="font-size:11px">${esc(a.service?.name||'—')}</td>
+    <td style="font-weight:500">${(a.totalPrice||0).toLocaleString('ru-RU')} ₽</td>
+    <td><span class="badge ${a.status}">${STATUS_LABEL[a.status]||a.status}</span></td>
   </tr>`;
 }
+
 function renderHist(){
   const filtered=getFiltered();
-  const clientMap={};
-  APPTS.filter(a=>a.status==='completed').forEach(a=>{
-    if(!clientMap[a.client])clientMap[a.client]={visits:0,total:0,pets:new Set(),last:''};
-    clientMap[a.client].visits++;clientMap[a.client].total+=a.price;clientMap[a.client].pets.add(a.pet);clientMap[a.client].last=a.date;
-  });
-  return `
-  <div class="topbar"><h2>История визитов</h2><div class="acts"><button class="ib"><i class="ti ti-download" aria-hidden="true"></i> Экспорт XLSX</button></div></div>
-  <div class="g2">
-    <div class="card">
-      <h3><i class="ti ti-table" style="font-size:15px;color:var(--teal)" aria-hidden="true"></i> Все записи</h3>
-      <div class="filter-row">
-        <!-- FIX #15: esc(fSearch) prevents XSS when value reflected in attribute -->
-        <input type="search" placeholder="Поиск по клиенту, питомцу..." id="fsearch" value="${esc(fSearch)}" oninput="fSearch=this.value;updateHistTable()">
-        <select id="fmaster" onchange="fMaster=this.value;updateHistTable()">
-          <option value="all"${fMaster==='all'?' selected':''}>Все мастера</option>
-          ${MASTERS.map(m=>`<option value="${esc(m.ini)}"${fMaster===m.ini?' selected':''}>${esc(m.n.split(' ')[0])}</option>`).join('')}
-        </select>
-        <select id="fstatus" onchange="fStatus=this.value;updateHistTable()">
-          <option value="all"${fStatus==='all'?' selected':''}>Все статусы</option>
-          ${Object.entries(STATUS_LABEL).map(([k,v])=>`<option value="${k}"${fStatus===k?' selected':''}>${v}</option>`).join('')}
-        </select>
-      </div>
-      <div style="overflow-x:auto">
-        <table class="tbl" style="table-layout:fixed;min-width:480px">
-          <colgroup><col style="width:80px"><col style="width:130px"><col style="width:90px"><col style="width:110px"><col style="width:75px"><col style="width:90px"></colgroup>
-          <thead><tr><th>Дата</th><th>Клиент / питомец</th><th>Мастер</th><th>Услуга</th><th>Сумма</th><th>Статус</th></tr></thead>
-          <tbody id="hist-tbody">${filtered.map(renderHistRow).join('')}</tbody>
-        </table>
-      </div>
-      <div id="hist-count" style="font-size:11px;color:var(--text2);margin-top:8px">Показано: ${filtered.length} из ${APPTS.length}</div>
-    </div>
-    <div>
-      <div class="card">
-        <h3><i class="ti ti-users" style="font-size:15px;color:var(--teal)" aria-hidden="true"></i> Постоянные клиенты</h3>
-        ${Object.entries(clientMap).map(([name,d])=>`<div class="stat-row"><div><div style="font-size:12px;font-weight:500">${esc(name)}</div><div style="font-size:10px;color:var(--text2)">${[...d.pets].map(esc).join(', ')} · ${esc(d.last)}</div></div><div style="text-align:right"><div style="font-size:12px;font-weight:500">${d.total.toLocaleString('ru-RU')} ₽</div><div style="font-size:10px;color:var(--text2)">${d.visits} виз.</div></div></div>`).join('')}
-      </div>
-      <div class="card">
-        <h3><i class="ti ti-paw" style="font-size:15px;color:var(--teal)" aria-hidden="true"></i> История питомца — Бублик</h3>
-        <div style="font-size:11px;color:var(--text2);margin-bottom:10px">Пудель · мелкий · Анна Смирнова</div>
-        <div style="padding-left:4px">
-          ${[{date:DEMO_TODAY,svc:'Полный груминг',master:'Мария С.',ok:true,note:'В работе'},{date:'01.05.2025',svc:'Купание',master:'Мария С.',ok:true,note:'★★★★★'},{date:'10.04.2025',svc:'SPA-пакет',master:'Елена В.',ok:true,note:'★★★★☆'}].map(v=>`<div class="tl-item"><div class="tl-dot ${v.ok?'ok':'warn'}"></div><div style="font-size:12px;font-weight:500">${esc(v.svc)}</div><div style="font-size:10px;color:var(--text2)">${esc(v.date)} · ${esc(v.master)}</div><div style="font-size:10px;color:var(--text3)">${esc(v.note)}</div></div>`).join('')}
-        </div>
-      </div>
-    </div>
-  </div>`;
-}
-function updateHistTable(){
-  const filtered=getFiltered();
-  const tbody=document.getElementById('hist-tbody');
-  const count=document.getElementById('hist-count');
-  if(tbody)tbody.innerHTML=filtered.map(renderHistRow).join('');
-  if(count)count.textContent=`Показано: ${filtered.length} из ${APPTS.length}`;
-}
-
-// ── MASTERS ─────────────────────────────────────────────────────────
-function renderMasters(){
-  return `<div class="topbar"><h2>Мастера</h2><div class="acts"><button class="ib"><i class="ti ti-plus" aria-hidden="true"></i> Добавить</button></div></div><div id="masters-list">${renderMasterCards()}</div>`;
-}
-function renderMasterCards(){
-  return MASTERS.map(m=>{
-    const todayCnt=APPTS.filter(a=>a.mi===m.ini&&a.date===DEMO_TODAY).length;
-    return `<div class="card" id="mcard-${m.id}">
-      <div style="display:flex;gap:14px;align-items:flex-start">
-        ${ava(m.ini,m.bg,m.tc,44)}
-        <div style="flex:1;min-width:0">
-          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px">
-            <span style="font-size:14px;font-weight:500">${esc(m.n)}</span>
-            ${m.badge?`<span class="badge confirmed">${esc(m.badge)}</span>`:''}
-            <span style="font-size:11px;color:var(--teal-dark)">★ ${m.rt} <span style="color:var(--text3)">(${m.rv})</span></span>
-          </div>
-          <div style="font-size:12px;color:var(--text2);margin-bottom:6px">${esc(m.sp)} · Опыт ${esc(m.exp)}</div>
-          <div style="margin-bottom:8px">${m.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>
-          <div class="g4" style="margin-bottom:0">
-            <div class="mcard"><div class="ml">Сегодня</div><div style="font-size:16px;font-weight:500">${todayCnt} зап.</div></div>
-            <div class="mcard"><div class="ml">Всего визитов</div><div style="font-size:16px;font-weight:500">${m.visits}</div></div>
-            <div class="mcard"><div class="ml">Выручка</div><div style="font-size:16px;font-weight:500">${m.rev.toLocaleString('ru-RU')} ₽</div></div>
-            <div class="mcard"><div class="ml">График</div><div style="font-size:11px;font-weight:500;margin-top:4px">${esc(m.sched)}</div></div>
-          </div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0">
-          <!-- FIX #1: onchange calls toggleMasterActive(id), was empty string -->
-          <!-- FIX #16: aria-label specific to each master -->
-          <label class="toggle" aria-label="${m.active?'Деактивировать':'Активировать'} ${esc(m.n)}">
-            <input type="checkbox" ${m.active?'checked':''} onchange="toggleMasterActive('${m.id}')">
-            <span class="tslider"></span>
-          </label>
-          <span style="font-size:10px;color:var(--text3)">${m.active?'Активен':'Отключён'}</span>
-          <button class="ib" style="margin-top:4px"><i class="ti ti-edit" aria-hidden="true"></i> Изменить</button>
-          <button class="ib"><i class="ti ti-calendar" aria-hidden="true"></i> График</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-}
-function toggleMasterActive(id){
-  const m=MASTERS.find(x=>x.id===id);if(!m)return;
-  m.active=!m.active;
-  const list=document.getElementById('masters-list');if(list)list.innerHTML=renderMasterCards();
-}
-
-// ── SERVICES ─────────────────────────────────────────────────────────
-function renderSvcs(){
-  return `
-  <div class="topbar"><h2>Услуги</h2><div class="acts"><button class="ib"><i class="ti ti-plus" aria-hidden="true"></i> Добавить</button></div></div>
+  setHTML(`
+  <div class="topbar"><h2>История визитов</h2></div>
   <div class="card">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><h3 style="margin-bottom:0">Каталог услуг</h3><span style="font-size:11px;color:var(--text2)">Цена = база × коэффициент размера</span></div>
-    <div id="svcs-list">${renderSvcRows()}</div>
-  </div>
-  <div class="card">
-    <h3>Привязка мастер × услуга</h3>
-    <!-- FIX #6: overflow wrapper prevents table bleeding outside card -->
+    <div class="filter-row">
+      <input type="search" placeholder="Поиск по клиенту, питомцу..." value="${esc(fSearch)}" oninput="fSearch=this.value;updateHistTable()">
+      <select onchange="fMaster=this.value;updateHistTable()">
+        <option value="all">Все мастера</option>
+        ${CACHE.staff.map(m=>`<option value="${m.id}"${fMaster===m.id?' selected':''}>${esc(m.name.split(' ')[0])}</option>`).join('')}
+      </select>
+      <select onchange="fStatus=this.value;updateHistTable()">
+        <option value="all">Все статусы</option>
+        ${Object.entries(STATUS_LABEL).map(([k,v])=>`<option value="${k}"${fStatus===k?' selected':''}>${v}</option>`).join('')}
+      </select>
+    </div>
     <div style="overflow-x:auto">
-      <table class="tbl" style="min-width:500px">
-        <thead><tr><th style="width:130px">Мастер</th>${SVCS.map(s=>`<th style="text-align:center;width:72px;font-size:10px">${s.n.length>9?s.n.slice(0,8)+'…':esc(s.n)}</th>`).join('')}</tr></thead>
-        <tbody>${MASTERS.map(m=>`<tr><td><div style="display:flex;align-items:center;gap:5px">${ava(m.ini,m.bg,m.tc,18)} ${esc(m.n.split(' ')[0])}</div></td>${SVCS.map(s=>{const has=!(m.id==='am'&&(s.id==='puppy'||s.id==='nails'));return`<td style="text-align:center"><i class="ti ${has?'ti-circle-check':'ti-circle-x'}" style="font-size:15px;color:${has?'#1D9E75':'var(--border2)'}" aria-hidden="true"></i></td>`;}).join('')}</tr>`).join('')}</tbody>
+      <table class="tbl" style="table-layout:fixed;min-width:480px">
+        <colgroup><col style="width:80px"><col style="width:130px"><col style="width:90px"><col style="width:110px"><col style="width:75px"><col style="width:90px"></colgroup>
+        <thead><tr><th>Дата</th><th>Клиент / питомец</th><th>Мастер</th><th>Услуга</th><th>Сумма</th><th>Статус</th></tr></thead>
+        <tbody id="hist-tbody">${filtered.map(renderHistRow).join('')}</tbody>
       </table>
     </div>
-  </div>`;
+    <div id="hist-count" style="font-size:11px;color:var(--text2);margin-top:8px">Показано: ${filtered.length} из ${CACHE.appointments.length}</div>
+  </div>`);
 }
-function renderSvcRows(){
-  return SVCS.map(s=>{
-    const ps=calcPrice(s.base,s.coef,'small');
-    const pm=calcPrice(s.base,s.coef,'medium');
-    const pl=calcPrice(s.base,s.coef,'large');
-    return `<div class="svc-row" id="srow-${s.id}">
-      <div style="display:flex;align-items:center;gap:10px;min-width:0;flex:1">
-        <div style="width:32px;height:32px;border-radius:8px;background:var(--bg2);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ${s.ic}" style="font-size:16px;color:${s.active?'var(--teal-dark)':'var(--text3)'}" aria-hidden="true"></i></div>
-        <div style="min-width:0"><div style="font-size:13px;font-weight:500;color:${s.active?'var(--text)':'var(--text3)'}">${esc(s.n)}</div><div style="font-size:11px;color:var(--text2)">${esc(s.d)}</div></div>
+
+function updateHistTable(){
+  const filtered=getFiltered();
+  const tb=document.getElementById('hist-tbody');
+  const ct=document.getElementById('hist-count');
+  if(tb)tb.innerHTML=filtered.map(renderHistRow).join('');
+  if(ct)ct.textContent=`Показано: ${filtered.length} из ${CACHE.appointments.length}`;
+}
+
+function renderMasters(){
+  setHTML(`
+  <div class="topbar"><h2>Мастера</h2></div>
+  ${CACHE.staff.map((m,i)=>`
+  <div class="card">
+    <div style="display:flex;gap:14px;align-items:flex-start">
+      ${avaOf(m.name,i,44)}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:14px;font-weight:500;margin-bottom:2px">${esc(m.name)}</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:6px">${esc(m.specialty)} · Опыт ${esc(m.bio||'')}</div>
+        <div style="font-size:11px;color:var(--teal)">★ ${m.rating} <span style="color:var(--text3)">(${m.reviewsCount} отз.)</span></div>
       </div>
-      <div style="display:flex;align-items:center;gap:12px;flex-shrink:0">
-        ${[['Малый',ps],['Средний',pm],['Крупный',pl]].map(([lbl,val])=>`<div style="text-align:center;min-width:44px"><div style="font-size:10px;color:var(--text3)">${lbl}</div><div style="font-size:12px;font-weight:500">${val.toLocaleString('ru-RU')} ₽</div></div>`).join('')}
-        <div style="text-align:center;min-width:40px"><div style="font-size:10px;color:var(--text3)">Время</div><div style="font-size:12px;font-weight:500">${s.dur} мин</div></div>
-        <!-- FIX #1: onchange calls toggleSvcActive, was empty string -->
-        <!-- FIX #16: aria-label specific to each service -->
-        <label class="toggle" aria-label="${s.active?'Деактивировать':'Активировать'} «${esc(s.n)}»"><input type="checkbox" ${s.active?'checked':''} onchange="toggleSvcActive('${s.id}')"><span class="tslider"></span></label>
-        <button class="ib" aria-label="Редактировать ${esc(s.n)}"><i class="ti ti-edit" aria-hidden="true"></i></button>
+      <div style="text-align:right;font-size:11px;color:var(--text2)">
+        <div>${CACHE.appointments.filter(a=>a.staffId===m.id).length} записей</div>
+        <div style="margin-top:4px">${m.isActive?'Активен':'Отключён'}</div>
+      </div>
+    </div>
+  </div>`).join('')}`);
+}
+
+function renderSvcs(){
+  setHTML(`
+  <div class="topbar"><h2>Услуги</h2></div>
+  <div class="card">
+    ${CACHE.services.map(s=>`
+    <div class="svc-row">
+      <div style="min-width:0;flex:1">
+        <div style="font-size:13px;font-weight:500">${esc(s.name)}</div>
+        <div style="font-size:11px;color:var(--text2)">${esc(s.description||'')}</div>
+      </div>
+      <div style="display:flex;gap:16px;align-items:center;flex-shrink:0">
+        <div style="text-align:center"><div style="font-size:10px;color:var(--text3)">База</div><div style="font-size:12px;font-weight:500">${(s.basePrice||0).toLocaleString('ru-RU')} ₽</div></div>
+        <div style="text-align:center"><div style="font-size:10px;color:var(--text3)">Время</div><div style="font-size:12px;font-weight:500">${s.durationMin} мин</div></div>
+        <span class="badge ${s.isActive?'confirmed':'cancelled'}">${s.isActive?'Активна':'Отключена'}</span>
+      </div>
+    </div>`).join('')}
+  </div>`);
+}
+
+function renderNotif(){
+  setHTML(`
+  <div class="topbar"><h2>Уведомления</h2></div>
+  <div class="card">
+    <h3>Каналы уведомлений</h3>
+    <div style="font-size:13px;color:var(--text2);line-height:1.7">
+      <div>📱 <b>SMS</b> — подтверждение записи и напоминание за 2 ч</div>
+      <div>📧 <b>Email</b> — подтверждение и история</div>
+      <div>✈️ <b>Telegram</b> — напоминание и запрос отзыва</div>
+      <div>🔵 <b>VK</b> — запрос отзыва</div>
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:var(--text3)">Для настройки каналов добавьте API-ключи в переменные Railway.</div>
+  </div>`);
+}
+
+// ══════════════════════════════════════════
+// MASTER VIEWS
+// ══════════════════════════════════════════
+
+function getMyAppts(){
+  return CACHE.appointments.filter(a=>a.staffId===AUTH?.user?.staffId);
+}
+
+function renderMyAppts(){
+  const appts = getMyAppts();
+  const today = new Date().toLocaleDateString('ru-RU');
+  const todayA = appts.filter(a=>fmtDate(a.startAt)===today);
+  setHTML(`
+  <div class="topbar"><h2>Мои записи</h2>
+    <div class="acts"><button class="ib" onclick="loadData().then(renderMyAppts)"><i class="ti ti-refresh" aria-hidden="true"></i> Обновить</button></div>
+  </div>
+  <div class="g4" style="margin-bottom:16px">
+    <div class="mcard"><div class="ml">Сегодня</div><div class="mv">${todayA.length}</div></div>
+    <div class="mcard"><div class="ml">Всего записей</div><div class="mv">${appts.length}</div></div>
+    <div class="mcard"><div class="ml">Завершено</div><div class="mv">${appts.filter(a=>a.status==='completed').length}</div></div>
+    <div class="mcard"><div class="ml">Отменено</div><div class="mv">${appts.filter(a=>a.status==='cancelled').length}</div></div>
+  </div>
+  <div class="card">
+    <h3><i class="ti ti-calendar" style="color:var(--teal)" aria-hidden="true"></i> Мои записи</h3>
+    ${appts.length===0?'<div style="color:var(--text3);font-size:13px">Записей нет</div>':''}
+    <div style="overflow-x:auto">
+      <table class="tbl" style="min-width:400px">
+        <thead><tr><th>Дата / время</th><th>Клиент</th><th>Питомец</th><th>Услуга</th><th>Сумма</th><th>Статус</th></tr></thead>
+        <tbody>${appts.sort((a,b)=>new Date(b.startAt)-new Date(a.startAt)).map(a=>`<tr>
+          <td style="color:var(--text2)">${fmtDate(a.startAt)}<div style="font-size:10px">${fmtTime(a.startAt)}</div></td>
+          <td style="font-weight:500">${esc(a.client?.name||'—')}<div style="font-size:10px;color:var(--text2)">${esc(a.client?.phone||'')}</div></td>
+          <td>${esc(a.pet?.name||'—')}<div style="font-size:10px;color:var(--text2)">${esc(a.pet?.breed||'')}</div></td>
+          <td style="font-size:11px">${esc(a.service?.name||'—')}</td>
+          <td style="font-weight:500">${(a.totalPrice||0).toLocaleString('ru-RU')} ₽</td>
+          <td><span class="badge ${a.status}">${STATUS_LABEL[a.status]||a.status}</span></td>
+        </tr>`).join('')}</tbody>
+      </table>
+    </div>
+  </div>`);
+}
+
+// ── Schedule editor for masters ──
+let scheduleData = {};
+
+function renderMySchedule(){
+  const myStaff = CACHE.staff.find(s=>s.id===AUTH?.user?.staffId);
+  if(!myStaff){setHTML('<div class="alert">Профиль мастера не найден</div>');return;}
+
+  // Build schedule from workSchedules
+  scheduleData = {};
+  (myStaff.workSchedules||[]).forEach(ws=>{
+    scheduleData[ws.dayOfWeek] = {isWorking:ws.isWorking, startTime:ws.startTime, endTime:ws.endTime};
+  });
+
+  const today = new Date().toLocaleDateString('ru-RU');
+  const myAppts = getMyAppts().filter(a=>fmtDate(a.startAt)===today);
+
+  setHTML(`
+  <div class="topbar">
+    <h2>Моё расписание</h2>
+    <div class="acts">
+      <button class="ib" onclick="openScheduleEditor()"><i class="ti ti-edit" aria-hidden="true"></i> Изменить расписание</button>
+    </div>
+  </div>
+  <div class="card">
+    <h3><i class="ti ti-clock" style="color:var(--teal)" aria-hidden="true"></i> Текущее расписание</h3>
+    ${[1,2,3,4,5,6,7].map(d=>{
+      const ws=scheduleData[d]||{isWorking:false,startTime:'09:00',endTime:'18:00'};
+      return `<div class="day-row">
+        <div class="day-name">${DAYS_RU[d-1]}</div>
+        <div style="flex:1;font-size:12px;color:${ws.isWorking?'var(--text)':'var(--text3)'}">
+          ${ws.isWorking?`${ws.startTime} — ${ws.endTime}`:'Выходной'}
+        </div>
+        <span class="badge ${ws.isWorking?'confirmed':'cancelled'}">${ws.isWorking?'Работает':'Выходной'}</span>
+      </div>`;
+    }).join('')}
+  </div>
+  <div class="card">
+    <h3><i class="ti ti-calendar" style="color:var(--teal)" aria-hidden="true"></i> Мои записи сегодня</h3>
+    ${myAppts.length===0?'<div style="color:var(--text3);font-size:13px">Записей нет</div>':''}
+    <table class="tbl">
+      <thead><tr><th>Время</th><th>Клиент</th><th>Питомец</th><th>Услуга</th><th>Статус</th></tr></thead>
+      <tbody>${myAppts.map(a=>`<tr>
+        <td style="font-weight:500">${fmtTime(a.startAt)}</td>
+        <td>${esc(a.client?.name||'—')}<div style="font-size:10px;color:var(--text2)">${esc(a.client?.phone||'')}</div></td>
+        <td>${esc(a.pet?.name||'—')}</td>
+        <td style="font-size:11px">${esc(a.service?.name||'—')}</td>
+        <td><span class="badge ${a.status}">${STATUS_LABEL[a.status]||a.status}</span></td>
+      </tr>`).join('')}</tbody>
+    </table>
+  </div>`);
+}
+
+function openScheduleEditor(){
+  const editor = document.getElementById('schedule-editor');
+  editor.innerHTML = [1,2,3,4,5,6,7].map(d=>{
+    const ws=scheduleData[d]||{isWorking:false,startTime:'09:00',endTime:'18:00'};
+    return `<div class="day-row">
+      <div class="day-name">${DAYS_RU[d-1]}</div>
+      <div class="day-times">
+        <label class="toggle" aria-label="${DAYS_RU[d-1]} рабочий день">
+          <input type="checkbox" id="wd-${d}" ${ws.isWorking?'checked':''} onchange="toggleDay(${d})">
+          <span class="tslider"></span>
+        </label>
+        <input type="time" id="ws-${d}" value="${ws.startTime}" ${ws.isWorking?'':'disabled'}>
+        <span style="font-size:12px;color:var(--text3)">—</span>
+        <input type="time" id="we-${d}" value="${ws.endTime}" ${ws.isWorking?'':'disabled'}>
       </div>
     </div>`;
   }).join('');
-}
-function toggleSvcActive(id){
-  const s=SVCS.find(x=>x.id===id);if(!s)return;
-  s.active=!s.active;
-  const list=document.getElementById('svcs-list');if(list)list.innerHTML=renderSvcRows();
+  document.getElementById('schedule-modal').style.display='flex';
 }
 
-// ── NOTIFICATIONS ────────────────────────────────────────────────────
-function renderNotif(){
-  return `
-  <div class="topbar"><h2>Уведомления</h2><div class="acts"><button class="ib"><i class="ti ti-device-floppy" aria-hidden="true"></i> Сохранить</button></div></div>
-  <div class="card">
-    <h3><i class="ti ti-adjustments" style="font-size:15px;color:var(--teal)" aria-hidden="true"></i> Типы событий и каналы</h3>
-    <p style="font-size:11px;color:var(--text2);margin-bottom:12px">Нажмите на иконку, чтобы включить или отключить канал для данного события.</p>
-    <div style="overflow-x:auto"><table class="tbl" style="min-width:520px">
-      <thead><tr><th style="width:175px">Событие</th>${ALL_CHANNELS.map(c=>`<th style="text-align:center;width:68px">${c}</th>`).join('')}</tr></thead>
-      <tbody id="notif-tbody">${renderNotifRows()}</tbody>
-    </table></div>
-  </div>
-  <div class="g2">
-    <div class="card">
-      <h3><i class="ti ti-list" style="font-size:15px;color:var(--teal)" aria-hidden="true"></i> Журнал доставки</h3>
-      ${[
-        {ch:'SMS',cbg:'#E1F5EE',ctc:'#085041',to:'+7 916 123-45-67',type:'Подтверждение',  st:'delivered',ts:'14.05 10:02'},
-        {ch:'Telegram',cbg:'#EEEDFE',ctc:'#3C3489',to:'@anna_s',       type:'Подтверждение',  st:'delivered',ts:'14.05 10:02'},
-        {ch:'SMS',cbg:'#E1F5EE',ctc:'#085041',to:'+7 903 234-56-78', type:'Напоминание 2 ч',st:'delivered',ts:'14.05 09:30'},
-        {ch:'Email',cbg:'#FAEEDA',ctc:'#633806',to:'igor@mail.ru',    type:'Напоминание 24ч',st:'failed',   ts:'13.05 11:00'},
-        {ch:'VK',cbg:'#E6F1FB',ctc:'#0C447C',to:'id12345',           type:'Отзыв',          st:'delivered',ts:'13.05 16:05'},
-        {ch:'MAX',cbg:'var(--bg2)',ctc:'var(--text2)',to:'max:user7', type:'Напоминание 24ч',st:'pending',  ts:'14.05 09:00'},
-      ].map(l=>`<div class="stat-row"><div><div style="display:flex;align-items:center;gap:6px"><span style="font-size:10px;font-weight:500;padding:1px 7px;border-radius:8px;background:${l.cbg};color:${l.ctc}">${esc(l.ch)}</span><span style="font-size:11px;color:var(--text2)">${esc(l.to)}</span></div><div style="font-size:10px;color:var(--text3);margin-top:1px">${esc(l.type)}</div></div><div style="text-align:right"><span class="badge ${l.st}">${l.st==='delivered'?'Доставлено':l.st==='failed'?'Ошибка':'Ожидание'}</span><div style="font-size:10px;color:var(--text3);margin-top:2px">${esc(l.ts)}</div></div></div>`).join('')}
-    </div>
-    <div class="card">
-      <h3><i class="ti ti-chart-bar" style="font-size:15px;color:var(--teal)" aria-hidden="true"></i> Статистика (май)</h3>
-      ${[{ch:'SMS',sent:142,ok:138,pct:97},{ch:'Email',sent:98,ok:91,pct:93},{ch:'Telegram',sent:76,ok:75,pct:99},{ch:'VK',sent:45,ok:43,pct:96},{ch:'MAX',sent:12,ok:11,pct:92},{ch:'Push',sent:33,ok:28,pct:85}].map(s=>`<div class="bar-wrap"><div class="bar-label"><span>${s.ch}</span><span>${s.ok}/${s.sent} · ${s.pct}%</span></div><div class="bar-track"><div class="bar-fill" style="width:${s.pct}%;background:${s.pct>=97?'#1D9E75':s.pct>=90?'#EF9F27':'#E24B4A'}"></div></div></div>`).join('')}
-    </div>
-  </div>`;
-}
-function renderNotifRows(){
-  return notifState.map((t,ti)=>`<tr><td style="font-size:11px;white-space:normal">${esc(t.label)}</td>${ALL_CHANNELS.map(ch=>{const on=t.channels.includes(ch);return`<td style="text-align:center"><span onclick="toggleNotif(${ti},'${ch}')" role="button" tabindex="0" style="cursor:pointer;display:inline-block" title="${on?'Отключить':'Включить'} ${ch}" onkeydown="if(event.key==='Enter')toggleNotif(${ti},'${ch}')"><i class="ti ${on?'ti-circle-check':'ti-circle-x'}" style="font-size:15px;color:${on?'#1D9E75':'var(--border2)'}" aria-hidden="true"></i></span></td>`;}).join('')}</tr>`).join('');
-}
-function toggleNotif(ti,ch){
-  const idx=notifState[ti].channels.indexOf(ch);
-  if(idx>=0)notifState[ti].channels.splice(idx,1);else notifState[ti].channels.push(ch);
-  const tb=document.getElementById('notif-tbody');if(tb)tb.innerHTML=renderNotifRows();
+function toggleDay(d){
+  const checked = document.getElementById(`wd-${d}`).checked;
+  document.getElementById(`ws-${d}`).disabled = !checked;
+  document.getElementById(`we-${d}`).disabled = !checked;
 }
 
-// ── Boot ─────────────────────────────────────────────────────────────
-nav('dash',document.querySelector('.snav a.active'));
+function closeSchedule(){
+  document.getElementById('schedule-modal').style.display='none';
+}
+
+async function saveSchedule(){
+  const staffId = AUTH?.user?.staffId;
+  if(!staffId){alert('Профиль мастера не найден');return;}
+  const schedule = [1,2,3,4,5,6,7].map(d=>({
+    dayOfWeek: d,
+    isWorking: document.getElementById(`wd-${d}`).checked,
+    startTime: document.getElementById(`ws-${d}`).value || '09:00',
+    endTime:   document.getElementById(`we-${d}`).value || '18:00',
+  }));
+  try {
+    await apiFetch(`/staff/${staffId}/schedule`,{
+      method:'PUT',
+      body: JSON.stringify({schedule}),
+    });
+    closeSchedule();
+    await loadData();
+    renderMySchedule();
+  } catch(e){
+    alert('Ошибка сохранения: '+e.message);
+  }
+}
+
+// ── Boot ──
+if(AUTH?.access_token){
+  showApp();
+} else {
+  document.getElementById('login-screen').style.display='flex';
+}
 </script>
 </body>
 </html>

@@ -1,3 +1,5 @@
+import { Put, Body, UseGuards, Request } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt.guard';
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { StaffService } from './staff.service';
@@ -23,4 +25,17 @@ export class StaffController {
   ) {
     return this.svc.getAvailableSlots(staffId, date, serviceId);
   }
+@Put(':id/schedule')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
+updateSchedule(
+  @Param('id') staffId: string,
+  @Body() body: { schedule: Array<{ dayOfWeek: number; isWorking: boolean; startTime: string; endTime: string }> },
+  @Request() req: any,
+) {
+  if (req.user.role === 'MASTER' && req.user.staffId !== staffId) {
+    throw new Error('Нет доступа');
+  }
+  return this.svc.updateSchedule(staffId, body.schedule);
+}
 }
