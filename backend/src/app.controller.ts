@@ -1,15 +1,7 @@
-import { Controller, Get, Res } from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Get } from '@nestjs/common';
 
 @Controller()
 export class AppController {
-  @Get()
-  root(@Res() res: Response) {
-    res.redirect('/widget/index.html');
-  }
-
   @Get('health')
-  health() {
-    return { status: 'ok' };
-  }
+  health() { return { status: 'ok' }; }
 }
