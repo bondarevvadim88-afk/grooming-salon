@@ -67,7 +67,7 @@
     .bp:hover{opacity:.9}
     .bp:disabled{opacity:.4;cursor:not-allowed}
     .bs{background:#fff;border:1px solid rgba(0,0,0,.15);border-radius:8px;padding:9px 16px;font-size:13px;color:#6b6b68;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px}
-    .err{font-size:11px;color:#A32D2D;margin-top:4px}
+    .err{font-size:11px;color:#A32D2D;margin-top:4px;min-height:16px}
     .ok-wrap{text-align:center;padding:1.5rem 1rem}
     .ok-icon{width:52px;height:52px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
     .ok-box{background:#f5f5f4;border-radius:8px;padding:12px 16px;text-align:left;margin:0 auto 1.25rem;max-width:380px}
@@ -77,6 +77,8 @@
     .spinner{width:28px;height:28px;border:3px solid #E1F5EE;border-top-color:#1D9E75;border-radius:50%;animation:spin .7s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
     .alert{background:#FCEBEB;color:#791F1F;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px}
+    .progress-bar{height:3px;background:#E1F5EE;border-radius:0 0 12px 12px;margin:-20px -20px 16px;overflow:hidden}
+    .progress-fill{height:100%;background:#1D9E75;transition:width .3s}
   </style>
 </head>
 <body>
@@ -88,8 +90,8 @@
     <h1>Запись на груминг</h1>
     <p>Услуга → Мастер → Питомец → Время → Контакты</p>
   </div>
-  <div class="steps" id="sbar"></div>
-  <div class="card" id="scont"></div>
+  <div class="steps" id="sbar" aria-label="Шаги записи"></div>
+  <div class="card" id="scont" role="main"></div>
 </div>
 <script>
 "use strict";
@@ -108,14 +110,15 @@ const S = {
   date:null, time:null,
   name:'', phone:'', email:'',
   calYear:new Date().getFullYear(), calMonth:new Date().getMonth(),
-  loading:false
+  loading:false,
+  // Created IDs after booking
+  createdApptId: null,
 };
 
-/* ── helpers ── */
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function calcPrice(svc,sz){if(!svc)return 0;const m={SMALL:svc.coefSmall,MEDIUM:svc.coefMedium,LARGE:svc.coefLarge};return Math.round(svc.basePrice*(m[sz]||1)/10)*10}
-function ava(idx){return AVA[idx%AVA.length]}
-function ini(n){return (n||'').split(' ').slice(0,2).map(w=>w[0]).join('')}
+function ava(idx,sz=20){const a=AVA[idx%AVA.length];const n=S.masters[idx]?.name||'';const i=n.split(' ').slice(0,2).map(w=>w[0]).join('');return `<div class="mava" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.42)}px;background:${a.bg};color:${a.tc}">${esc(i)}</div>`}
+function masterAva(m,idx,sz=20){const a=AVA[idx%AVA.length];const i=(m.name||'').split(' ').slice(0,2).map(w=>w[0]).join('');return `<span style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.42)}px;background:${a.bg};color:${a.tc};border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:500;flex-shrink:0">${esc(i)}</span>`}
 function fmtLong(d){return d.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'})}
 function fmtISO(d){const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`}
 function fmtTime(iso){return new Date(iso).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}
@@ -123,22 +126,22 @@ function svcIcon(id){for(const[k,v]of Object.entries(SVC_ICONS))if(id.includes(k
 function setHTML(html){document.getElementById('scont').innerHTML=html}
 function showLoader(){setHTML('<div class="loader"><div class="spinner"></div></div>')}
 
-/* ── API ── */
-async function get(path){
+async function apiGet(path){
   const r=await fetch(API+path);
   if(!r.ok)throw new Error('Ошибка '+r.status);
   return r.json();
 }
-async function post(path,body){
+async function apiPost(path,body){
   const r=await fetch(API+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
   const data=await r.json().catch(()=>({}));
   if(!r.ok)throw new Error(data.message||'Ошибка сервера');
   return data;
 }
 
-/* ── render steps ── */
+// Steps bar
 function renderSteps(){
-  document.getElementById('sbar').innerHTML=STEPS.map((s,i)=>{
+  const pct = Math.round(S.step / (STEPS.length-1) * 100);
+  document.getElementById('sbar').innerHTML = STEPS.map((s,i)=>{
     const c=i<S.step?'done':i===S.step?'active':'';
     const n=i<S.step?'<i class="ti ti-check" style="font-size:11px"></i>':i+1;
     const l=i<STEPS.length-1?`<div class="sl${i<S.step?' done':''}"></div>`:'';
@@ -146,7 +149,7 @@ function renderSteps(){
   }).join('');
 }
 
-/* ── step 0: services ── */
+// Step 0: Services
 function renderSvcs(){
   setHTML(`
     <div class="stitle">Выберите услугу</div>
@@ -163,14 +166,14 @@ function renderSvcs(){
     <div class="acts"><button class="bp" onclick="next()" ${!S.svc?'disabled':''}>Далее <i class="ti ti-arrow-right"></i></button></div>`);
 }
 
-/* ── step 1: masters ── */
+// Step 1: Masters
 function renderMasters(){
-  const list=S.svc ? S.masters.filter(m=>(m.services||[]).some(x=>x.serviceId===S.svc.id)) : S.masters;
+  const list = S.svc ? S.masters.filter(m=>(m.services||[]).some(x=>x.serviceId===S.svc.id)) : S.masters;
   setHTML(`
     <div class="stitle">Выберите мастера</div>
-    <div class="g3">${list.map((m,i)=>{const a=ava(i);return `
+    <div class="g3">${list.map((m,i)=>{const a=AVA[i%AVA.length];const ini=(m.name||'').split(' ').slice(0,2).map(w=>w[0]).join('');return `
       <div class="mcard${S.master?.id===m.id?' sel':''}" onclick="selMaster('${m.id}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')selMaster('${m.id}')">
-        <div class="mava" style="background:${a.bg};color:${a.tc}">${esc(ini(m.name))}</div>
+        <div class="mava" style="background:${a.bg};color:${a.tc}">${esc(ini)}</div>
         <div style="font-size:13px;font-weight:500;color:#1a1a18;margin-bottom:2px">${esc(m.name)}</div>
         <div style="font-size:11px;color:#6b6b68;margin-bottom:4px">${esc(m.specialty)}</div>
         <div style="font-size:11px;color:#0F6E56">★ ${m.rating} <span style="color:#9e9e9a">(${m.reviewsCount})</span></div>
@@ -181,22 +184,20 @@ function renderMasters(){
     </div>`);
 }
 
-/* ── step 2: pet ── */
+// Step 2: Pet
 function renderPet(){
   setHTML(`
     <div class="stitle">О вашем питомце</div>
     <label>Вид питомца</label>
     <div class="ptrow">
       ${[['dog','ti-bone','Собака'],['cat','ti-paw','Кошка'],['other','ti-star','Другое']].map(([v,ic,lb])=>`
-        <button class="ptb${S.petType===v?' sel':''}" onclick="S.petType='${v}';renderPet()">
-          <i class="ti ${ic}"></i> ${lb}
-        </button>`).join('')}
+        <button class="ptb${S.petType===v?' sel':''}" onclick="S.petType='${v}';renderPet()"><i class="ti ${ic}"></i> ${lb}</button>`).join('')}
     </div>
-    <label>Кличка</label>
+    <label>Кличка *</label>
     <input id="pname" type="text" value="${esc(S.petName)}" placeholder="Например, Барсик" oninput="S.petName=this.value">
     <label>Порода</label>
     <input id="pbr" type="text" value="${esc(S.petBreed)}" placeholder="Например, лабрадор" oninput="S.petBreed=this.value">
-    <label>Размер</label>
+    <label>Размер питомца</label>
     <div class="psz">
       ${[['SMALL','Мелкий','до 5 кг'],['MEDIUM','Средний','5–20 кг'],['LARGE','Крупный','от 20 кг']].map(([v,lb,sub])=>`
         <button class="szb${S.petSize===v?' sel':''}" onclick="S.petSize='${v}';renderPet()">
@@ -211,7 +212,7 @@ function renderPet(){
     </div>`);
 }
 
-/* ── step 3: date & time ── */
+// Step 3: DateTime
 function renderDateTime(){
   const now=new Date(),today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
   const y=S.calYear,m=S.calMonth;
@@ -225,20 +226,22 @@ function renderDateTime(){
     const cls=['cd',ip?'past':'',it&&!is?'today':'',is?'sel':''].filter(Boolean).join(' ');
     cells.push(`<div class="${cls}"${!ip?` onclick="selDate(${y},${m},${d})"`:''}>${d}</div>`);
   }
-  let timesHTML='<div style="font-size:12px;color:#9e9e9a">Выберите дату</div>';
+  let timesHTML='<div style="font-size:12px;color:#9e9e9a;padding:8px 0">Выберите дату</div>';
   if(S.loading)timesHTML='<div class="loader" style="padding:12px"><div class="spinner"></div></div>';
   else if(S.date&&S.slots.length)timesHTML=S.slots.map(sl=>{
     const lbl=fmtTime(sl.startAt),is=S.time===sl.startAt,busy=!sl.available;
     return `<button class="tbtn${busy?' busy':''}${is?' sel':''}" ${busy?'disabled':` onclick="S.time='${sl.startAt}';renderDateTime()"`}>${lbl}</button>`;
   }).join('');
-  else if(S.date)timesHTML='<div style="font-size:12px;color:#9e9e9a">Нет доступных слотов</div>';
+  else if(S.date)timesHTML='<div style="font-size:12px;color:#9e9e9a;padding:8px 0">Нет доступных слотов на этот день</div>';
 
   const midx=S.masters.findIndex(x=>x.id===S.master?.id);
-  const a=ava(midx);
+  const a=AVA[midx%AVA.length];
+  const ini=S.master?(S.master.name||'').split(' ').slice(0,2).map(w=>w[0]).join(''):'';
+
   setHTML(`
     <div class="stitle">Дата и время</div>
     ${S.master?`<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f5f5f4;border-radius:8px;margin-bottom:12px;font-size:12px">
-      <div style="width:28px;height:28px;border-radius:50%;background:${a.bg};color:${a.tc};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500">${esc(ini(S.master.name))}</div>
+      <div style="width:28px;height:28px;border-radius:50%;background:${a.bg};color:${a.tc};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500">${esc(ini)}</div>
       <div><b>${esc(S.master.name)}</b> · ${esc(S.master.specialty)}</div>
     </div>`:''}
     <div class="cnav">
@@ -258,12 +261,13 @@ function renderDateTime(){
     </div>`);
 }
 
-/* ── step 4: contact ── */
+// Step 4: Contact
 function renderContact(){
   if(!S.svc||!S.master){prev();return;}
   const price=calcPrice(S.svc,S.petSize);
   const midx=S.masters.findIndex(x=>x.id===S.master.id);
-  const a=ava(midx);
+  const a=AVA[midx%AVA.length];
+  const ini=(S.master.name||'').split(' ').slice(0,2).map(w=>w[0]).join('');
   setHTML(`
     <div class="stitle">Ваши контакты</div>
     <div style="background:#f5f5f4;border-radius:8px;padding:10px 12px;margin-bottom:1rem">
@@ -271,17 +275,17 @@ function renderContact(){
       <div class="sr"><span style="color:#6b6b68">Услуга</span><span>${esc(S.svc.name)}</span></div>
       <div class="sr"><span style="color:#6b6b68">Мастер</span>
         <span style="display:flex;align-items:center;gap:6px">
-          <span style="width:20px;height:20px;border-radius:50%;background:${a.bg};color:${a.tc};display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:500">${esc(ini(S.master.name))}</span>
+          <span style="width:20px;height:20px;border-radius:50%;background:${a.bg};color:${a.tc};display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:500">${esc(ini)}</span>
           ${esc(S.master.name)}
         </span>
       </div>
-      <div class="sr"><span style="color:#6b6b68">Питомец</span><span>${esc(S.petName)}${S.petBreed?', '+esc(S.petBreed):''}</span></div>
+      <div class="sr"><span style="color:#6b6b68">Питомец</span><span>${esc(S.petName)}${S.petBreed?', '+esc(S.petBreed):''} · ${S.petSize==='SMALL'?'мелкий':S.petSize==='MEDIUM'?'средний':'крупный'}</span></div>
       <div class="sr"><span style="color:#6b6b68">Дата и время</span><span>${S.date?fmtLong(S.date):''}, ${S.time?fmtTime(S.time):''}</span></div>
       <div class="sr"><span style="color:#6b6b68">Стоимость</span><span style="color:#0F6E56;font-weight:500">от ${price.toLocaleString('ru-RU')} ₽</span></div>
     </div>
-    <label>Ваше имя</label>
+    <label>Ваше имя *</label>
     <input id="oname" type="text" value="${esc(S.name)}" placeholder="Иван Петров" oninput="S.name=this.value" autocomplete="name">
-    <label>Телефон</label>
+    <label>Телефон *</label>
     <input id="ophone" type="tel" value="${esc(S.phone)}" placeholder="+7 900 000-00-00" oninput="S.phone=this.value" autocomplete="tel">
     <label>E-mail <span style="color:#9e9e9a;font-size:11px">(необязательно)</span></label>
     <input id="oemail" type="email" value="${esc(S.email)}" placeholder="ivan@example.com" oninput="S.email=this.value" autocomplete="email">
@@ -293,11 +297,12 @@ function renderContact(){
     </div>`);
 }
 
-/* ── step 5: success ── */
+// Step 5: Success
 function renderSuccess(){
   if(!S.svc||!S.master){resetForm();return;}
   const midx=S.masters.findIndex(x=>x.id===S.master.id);
-  const a=ava(midx);
+  const a=AVA[midx%AVA.length];
+  const ini=(S.master.name||'').split(' ').slice(0,2).map(w=>w[0]).join('');
   setHTML(`
     <div class="ok-wrap">
       <div class="ok-icon"><i class="ti ti-circle-check" style="font-size:24px;color:#1D9E75"></i></div>
@@ -306,7 +311,7 @@ function renderSuccess(){
       <div class="ok-box">
         <div class="ok-row"><i class="ti ti-scissors"></i><span>${esc(S.svc.name)}</span></div>
         <div class="ok-row">
-          <div style="width:22px;height:22px;border-radius:50%;background:${a.bg};color:${a.tc};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;flex-shrink:0">${esc(ini(S.master.name))}</div>
+          <div style="width:22px;height:22px;border-radius:50%;background:${a.bg};color:${a.tc};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;flex-shrink:0">${esc(ini)}</div>
           <span>${esc(S.master.name)}</span>
         </div>
         <div class="ok-row"><i class="ti ti-paw"></i><span>${esc(S.petName)}${S.petBreed?' · '+esc(S.petBreed):''} · ${S.petSize==='SMALL'?'мелкий':S.petSize==='MEDIUM'?'средний':'крупный'}</span></div>
@@ -317,13 +322,13 @@ function renderSuccess(){
     </div>`);
 }
 
-/* ── actions ── */
+// ── Actions ──
 function selSvc(id){S.svc=S.services.find(x=>x.id===id)||null;S.master=null;S.date=null;S.time=null;S.slots=[];renderSvcs()}
 function selMaster(id){S.master=S.masters.find(x=>x.id===id)||null;S.date=null;S.time=null;S.slots=[];renderMasters()}
 
 async function selDate(y,m,d){
   S.date=new Date(y,m,d);S.time=null;S.slots=[];S.loading=true;renderDateTime();
-  try{const r=await get(`/staff/${S.master.id}/slots?date=${fmtISO(S.date)}&serviceId=${S.svc.id}`);S.slots=r.slots||[];}
+  try{const r=await apiGet(`/staff/${S.master.id}/slots?date=${fmtISO(S.date)}&serviceId=${S.svc.id}`);S.slots=r.slots||[];}
   catch(e){S.slots=[];}
   S.loading=false;renderDateTime();
 }
@@ -353,29 +358,67 @@ function validateDT(){
   if(!S.date||!S.time){const e=document.getElementById('dt-err');if(e)e.textContent='Выберите дату и время';return;}
   S.step++;render();
 }
+
+// ── FULL BOOKING FLOW ──
 async function submitBooking(){
   S.name=(document.getElementById('oname')?.value||'').trim();
   S.phone=(document.getElementById('ophone')?.value||'').trim();
   S.email=(document.getElementById('oemail')?.value||'').trim();
-  const err=document.getElementById('cerr');
-  if(!S.name){if(err)err.textContent='Введите ваше имя';return;}
-  if(!S.phone||!/^(?:\+7|8)[\d\s\-()\d]{9,}$/.test(S.phone)){if(err)err.textContent='Введите корректный номер телефона';return;}
+  const errEl=document.getElementById('cerr');
+
+  if(!S.name){if(errEl)errEl.textContent='Введите ваше имя';return;}
+  if(!S.phone||!/^(?:\+7|8)[\d\s\-()\d]{9,}$/.test(S.phone)){if(errEl)errEl.textContent='Введите корректный номер телефона';return;}
+
   const btn=document.getElementById('sbtn');
   if(btn){btn.disabled=true;btn.textContent='Отправка…';}
-  try{
-    await post('/clients',{name:S.name,phone:S.phone,...(S.email?{email:S.email}:{})}).catch(()=>{});
-    S.step++;renderSteps();renderSuccess();
-  }catch(e){
+  if(errEl)errEl.textContent='';
+
+  try {
+    // Step 1: create or find client (idempotent)
+    const client = await apiPost('/clients',{
+      name:S.name, phone:S.phone, ...(S.email?{email:S.email}:{})
+    });
+    if(!client?.id) throw new Error('Не удалось создать клиента');
+
+    // Step 2: create pet
+    const petTypeMap={dog:'DOG',cat:'CAT',other:'OTHER'};
+    const pet = await apiPost(`/clients/${client.id}/pets`,{
+      name:  S.petName,
+      type:  petTypeMap[S.petType]||'DOG',
+      size:  S.petSize,
+      ...(S.petBreed?{breed:S.petBreed}:{}),
+    });
+    if(!pet?.id) throw new Error('Не удалось создать профиль питомца');
+
+    // Step 3: create appointment
+    const appt = await apiPost('/appointments',{
+      serviceId: S.svc.id,
+      staffId:   S.master.id,
+      petId:     pet.id,
+      startAt:   S.time,
+    });
+    S.createdApptId = appt?.id;
+
+    // Success!
+    S.step++;
+    renderSteps();
+    renderSuccess();
+
+  } catch(e){
     if(btn){btn.disabled=false;btn.innerHTML='<i class="ti ti-calendar-check"></i> Записаться';}
-    if(err)err.textContent=e.message||'Ошибка. Попробуйте ещё раз.';
+    if(errEl)errEl.textContent=e.message||'Ошибка. Попробуйте ещё раз.';
   }
 }
+
 function resetForm(){
-  Object.assign(S,{step:0,svc:null,master:null,petType:'dog',petName:'',petBreed:'',petSize:'MEDIUM',
-    date:null,time:null,slots:[],name:'',phone:'',email:'',
-    calYear:new Date().getFullYear(),calMonth:new Date().getMonth(),loading:false});
+  Object.assign(S,{
+    step:0,svc:null,master:null,petType:'dog',petName:'',petBreed:'',petSize:'MEDIUM',
+    date:null,time:null,slots:[],name:'',phone:'',email:'',createdApptId:null,
+    calYear:new Date().getFullYear(),calMonth:new Date().getMonth(),loading:false
+  });
   render();
 }
+
 function render(){
   renderSteps();
   if(S.step===0)renderSvcs();
@@ -386,11 +429,11 @@ function render(){
   else renderSuccess();
 }
 
-/* ── boot ── */
+// ── Boot ──
 async function boot(){
   renderSteps();showLoader();
   try{
-    const [svcs,masters]=await Promise.all([get('/services'),get('/staff')]);
+    const [svcs,masters]=await Promise.all([apiGet('/services'),apiGet('/staff')]);
     S.services=svcs;S.masters=masters;render();
   }catch(e){
     setHTML(`<div class="alert">Не удалось загрузить данные: ${esc(e.message)}</div>
