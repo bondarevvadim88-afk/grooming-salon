@@ -1,18 +1,17 @@
-// appointments/dto/create-appointment.dto.ts
-import { IsUUID, IsDateString, IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsString, IsDateString, IsOptional, MaxLength } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateAppointmentDto {
   @ApiProperty()
-  @IsUUID()
+  @IsString()
   serviceId: string;
 
   @ApiProperty()
-  @IsUUID()
+  @IsString()
   staffId: string;
 
   @ApiProperty()
-  @IsUUID()
+  @IsString()
   petId: string;
 
   @ApiProperty({ example: '2025-06-15T10:00:00Z' })
