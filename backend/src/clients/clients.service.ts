@@ -1,5 +1,4 @@
-// clients/clients.service.ts
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateClientDto } from './dto/create-client.dto';
 
@@ -9,7 +8,7 @@ export class ClientsService {
 
   async create(dto: CreateClientDto) {
     const existing = await this.prisma.client.findUnique({ where: { phone: dto.phone } });
-    if (existing) throw new ConflictException('Phone already registered');
+    if (existing) return existing;
     return this.prisma.client.create({ data: dto });
   }
 
@@ -29,8 +28,12 @@ export class ClientsService {
       orderBy: { startAt: 'desc' },
     });
   }
-}
 
-// clients/dto/create-client.dto.ts
-// (exported separately but kept in same file for brevity)
-export { CreateClientDto } from './dto/create-client.dto';
+  async createPet(clientId: string, body: { name: string; type: string; breed?: string; size: string }) {
+    const client = await this.prisma.client.findUnique({ where: { id: clientId } });
+    if (!client) throw new NotFoundException('Client not found');
+    return this.prisma.pet.create({
+      data: { clientId, name: body.name, type: body.type as any, breed: body.breed || null, size: body.size as any },
+    });
+  }
+}
