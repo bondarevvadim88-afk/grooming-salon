@@ -12,9 +12,8 @@
       --text:#1a1a18;--text2:#6b6b68;--text3:#9e9e9a;
       --border:rgba(0,0,0,.10);--border2:rgba(0,0,0,.18);
       --teal:#1D9E75;--teal-bg:#E1F5EE;--teal-dark:#0F6E56;
-      --amber:#854F0B;--danger:#A32D2D;--danger-bg:#FCEBEB;
+      --danger:#A32D2D;--danger-bg:#FCEBEB;
       --blue:#185FA5;--blue-bg:#E6F1FB;
-      --purple:#534AB7;--purple-bg:#EEEDFE;
       --r:8px;--rl:12px;
       --font:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     }
@@ -25,10 +24,9 @@
       --teal-bg:#04342C;
     }}
     body{font-family:var(--font);background:var(--bg3);color:var(--text);font-size:14px;min-height:100vh}
-
-    /* ── Login ── */
+    /* Login */
     .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-    .login-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:32px;width:100%;max-width:380px}
+    .login-card{background:var(--bg);border:.5px solid var(--border);border-radius:var(--rl);padding:32px;width:100%;max-width:380px}
     .login-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:24px}
     .login-logo .ico{width:40px;height:40px;border-radius:10px;background:var(--teal-bg);display:flex;align-items:center;justify-content:center}
     .login-logo span{font-size:18px;font-weight:500}
@@ -36,37 +34,34 @@
     .login-sub{font-size:13px;color:var(--text2);margin-bottom:24px;text-align:center}
     .field{margin-bottom:14px}
     .field label{display:block;font-size:12px;color:var(--text2);margin-bottom:5px}
-    .field input{width:100%;padding:9px 12px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font);outline:none;transition:border-color .15s}
+    .field input{width:100%;padding:9px 12px;border:.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font);outline:none;transition:border-color .15s}
     .field input:focus{border-color:var(--teal)}
-    .btn-primary{width:100%;background:var(--teal);border:none;border-radius:var(--r);padding:10px;font-size:14px;font-weight:500;color:#fff;cursor:pointer;transition:opacity .15s;font-family:var(--font)}
+    .btn-primary{width:100%;background:var(--teal);border:none;border-radius:var(--r);padding:10px;font-size:14px;font-weight:500;color:#fff;cursor:pointer;font-family:var(--font)}
     .btn-primary:hover{opacity:.9}
     .btn-primary:disabled{opacity:.4;cursor:not-allowed}
     .login-err{font-size:12px;color:var(--danger);margin-top:10px;text-align:center;min-height:18px}
-
-    /* ── App layout ── */
+    /* App */
     .app{display:flex;min-height:100vh}
-    .sidebar{width:200px;flex-shrink:0;background:var(--bg);border-right:0.5px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+    .sidebar{width:200px;flex-shrink:0;background:var(--bg);border-right:.5px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
     .main{flex:1;min-width:0;padding:24px;overflow-y:auto}
-    .s-logo{display:flex;align-items:center;gap:9px;padding:16px 16px 14px;border-bottom:0.5px solid var(--border)}
+    .s-logo{display:flex;align-items:center;gap:9px;padding:16px 16px 14px;border-bottom:.5px solid var(--border)}
     .s-logo .ico{width:30px;height:30px;border-radius:8px;background:var(--teal-bg);display:flex;align-items:center;justify-content:center}
     .s-logo span{font-size:14px;font-weight:500}
     .s-user{padding:10px 16px;font-size:11px;background:var(--bg2);margin:8px;border-radius:var(--r);display:flex;align-items:center;justify-content:space-between}
-    .s-user .role{font-size:10px;padding:2px 6px;border-radius:6px;font-weight:500}
+    .role-badge{font-size:10px;padding:2px 6px;border-radius:6px;font-weight:500}
     .role-admin{background:var(--teal-bg);color:var(--teal-dark)}
     .role-master{background:var(--blue-bg);color:var(--blue)}
     .snav{padding:4px 0;flex:1}
-    .snav a{display:flex;align-items:center;gap:9px;padding:9px 16px;font-size:13px;cursor:pointer;color:var(--text2);text-decoration:none;transition:background .12s,color .12s}
+    .snav a{display:flex;align-items:center;gap:9px;padding:9px 16px;font-size:13px;cursor:pointer;color:var(--text2);text-decoration:none;transition:background .12s}
     .snav a:hover{background:var(--bg2);color:var(--text)}
-    .snav a:focus{outline:2px solid var(--teal);outline-offset:-2px}
     .snav a.active{background:var(--teal-bg);color:var(--teal-dark);font-weight:500}
     .snav a i{font-size:16px;flex-shrink:0}
-    .snav .sep{height:0.5px;background:var(--border);margin:6px 14px}
-    .s-logout{padding:12px 16px;border-top:0.5px solid var(--border)}
-    .s-logout button{width:100%;background:none;border:0.5px solid var(--border2);border-radius:var(--r);padding:7px;font-size:12px;color:var(--text2);cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:6px}
+    .snav .sep{height:.5px;background:var(--border);margin:6px 14px}
+    .s-logout{padding:12px 16px;border-top:.5px solid var(--border)}
+    .s-logout button{width:100%;background:none;border:.5px solid var(--border2);border-radius:var(--r);padding:7px;font-size:12px;color:var(--text2);cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:6px}
     .s-logout button:hover{border-color:var(--danger);color:var(--danger)}
-
-    /* ── Cards ── */
-    .card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:14px 16px;margin-bottom:14px}
+    /* Cards */
+    .card{background:var(--bg);border:.5px solid var(--border);border-radius:var(--rl);padding:14px 16px;margin-bottom:14px}
     .card h3{font-size:13px;font-weight:500;margin-bottom:12px;display:flex;align-items:center;gap:6px}
     .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
     .topbar h2{font-size:17px;font-weight:500}
@@ -75,11 +70,13 @@
     .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:14px}
     @media(max-width:900px){.g2{grid-template-columns:1fr}}
     @media(max-width:700px){.g4{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:480px){.g4{grid-template-columns:1fr}}
     .mcard{background:var(--bg2);border-radius:var(--r);padding:12px 14px}
     .mcard .ml{font-size:11px;color:var(--text2);margin-bottom:4px}
     .mcard .mv{font-size:22px;font-weight:500}
-    .ib{background:none;border:0.5px solid var(--border2);border-radius:var(--r);padding:6px 12px;font-size:12px;color:var(--text2);cursor:pointer;transition:border-color .12s,color .12s;display:inline-flex;align-items:center;gap:5px;font-family:var(--font)}
+    .ib{background:none;border:.5px solid var(--border2);border-radius:var(--r);padding:6px 12px;font-size:12px;color:var(--text2);cursor:pointer;transition:border-color .12s;display:inline-flex;align-items:center;gap:5px;font-family:var(--font)}
     .ib:hover{border-color:var(--teal);color:var(--teal-dark)}
+    .ib.danger:hover{border-color:var(--danger);color:var(--danger)}
     .badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500}
     .badge.confirmed{background:#E1F5EE;color:#085041}
     .badge.pending{background:#FAEEDA;color:#633806}
@@ -87,8 +84,8 @@
     .badge.completed{background:#E6F1FB;color:#0C447C}
     .badge.inprog{background:#EEEDFE;color:#3C3489}
     .tbl{width:100%;border-collapse:collapse;font-size:12px}
-    .tbl th{text-align:left;padding:6px 8px;font-size:11px;font-weight:500;color:var(--text2);border-bottom:0.5px solid var(--border)}
-    .tbl td{padding:8px;border-bottom:0.5px solid var(--border);color:var(--text);vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .tbl th{text-align:left;padding:6px 8px;font-size:11px;font-weight:500;color:var(--text2);border-bottom:.5px solid var(--border)}
+    .tbl td{padding:8px;border-bottom:.5px solid var(--border);color:var(--text);vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .tbl tr:last-child td{border-bottom:none}
     .tbl tr:hover td{background:var(--bg2)}
     .ava{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;font-weight:500;flex-shrink:0}
@@ -96,315 +93,276 @@
     .bar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:3px}
     .bar-track{height:6px;background:var(--border);border-radius:3px}
     .bar-fill{height:6px;border-radius:3px}
-    .tag{display:inline-block;font-size:10px;padding:2px 6px;border-radius:8px;background:var(--bg2);color:var(--text2);margin:2px 2px 0 0}
+    /* Schedule grid */
     .sched-wrap{overflow-x:auto}
     .sched-grid{display:grid;gap:3px}
     .sched-hdr{font-size:11px;font-weight:500;color:var(--text2);text-align:center;padding:4px;background:var(--bg2);border-radius:var(--r)}
     .sched-time{font-size:11px;color:var(--text3);text-align:right;padding:5px 6px 0 0}
-    .sched-slot{border-radius:5px;padding:4px 5px;min-height:28px;font-size:10px;cursor:pointer;border:0.5px solid transparent;transition:all .12s}
+    .sched-slot{border-radius:5px;padding:4px 5px;min-height:28px;font-size:10px;cursor:pointer;border:.5px solid transparent;transition:all .12s}
     .sched-slot.free{background:var(--bg2)}
-    .sched-slot.free:hover{border-color:var(--teal);background:var(--teal-bg)}
     .sched-slot.booked{background:var(--teal-bg);color:#085041;border-color:#9FE1CB}
     .sched-slot.wait{background:#FAEEDA;color:#633806;border-color:#FAC775}
     .sched-slot.done{background:#E6F1FB;color:#0C447C;border-color:#B5D4F4}
+    /* Filters */
     .filter-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
-    .filter-row select,.filter-row input{font-size:12px;padding:5px 8px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text);font-family:var(--font)}
+    .filter-row select,.filter-row input{font-size:12px;padding:5px 8px;border:.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text);font-family:var(--font)}
     .filter-row input{flex:1;min-width:140px}
+    /* Toggle */
     .toggle{position:relative;width:30px;height:17px;display:inline-block}
     .toggle input{opacity:0;width:0;height:0;position:absolute}
     .tslider{position:absolute;inset:0;border-radius:9px;background:var(--border2);cursor:pointer;transition:.2s}
     .tslider::before{content:'';position:absolute;width:13px;height:13px;left:2px;top:2px;border-radius:50%;background:#fff;transition:.2s}
     .toggle input:checked+.tslider{background:var(--teal)}
     .toggle input:checked+.tslider::before{transform:translateX(13px)}
-    .svc-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--border);gap:10px}
+    .svc-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:.5px solid var(--border);gap:10px}
     .svc-row:last-child{border-bottom:none}
-    .tl-item{position:relative;padding:0 0 12px 16px;border-left:0.5px solid var(--border)}
-    .tl-item:last-child{border-left:0.5px solid transparent;padding-bottom:0}
-    .tl-dot{position:absolute;left:-5px;top:3px;width:9px;height:9px;border-radius:50%;border:0.5px solid var(--border);background:var(--bg)}
-    .tl-dot.ok{background:var(--teal);border-color:var(--teal)}
-    .stat-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--border);font-size:12px}
+    .stat-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:.5px solid var(--border);font-size:12px}
     .stat-row:last-child{border-bottom:none}
+    /* Modal */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
+    .modal{background:var(--bg);border-radius:var(--rl);padding:24px;width:100%;max-width:440px;max-height:90vh;overflow-y:auto}
+    .modal h3{font-size:15px;font-weight:500;margin-bottom:16px}
+    .modal-field{margin-bottom:12px}
+    .modal-field label{display:block;font-size:12px;color:var(--text2);margin-bottom:4px}
+    .modal-field input,.modal-field select,.modal-field textarea{width:100%;padding:8px 10px;border:.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font);outline:none}
+    .modal-field input:focus,.modal-field textarea:focus{border-color:var(--teal)}
+    .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+    .btn-save{background:var(--teal);border:none;border-radius:var(--r);padding:8px 20px;font-size:13px;font-weight:500;color:#fff;cursor:pointer;font-family:var(--font)}
+    .btn-cancel{background:none;border:.5px solid var(--border2);border-radius:var(--r);padding:8px 16px;font-size:13px;color:var(--text2);cursor:pointer;font-family:var(--font)}
     .alert{background:var(--danger-bg);color:var(--danger);border-radius:var(--r);padding:10px 14px;font-size:13px;margin-bottom:12px}
     .loader{display:flex;align-items:center;justify-content:center;padding:40px}
     .spinner{width:24px;height:24px;border:3px solid var(--teal-bg);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
-
-    /* ── Schedule editor ── */
-    .day-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:0.5px solid var(--border)}
+    /* Schedule editor */
+    .day-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:.5px solid var(--border)}
     .day-row:last-child{border-bottom:none}
-    .day-name{width:36px;font-size:12px;font-weight:500;color:var(--text)}
-    .day-times{display:flex;gap:8px;align-items:center;flex:1;flex-wrap:wrap}
-    .day-times input[type=time]{padding:4px 6px;border:0.5px solid var(--border2);border-radius:var(--r);font-size:12px;background:var(--bg);color:var(--text);font-family:var(--font)}
+    .day-name{width:36px;font-size:12px;font-weight:500}
+    .day-times{display:flex;gap:8px;align-items:center;flex:1}
+    .day-times input[type=time]{padding:4px 6px;border:.5px solid var(--border2);border-radius:var(--r);font-size:12px;background:var(--bg);color:var(--text);font-family:var(--font)}
     .day-times input[type=time]:disabled{opacity:.4}
-    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
-    .modal{background:var(--bg);border-radius:var(--rl);padding:24px;width:100%;max-width:420px;max-height:90vh;overflow-y:auto}
-    .modal h3{font-size:15px;font-weight:500;margin-bottom:16px}
-    .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
-    .btn-save{background:var(--teal);border:none;border-radius:var(--r);padding:8px 20px;font-size:13px;font-weight:500;color:#fff;cursor:pointer;font-family:var(--font)}
-    .btn-cancel{background:none;border:0.5px solid var(--border2);border-radius:var(--r);padding:8px 16px;font-size:13px;color:var(--text2);cursor:pointer;font-family:var(--font)}
   </style>
 </head>
 <body>
 
-<!-- ── Login screen ── -->
+<!-- Login -->
 <div id="login-screen" class="login-wrap">
   <div class="login-card">
     <div class="login-logo">
-      <div class="ico"><i class="ti ti-scissors" style="font-size:18px;color:#0F6E56" aria-hidden="true"></i></div>
+      <div class="ico"><i class="ti ti-scissors" style="font-size:18px;color:#0F6E56"></i></div>
       <span>ГрумПро</span>
     </div>
     <div class="login-title">Вход в панель управления</div>
     <div class="login-sub">Введите email и пароль</div>
-    <div class="field">
-      <label>Email</label>
-      <input id="login-email" type="email" placeholder="admin@lyubi-grooming.ru" autocomplete="email">
-    </div>
-    <div class="field">
-      <label>Пароль</label>
-      <input id="login-password" type="password" placeholder="••••••••" autocomplete="current-password"
-             onkeydown="if(event.key==='Enter')doLogin()">
-    </div>
-    <button class="btn-primary" id="login-btn" onclick="doLogin()">Войти</button>
-    <div class="login-err" id="login-err"></div>
+    <div class="field"><label>Email</label><input id="l-email" type="email" placeholder="admin@lyubi-grooming.ru" autocomplete="email"></div>
+    <div class="field"><label>Пароль</label><input id="l-pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <button class="btn-primary" id="l-btn" onclick="doLogin()">Войти</button>
+    <div class="login-err" id="l-err"></div>
   </div>
 </div>
 
-<!-- ── App screen ── -->
+<!-- App -->
 <div id="app-screen" class="app" style="display:none">
   <aside class="sidebar">
     <div class="s-logo">
-      <div class="ico" aria-hidden="true"><i class="ti ti-scissors" style="font-size:15px;color:#0F6E56"></i></div>
+      <div class="ico"><i class="ti ti-scissors" style="font-size:15px;color:#0F6E56"></i></div>
       <span>ГрумПро</span>
     </div>
     <div class="s-user">
-      <span id="user-email" style="font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100px"></span>
-      <span class="role" id="user-role-badge"></span>
+      <span id="u-email" style="font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:110px"></span>
+      <span class="role-badge" id="u-role"></span>
     </div>
-    <nav class="snav" id="sidebar-nav"></nav>
-    <div class="s-logout">
-      <button onclick="doLogout()"><i class="ti ti-logout" aria-hidden="true"></i> Выйти</button>
-    </div>
+    <nav class="snav" id="snav"></nav>
+    <div class="s-logout"><button onclick="doLogout()"><i class="ti ti-logout"></i> Выйти</button></div>
   </aside>
-  <main class="main" id="main-content" aria-live="polite"></main>
+  <main class="main" id="main"></main>
 </div>
 
-<!-- ── Schedule modal ── -->
-<div id="schedule-modal" class="modal-overlay" style="display:none">
-  <div class="modal">
-    <h3>Моё расписание</h3>
-    <div id="schedule-editor"></div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeSchedule()">Отмена</button>
-      <button class="btn-save" onclick="saveSchedule()">Сохранить</button>
-    </div>
-  </div>
+<!-- Universal Modal -->
+<div id="modal" class="modal-overlay" style="display:none">
+  <div class="modal" id="modal-body"></div>
 </div>
 
 <script>
 "use strict";
-
 const API = 'https://grooming-salon-production.up.railway.app';
 const AVA = [{bg:'#E1F5EE',tc:'#0F6E56'},{bg:'#E6F1FB',tc:'#185FA5'},{bg:'#EEEDFE',tc:'#534AB7'}];
 const STATUS_LABEL = {confirmed:'Подтверждена',pending:'Ожидает',cancelled:'Отменена',completed:'Завершена',inprog:'В работе'};
-const DAYS_RU = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
-const SCHED_TIMES = ['09:00','09:30','10:00','10:30','11:00','11:30','12:00','13:00','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00'];
+const DAYS = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+const TIMES = ['09:00','09:30','10:00','10:30','11:00','11:30','12:00','13:00','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00'];
 
-// ── State ──
-let AUTH = JSON.parse(localStorage.getItem('groomauth') || 'null');
-let CACHE = { appointments:[], staff:[], services:[] };
+let AUTH = null;
+try { AUTH = JSON.parse(localStorage.getItem('groomauth') || 'null'); } catch(e){}
+let D = { appointments:[], staff:[], services:[] };
 let fMaster='all', fStatus='all', fSearch='';
-let schedDate = new Date();
 
-// ── Helpers ──
+/* ── Helpers ── */
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
-function ava(idx,sz=20){const a=AVA[idx%AVA.length];return `<div class="ava" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.42)}px;background:${a.bg};color:${a.tc}">${esc(AUTH?.user?.role)}</div>`}
-function avaOf(name,idx,sz=20){const a=AVA[idx%AVA.length];const i=(name||'').split(' ').slice(0,2).map(w=>w[0]).join('');return `<div class="ava" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.42)}px;background:${a.bg};color:${a.tc}">${esc(i)}</div>`}
-function fmtDate(d){return new Date(d).toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric'})}
-function fmtTime(d){return new Date(d).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}
-function setHTML(html){document.getElementById('main-content').innerHTML=html}
+function avaOf(name,idx,sz=20){const a=AVA[idx%AVA.length];const i=(name||'').split(' ').slice(0,2).map(w=>w[0]).join('');return `<span class="ava" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.42)}px;background:${a.bg};color:${a.tc}">${esc(i)}</span>`}
+function fmtD(d){return new Date(d).toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric'})}
+function fmtT(d){return new Date(d).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}
+function setHTML(h){document.getElementById('main').innerHTML=h}
 function showLoader(){setHTML('<div class="loader"><div class="spinner"></div></div>')}
 function isAdmin(){return AUTH?.user?.role==='ADMIN'}
+function closeModal(){document.getElementById('modal').style.display='none'}
 
-// ── API ──
-async function apiFetch(path, opts={}){
-  const headers = {'Content-Type':'application/json'};
-  if(AUTH?.access_token) headers['Authorization'] = 'Bearer '+AUTH.access_token;
-  const r = await fetch(API+path, {...opts, headers:{...headers,...(opts.headers||{})}});
+/* ── API ── */
+async function req(path,opts={}){
+  const h={'Content-Type':'application/json'};
+  if(AUTH?.access_token) h['Authorization']='Bearer '+AUTH.access_token;
+  const r=await fetch(API+path,{...opts,headers:{...h,...(opts.headers||{})}});
   if(r.status===401){doLogout();throw new Error('Сессия истекла')}
-  if(!r.ok){const d=await r.json().catch(()=>({}));throw new Error(d.message||'Ошибка '+r.status)}
-  return r.json();
+  const data=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(data.message||'Ошибка '+r.status);
+  return data;
 }
 
-// ── Auth ──
+/* ── Auth ── */
 async function doLogin(){
-  const email = document.getElementById('login-email').value.trim();
-  const pass  = document.getElementById('login-password').value;
-  const err   = document.getElementById('login-err');
-  const btn   = document.getElementById('login-btn');
+  const email=document.getElementById('l-email').value.trim();
+  const pass=document.getElementById('l-pass').value;
+  const err=document.getElementById('l-err');
+  const btn=document.getElementById('l-btn');
   if(!email||!pass){err.textContent='Введите email и пароль';return;}
-  btn.disabled=true; btn.textContent='Вход…'; err.textContent='';
-  try {
-    const data = await fetch(API+'/auth/login',{
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({email, password:pass})
-    }).then(r=>r.json());
-    if(!data.access_token) throw new Error(data.message||'Ошибка входа');
-    AUTH = data;
-    localStorage.setItem('groomauth', JSON.stringify(AUTH));
-    showApp();
-  } catch(e){
-    err.textContent = e.message||'Неверный email или пароль';
-    btn.disabled=false; btn.textContent='Войти';
-  }
+  btn.disabled=true;btn.textContent='Вход…';err.textContent='';
+  try{
+    const r=await fetch(API+'/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pass})});
+    const data=await r.json();
+    if(!data.access_token)throw new Error(data.message||'Ошибка входа');
+    AUTH=data;localStorage.setItem('groomauth',JSON.stringify(AUTH));
+    startApp();
+  }catch(e){err.textContent=e.message||'Неверный email или пароль';btn.disabled=false;btn.textContent='Войти';}
 }
-
 function doLogout(){
-  AUTH=null; localStorage.removeItem('groomauth');
+  AUTH=null;localStorage.removeItem('groomauth');
   document.getElementById('login-screen').style.display='flex';
   document.getElementById('app-screen').style.display='none';
-  document.getElementById('login-password').value='';
-  document.getElementById('login-err').textContent='';
-  document.getElementById('login-btn').disabled=false;
-  document.getElementById('login-btn').textContent='Войти';
+  document.getElementById('l-pass').value='';
+  document.getElementById('l-err').textContent='';
+  document.getElementById('l-btn').disabled=false;
+  document.getElementById('l-btn').textContent='Войти';
 }
 
-// ── App init ──
-async function showApp(){
+/* ── App ── */
+async function startApp(){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('app-screen').style.display='flex';
-  document.getElementById('user-email').textContent = AUTH.user.email;
-  const rb = document.getElementById('user-role-badge');
-  rb.textContent = isAdmin() ? 'Администратор' : 'Мастер';
-  rb.className = 'role ' + (isAdmin() ? 'role-admin' : 'role-master');
+  document.getElementById('u-email').textContent=AUTH.user.email;
+  const rb=document.getElementById('u-role');
+  rb.textContent=isAdmin()?'Администратор':'Мастер';
+  rb.className='role-badge '+(isAdmin()?'role-admin':'role-master');
   buildNav();
-  await loadData();
-  navTo('dash', document.querySelector('.snav a.active'));
+  showLoader();
+  await loadAll();
+  navTo('dash',document.querySelector('.snav a'));
 }
 
 function buildNav(){
-  const nav = document.getElementById('sidebar-nav');
-  const adminLinks = [
-    {id:'dash',   icon:'ti-layout-dashboard', label:'Дашборд'},
-    {id:'sched',  icon:'ti-calendar',          label:'Расписание'},
-    {id:'hist',   icon:'ti-clock-history',     label:'История'},
+  const links=isAdmin()?[
+    {id:'dash',ic:'ti-layout-dashboard',lb:'Дашборд'},
+    {id:'sched',ic:'ti-calendar',lb:'Расписание'},
+    {id:'hist',ic:'ti-clock-history',lb:'История'},
     {sep:true},
-    {id:'masters',icon:'ti-users',             label:'Мастера'},
-    {id:'svcs',   icon:'ti-cut',               label:'Услуги'},
-    {sep:true},
-    {id:'notif',  icon:'ti-bell',              label:'Уведомления'},
+    {id:'masters',ic:'ti-users',lb:'Мастера'},
+    {id:'svcs',ic:'ti-cut',lb:'Услуги'},
+  ]:[
+    {id:'my-sched',ic:'ti-calendar',lb:'Моё расписание'},
+    {id:'my-appts',ic:'ti-clock-history',lb:'Мои записи'},
   ];
-  const masterLinks = [
-    {id:'my-sched', icon:'ti-calendar',        label:'Моё расписание'},
-    {id:'my-appts', icon:'ti-clock-history',   label:'Мои записи'},
-  ];
-  const links = isAdmin() ? adminLinks : masterLinks;
-  nav.innerHTML = links.map((l,i)=>{
-    if(l.sep) return '<div class="sep" role="separator"></div>';
-    const active = i===0 ? ' active' : '';
-    return `<a class="${active}" tabindex="0" role="button"
-      onclick="navTo('${l.id}',this)"
-      onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();navTo('${l.id}',this)}">
-      <i class="ti ${l.icon}" aria-hidden="true"></i>${esc(l.label)}
-    </a>`;
+  document.getElementById('snav').innerHTML=links.map((l,i)=>{
+    if(l.sep)return '<div class="sep"></div>';
+    return `<a class="${i===0?'active':''}" onclick="navTo('${l.id}',this)" tabindex="0" onkeydown="if(event.key==='Enter')navTo('${l.id}',this)"><i class="ti ${l.ic}"></i>${esc(l.lb)}</a>`;
   }).join('');
 }
 
-async function loadData(){
-  try {
-    const [appts, staff, services] = await Promise.all([
-      apiFetch('/appointments').catch(()=>[]),
-      apiFetch('/staff').catch(()=>[]),
-      apiFetch('/services').catch(()=>[]),
+async function loadAll(){
+  try{
+    const [a,s,sv]=await Promise.all([
+      req('/appointments').catch(()=>[]),
+      req('/staff').catch(()=>[]),
+      req('/services').catch(()=>[]),
     ]);
-    CACHE.appointments = Array.isArray(appts) ? appts : [];
-    CACHE.staff = Array.isArray(staff) ? staff : [];
-    CACHE.services = Array.isArray(services) ? services : [];
-  } catch(e){ console.error('loadData error', e); }
+    D.appointments=Array.isArray(a)?a:[];
+    D.staff=Array.isArray(s)?s:[];
+    D.services=Array.isArray(sv)?sv:[];
+  }catch(e){console.error(e);}
 }
 
-function navTo(page, el){
+function navTo(page,el){
   document.querySelectorAll('.snav a').forEach(a=>a.classList.remove('active'));
-  if(el) el.classList.add('active');
-  try {
-    const pages = {
-      dash: renderDash, sched: renderSched, hist: renderHist,
-      masters: renderMasters, svcs: renderSvcs, notif: renderNotif,
-      'my-sched': renderMySchedule, 'my-appts': renderMyAppts,
-    };
-    (pages[page]||renderDash)();
-  } catch(e){
-    setHTML(`<div class="alert">Ошибка: ${esc(e.message)}</div>`);
-    console.error(e);
-  }
+  if(el)el.classList.add('active');
+  try{
+    ({dash:renderDash,sched:renderSched,hist:renderHist,masters:renderMasters,svcs:renderSvcs,'my-sched':renderMySched,'my-appts':renderMyAppts}[page]||renderDash)();
+  }catch(e){setHTML(`<div class="alert">Ошибка: ${esc(e.message)}</div>`);console.error(e);}
 }
 
-// ══════════════════════════════════════════
-// ADMIN VIEWS
-// ══════════════════════════════════════════
-
+/* ════════ DASHBOARD ════════ */
 function renderDash(){
-  const today = new Date().toLocaleDateString('ru-RU');
-  const todayA = CACHE.appointments.filter(a=>fmtDate(a.startAt)===today);
-  const dayRev = todayA.filter(a=>['completed','inprog'].includes(a.status)).reduce((s,a)=>s+a.totalPrice,0);
-  const monthRev = CACHE.appointments.reduce((s,a)=>s+a.totalPrice,0);
-  const noPct = CACHE.appointments.length ? Math.round(CACHE.appointments.filter(a=>a.status==='cancelled').length/CACHE.appointments.length*100) : 0;
-
+  const today=new Date().toLocaleDateString('ru-RU');
+  const todayA=D.appointments.filter(a=>fmtD(a.startAt)===today);
+  const rev=D.appointments.reduce((s,a)=>s+(a.totalPrice||0),0);
+  const noPct=D.appointments.length?Math.round(D.appointments.filter(a=>a.status==='cancelled').length/D.appointments.length*100):0;
   setHTML(`
   <div class="topbar"><h2>Дашборд</h2>
-    <div class="acts"><button class="ib" onclick="loadData().then(renderDash)"><i class="ti ti-refresh" aria-hidden="true"></i> Обновить</button></div>
+    <div class="acts"><button class="ib" onclick="loadAll().then(renderDash)"><i class="ti ti-refresh"></i> Обновить</button></div>
   </div>
   <div class="g4">
     <div class="mcard"><div class="ml">Записей сегодня</div><div class="mv">${todayA.length}</div></div>
-    <div class="mcard"><div class="ml">Выручка сегодня</div><div class="mv">${dayRev.toLocaleString('ru-RU')} ₽</div></div>
-    <div class="mcard"><div class="ml">Выручка за всё время</div><div class="mv">${monthRev.toLocaleString('ru-RU')} ₽</div></div>
+    <div class="mcard"><div class="ml">Всего записей</div><div class="mv">${D.appointments.length}</div></div>
+    <div class="mcard"><div class="ml">Выручка</div><div class="mv">${rev.toLocaleString('ru-RU')} ₽</div></div>
     <div class="mcard"><div class="ml">% отмен</div><div class="mv">${noPct}%</div></div>
   </div>
   <div class="g2">
     <div class="card">
-      <h3><i class="ti ti-calendar" style="color:var(--teal)" aria-hidden="true"></i> Записи сегодня</h3>
-      ${todayA.length===0?'<div style="color:var(--text3);font-size:13px">Записей нет</div>':''}
+      <h3><i class="ti ti-calendar" style="color:var(--teal)"></i> Записи сегодня</h3>
+      ${todayA.length===0?'<div style="color:var(--text3);font-size:13px;padding:8px 0">Записей нет</div>':''}
       <table class="tbl" style="table-layout:fixed">
         <colgroup><col style="width:44px"><col><col style="width:82px"><col style="width:100px"><col style="width:90px"></colgroup>
-        <thead><tr><th>Вр.</th><th>Клиент / питомец</th><th>Мастер</th><th>Услуга</th><th>Статус</th></tr></thead>
+        <thead><tr><th>Вр.</th><th>Клиент</th><th>Мастер</th><th>Услуга</th><th>Статус</th></tr></thead>
         <tbody>${todayA.map(a=>`<tr>
-          <td style="color:var(--text2)">${fmtTime(a.startAt)}</td>
-          <td><div style="font-size:12px;font-weight:500">${esc(a.client?.name||'—')}</div><div style="font-size:10px;color:var(--text2)">${esc(a.pet?.name||'—')}</div></td>
-          <td style="font-size:11px;color:var(--text2)">${esc(a.staff?.name?.split(' ')[0]||'—')}</td>
+          <td style="color:var(--text2)">${fmtT(a.startAt)}</td>
+          <td><div style="font-weight:500">${esc(a.client?.name||'—')}</div><div style="font-size:10px;color:var(--text2)">${esc(a.pet?.name||'—')}</div></td>
+          <td style="font-size:11px;color:var(--text2)">${esc((a.staff?.name||'—').split(' ')[0])}</td>
           <td style="font-size:11px">${esc(a.service?.name||'—')}</td>
           <td><span class="badge ${a.status}">${STATUS_LABEL[a.status]||a.status}</span></td>
         </tr>`).join('')}</tbody>
       </table>
     </div>
     <div class="card">
-      <h3><i class="ti ti-users" style="color:var(--teal)" aria-hidden="true"></i> Мастера</h3>
-      ${CACHE.staff.map((m,i)=>{
-        const cnt=CACHE.appointments.filter(a=>a.staffId===m.id).length;
+      <h3><i class="ti ti-users" style="color:var(--teal)"></i> Мастера</h3>
+      ${D.staff.map((m,i)=>{
+        const cnt=D.appointments.filter(a=>a.staffId===m.id).length;
         return `<div class="bar-wrap">
           <div class="bar-label"><span style="display:flex;align-items:center;gap:5px">${avaOf(m.name,i,18)} ${esc(m.name.split(' ')[0])}</span><span>${cnt} зап.</span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:${Math.min(cnt*10,100)}%;background:${AVA[i%AVA.length].tc}"></div></div>
+          <div class="bar-track"><div class="bar-fill" style="width:${Math.min(cnt*8,100)}%;background:${AVA[i%AVA.length].tc}"></div></div>
         </div>`;
       }).join('')}
     </div>
   </div>`);
 }
 
+/* ════════ SCHEDULE (from real data) ════════ */
 function renderSched(){
-  const todayStr = new Date().toLocaleDateString('ru-RU');
-  const todayA = CACHE.appointments.filter(a=>fmtDate(a.startAt)===todayStr);
-  const cols = `64px repeat(${CACHE.staff.length},1fr)`;
+  const today=new Date().toLocaleDateString('ru-RU');
+  const todayA=D.appointments.filter(a=>fmtD(a.startAt)===today);
+  const cols=`64px repeat(${D.staff.length},1fr)`;
   setHTML(`
-  <div class="topbar"><h2>Расписание — сегодня</h2></div>
+  <div class="topbar"><h2>Расписание — сегодня (${today})</h2>
+    <div class="acts"><button class="ib" onclick="loadAll().then(renderSched)"><i class="ti ti-refresh"></i> Обновить</button></div>
+  </div>
   <div class="card">
     <div class="sched-wrap">
-      <div class="sched-grid" style="grid-template-columns:${cols}">
+      <div class="sched-grid" style="grid-template-columns:${cols};min-width:${64+D.staff.length*120}px">
         <div class="sched-hdr"></div>
-        ${CACHE.staff.map((m,i)=>`<div class="sched-hdr"><div style="display:flex;align-items:center;justify-content:center;gap:5px">${avaOf(m.name,i,22)}<span>${esc(m.name.split(' ')[0])}</span></div></div>`).join('')}
-        ${SCHED_TIMES.map(t=>`
+        ${D.staff.map((m,i)=>`<div class="sched-hdr"><div style="display:flex;align-items:center;justify-content:center;gap:5px">${avaOf(m.name,i,22)}<span>${esc(m.name.split(' ')[0])}</span></div></div>`).join('')}
+        ${TIMES.map(t=>`
           <div class="sched-time">${t}</div>
-          ${CACHE.staff.map(m=>{
-            const a=todayA.find(x=>fmtTime(x.startAt)===t&&x.staffId===m.id);
+          ${D.staff.map(m=>{
+            const a=todayA.find(x=>{
+              const at=fmtT(x.startAt);
+              return at===t&&x.staffId===m.id;
+            });
             if(a){const cls=a.status==='pending'?'wait':a.status==='completed'?'done':'booked';
-              return `<div class="sched-slot ${cls}" title="${esc(a.client?.name)} — ${esc(a.service?.name)}"><div style="font-weight:500">${esc(a.pet?.name||'—')}</div><div style="opacity:.8;font-size:9px">${esc(a.service?.name||'')}</div></div>`;}
+              return `<div class="sched-slot ${cls}" title="${esc(a.client?.name||'')} — ${esc(a.service?.name||'')}"><div style="font-weight:500;overflow:hidden;text-overflow:ellipsis">${esc(a.pet?.name||'—')}</div><div style="opacity:.8;font-size:9px;overflow:hidden;text-overflow:ellipsis">${esc(a.service?.name||'')}</div></div>`;}
             return `<div class="sched-slot free"></div>`;
           }).join('')}
         `).join('')}
@@ -416,147 +374,229 @@ function renderSched(){
   </div>`);
 }
 
+/* ════════ HISTORY ════════ */
 function getFiltered(){
-  return CACHE.appointments.filter(a=>{
+  return D.appointments.filter(a=>{
     if(fMaster!=='all'&&a.staffId!==fMaster)return false;
     if(fStatus!=='all'&&a.status!==fStatus)return false;
     if(fSearch){const q=fSearch.toLowerCase();if(!(a.client?.name||'').toLowerCase().includes(q)&&!(a.pet?.name||'').toLowerCase().includes(q))return false;}
     return true;
   });
 }
-
-function renderHistRow(a){
-  const si=CACHE.staff.findIndex(x=>x.id===a.staffId);
+function histRow(a){
+  const si=D.staff.findIndex(x=>x.id===a.staffId);
   return `<tr>
-    <td style="color:var(--text2)">${fmtDate(a.startAt)}<div style="font-size:10px">${fmtTime(a.startAt)}</div></td>
-    <td><div style="font-weight:500">${esc(a.client?.name||'—')}</div><div style="font-size:10px;color:var(--text2)">${esc(a.pet?.name||'—')}</div></td>
-    <td><div style="display:flex;align-items:center;gap:4px">${avaOf(a.staff?.name||'',si,18)}<span style="font-size:10px">${esc((a.staff?.name||'').split(' ')[0])}</span></div></td>
+    <td style="color:var(--text2)">${fmtD(a.startAt)}<div style="font-size:10px">${fmtT(a.startAt)}</div></td>
+    <td><div style="font-weight:500">${esc(a.client?.name||'—')}</div><div style="font-size:10px;color:var(--text2)">${esc(a.client?.phone||'')}</div></td>
+    <td><div style="display:flex;align-items:center;gap:4px">${avaOf(a.staff?.name||'',si,18)}<span style="font-size:10px">${esc((a.staff?.name||'—').split(' ')[0])}</span></div></td>
+    <td><div style="font-size:11px">${esc(a.pet?.name||'—')}</div><div style="font-size:10px;color:var(--text2)">${esc(a.pet?.breed||'')}</div></td>
     <td style="font-size:11px">${esc(a.service?.name||'—')}</td>
     <td style="font-weight:500">${(a.totalPrice||0).toLocaleString('ru-RU')} ₽</td>
     <td><span class="badge ${a.status}">${STATUS_LABEL[a.status]||a.status}</span></td>
   </tr>`;
 }
-
 function renderHist(){
-  const filtered=getFiltered();
+  const f=getFiltered();
   setHTML(`
   <div class="topbar"><h2>История визитов</h2></div>
   <div class="card">
     <div class="filter-row">
-      <input type="search" placeholder="Поиск по клиенту, питомцу..." value="${esc(fSearch)}" oninput="fSearch=this.value;updateHistTable()">
-      <select onchange="fMaster=this.value;updateHistTable()">
+      <input type="search" placeholder="Поиск по клиенту, питомцу..." value="${esc(fSearch)}" oninput="fSearch=this.value;updHist()">
+      <select onchange="fMaster=this.value;updHist()">
         <option value="all">Все мастера</option>
-        ${CACHE.staff.map(m=>`<option value="${m.id}"${fMaster===m.id?' selected':''}>${esc(m.name.split(' ')[0])}</option>`).join('')}
+        ${D.staff.map(m=>`<option value="${m.id}"${fMaster===m.id?' selected':''}>${esc(m.name.split(' ')[0])}</option>`).join('')}
       </select>
-      <select onchange="fStatus=this.value;updateHistTable()">
+      <select onchange="fStatus=this.value;updHist()">
         <option value="all">Все статусы</option>
         ${Object.entries(STATUS_LABEL).map(([k,v])=>`<option value="${k}"${fStatus===k?' selected':''}>${v}</option>`).join('')}
       </select>
     </div>
     <div style="overflow-x:auto">
-      <table class="tbl" style="table-layout:fixed;min-width:480px">
-        <colgroup><col style="width:80px"><col style="width:130px"><col style="width:90px"><col style="width:110px"><col style="width:75px"><col style="width:90px"></colgroup>
-        <thead><tr><th>Дата</th><th>Клиент / питомец</th><th>Мастер</th><th>Услуга</th><th>Сумма</th><th>Статус</th></tr></thead>
-        <tbody id="hist-tbody">${filtered.map(renderHistRow).join('')}</tbody>
+      <table class="tbl" style="min-width:600px">
+        <thead><tr><th>Дата</th><th>Клиент</th><th>Мастер</th><th>Питомец</th><th>Услуга</th><th>Сумма</th><th>Статус</th></tr></thead>
+        <tbody id="htbody">${f.map(histRow).join('')}</tbody>
       </table>
     </div>
-    <div id="hist-count" style="font-size:11px;color:var(--text2);margin-top:8px">Показано: ${filtered.length} из ${CACHE.appointments.length}</div>
+    <div id="hcount" style="font-size:11px;color:var(--text2);margin-top:8px">Показано: ${f.length} из ${D.appointments.length}</div>
   </div>`);
 }
-
-function updateHistTable(){
-  const filtered=getFiltered();
-  const tb=document.getElementById('hist-tbody');
-  const ct=document.getElementById('hist-count');
-  if(tb)tb.innerHTML=filtered.map(renderHistRow).join('');
-  if(ct)ct.textContent=`Показано: ${filtered.length} из ${CACHE.appointments.length}`;
+function updHist(){
+  const f=getFiltered();
+  const tb=document.getElementById('htbody');const ct=document.getElementById('hcount');
+  if(tb)tb.innerHTML=f.map(histRow).join('');
+  if(ct)ct.textContent=`Показано: ${f.length} из ${D.appointments.length}`;
 }
 
+/* ════════ MASTERS (admin CRUD) ════════ */
 function renderMasters(){
   setHTML(`
-  <div class="topbar"><h2>Мастера</h2></div>
-  ${CACHE.staff.map((m,i)=>`
+  <div class="topbar"><h2>Мастера</h2>
+    <div class="acts"><button class="ib" onclick="openMasterModal()"><i class="ti ti-plus"></i> Добавить</button></div>
+  </div>
+  <div id="masters-list">${masterCards()}</div>`);
+}
+function masterCards(){
+  return D.staff.map((m,i)=>`
   <div class="card">
     <div style="display:flex;gap:14px;align-items:flex-start">
       ${avaOf(m.name,i,44)}
       <div style="flex:1;min-width:0">
         <div style="font-size:14px;font-weight:500;margin-bottom:2px">${esc(m.name)}</div>
-        <div style="font-size:12px;color:var(--text2);margin-bottom:6px">${esc(m.specialty)} · Опыт ${esc(m.bio||'')}</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:6px">${esc(m.specialty)}</div>
         <div style="font-size:11px;color:var(--teal)">★ ${m.rating} <span style="color:var(--text3)">(${m.reviewsCount} отз.)</span></div>
+        <div style="font-size:11px;color:var(--text2);margin-top:4px">${D.appointments.filter(a=>a.staffId===m.id).length} записей всего</div>
       </div>
-      <div style="text-align:right;font-size:11px;color:var(--text2)">
-        <div>${CACHE.appointments.filter(a=>a.staffId===m.id).length} записей</div>
-        <div style="margin-top:4px">${m.isActive?'Активен':'Отключён'}</div>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+        <span class="badge ${m.isActive?'confirmed':'cancelled'}">${m.isActive?'Активен':'Отключён'}</span>
+        <button class="ib" onclick="openMasterModal('${m.id}')"><i class="ti ti-edit"></i> Изменить</button>
+        <button class="ib danger" onclick="deactivateMaster('${m.id}','${esc(m.name)}')"><i class="ti ti-trash"></i> Удалить</button>
       </div>
     </div>
-  </div>`).join('')}`);
+  </div>`).join('');
 }
 
+function openMasterModal(id){
+  const m=id?D.staff.find(x=>x.id===id):null;
+  document.getElementById('modal-body').innerHTML=`
+    <h3>${m?'Редактировать мастера':'Новый мастер'}</h3>
+    <div class="modal-field"><label>Имя *</label><input id="m-name" value="${esc(m?.name||'')}" placeholder="Иван Иванов"></div>
+    <div class="modal-field"><label>Специализация *</label><input id="m-spec" value="${esc(m?.specialty||'')}" placeholder="Декоративные породы, кошки"></div>
+    <div class="modal-field"><label>О мастере</label><textarea id="m-bio" rows="2" style="resize:vertical">${esc(m?.bio||'')}</textarea></div>
+    <div id="m-err" style="font-size:12px;color:var(--danger);min-height:16px"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Отмена</button>
+      <button class="btn-save" onclick="saveMaster('${id||''}')">Сохранить</button>
+    </div>`;
+  document.getElementById('modal').style.display='flex';
+}
+
+async function saveMaster(id){
+  const name=document.getElementById('m-name').value.trim();
+  const spec=document.getElementById('m-spec').value.trim();
+  const bio=document.getElementById('m-bio').value.trim();
+  const err=document.getElementById('m-err');
+  if(!name||!spec){err.textContent='Заполните обязательные поля';return;}
+  try{
+    if(id){await req(`/staff/${id}`,{method:'PATCH',body:JSON.stringify({name,specialty:spec,bio:bio||undefined})});}
+    else  {await req('/staff',{method:'POST',body:JSON.stringify({name,specialty:spec,bio:bio||undefined})});}
+    closeModal();await loadAll();
+    document.getElementById('masters-list').innerHTML=masterCards();
+  }catch(e){err.textContent=e.message;}
+}
+
+async function deactivateMaster(id,name){
+  if(!confirm(`Удалить мастера «${name}»?`))return;
+  try{
+    await req(`/staff/${id}`,{method:'DELETE'});
+    await loadAll();
+    document.getElementById('masters-list').innerHTML=masterCards();
+  }catch(e){alert(e.message);}
+}
+
+/* ════════ SERVICES (admin CRUD) ════════ */
 function renderSvcs(){
   setHTML(`
-  <div class="topbar"><h2>Услуги</h2></div>
-  <div class="card">
-    ${CACHE.services.map(s=>`
-    <div class="svc-row">
-      <div style="min-width:0;flex:1">
-        <div style="font-size:13px;font-weight:500">${esc(s.name)}</div>
-        <div style="font-size:11px;color:var(--text2)">${esc(s.description||'')}</div>
-      </div>
-      <div style="display:flex;gap:16px;align-items:center;flex-shrink:0">
-        <div style="text-align:center"><div style="font-size:10px;color:var(--text3)">База</div><div style="font-size:12px;font-weight:500">${(s.basePrice||0).toLocaleString('ru-RU')} ₽</div></div>
-        <div style="text-align:center"><div style="font-size:10px;color:var(--text3)">Время</div><div style="font-size:12px;font-weight:500">${s.durationMin} мин</div></div>
-        <span class="badge ${s.isActive?'confirmed':'cancelled'}">${s.isActive?'Активна':'Отключена'}</span>
-      </div>
-    </div>`).join('')}
-  </div>`);
+  <div class="topbar"><h2>Услуги</h2>
+    <div class="acts"><button class="ib" onclick="openSvcModal()"><i class="ti ti-plus"></i> Добавить</button></div>
+  </div>
+  <div class="card" id="svcs-list">${svcRows()}</div>`);
 }
-
-function renderNotif(){
-  setHTML(`
-  <div class="topbar"><h2>Уведомления</h2></div>
-  <div class="card">
-    <h3>Каналы уведомлений</h3>
-    <div style="font-size:13px;color:var(--text2);line-height:1.7">
-      <div>📱 <b>SMS</b> — подтверждение записи и напоминание за 2 ч</div>
-      <div>📧 <b>Email</b> — подтверждение и история</div>
-      <div>✈️ <b>Telegram</b> — напоминание и запрос отзыва</div>
-      <div>🔵 <b>VK</b> — запрос отзыва</div>
+function svcRows(){
+  return D.services.map(s=>`
+  <div class="svc-row" id="sr-${s.id}">
+    <div style="min-width:0;flex:1">
+      <div style="font-size:13px;font-weight:500">${esc(s.name)}</div>
+      <div style="font-size:11px;color:var(--text2)">${esc(s.description||'')}</div>
     </div>
-    <div style="margin-top:12px;font-size:12px;color:var(--text3)">Для настройки каналов добавьте API-ключи в переменные Railway.</div>
-  </div>`);
+    <div style="display:flex;align-items:center;gap:12px;flex-shrink:0">
+      <div style="text-align:center;min-width:52px"><div style="font-size:10px;color:var(--text3)">База</div><div style="font-size:12px;font-weight:500">${(s.basePrice||0).toLocaleString('ru-RU')} ₽</div></div>
+      <div style="text-align:center;min-width:44px"><div style="font-size:10px;color:var(--text3)">Малый</div><div style="font-size:12px">${Math.round(s.basePrice*s.coefSmall/10)*10} ₽</div></div>
+      <div style="text-align:center;min-width:44px"><div style="font-size:10px;color:var(--text3)">Средний</div><div style="font-size:12px">${Math.round(s.basePrice*s.coefMedium/10)*10} ₽</div></div>
+      <div style="text-align:center;min-width:44px"><div style="font-size:10px;color:var(--text3)">Крупный</div><div style="font-size:12px">${Math.round(s.basePrice*s.coefLarge/10)*10} ₽</div></div>
+      <div style="text-align:center;min-width:40px"><div style="font-size:10px;color:var(--text3)">Время</div><div style="font-size:12px">${s.durationMin} мин</div></div>
+      <span class="badge ${s.isActive?'confirmed':'cancelled'}">${s.isActive?'Активна':'Откл.'}</span>
+      <button class="ib" onclick="openSvcModal('${s.id}')"><i class="ti ti-edit"></i></button>
+      <button class="ib danger" onclick="deactivateSvc('${s.id}','${esc(s.name)}')"><i class="ti ti-trash"></i></button>
+    </div>
+  </div>`).join('');
 }
 
-// ══════════════════════════════════════════
-// MASTER VIEWS
-// ══════════════════════════════════════════
-
-function getMyAppts(){
-  return CACHE.appointments.filter(a=>a.staffId===AUTH?.user?.staffId);
+function openSvcModal(id){
+  const s=id?D.services.find(x=>x.id===id):null;
+  document.getElementById('modal-body').innerHTML=`
+    <h3>${s?'Редактировать услугу':'Новая услуга'}</h3>
+    <div class="modal-field"><label>Название *</label><input id="s-name" value="${esc(s?.name||'')}" placeholder="Купание"></div>
+    <div class="modal-field"><label>Описание</label><input id="s-desc" value="${esc(s?.description||'')}" placeholder="Шампунь, сушка, расчёска"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="modal-field"><label>Базовая цена (₽) *</label><input id="s-price" type="number" value="${s?.basePrice||''}" placeholder="800"></div>
+      <div class="modal-field"><label>Длительность (мин) *</label><input id="s-dur" type="number" value="${s?.durationMin||''}" placeholder="60"></div>
+    </div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:8px">Коэффициенты по размеру питомца:</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+      <div class="modal-field"><label>Мелкий</label><input id="s-cs" type="number" step="0.1" value="${s?.coefSmall??0.8}"></div>
+      <div class="modal-field"><label>Средний</label><input id="s-cm" type="number" step="0.1" value="${s?.coefMedium??1.0}"></div>
+      <div class="modal-field"><label>Крупный</label><input id="s-cl" type="number" step="0.1" value="${s?.coefLarge??1.5}"></div>
+    </div>
+    <div id="s-err" style="font-size:12px;color:var(--danger);min-height:16px"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Отмена</button>
+      <button class="btn-save" onclick="saveSvc('${id||''}')">Сохранить</button>
+    </div>`;
+  document.getElementById('modal').style.display='flex';
 }
+
+async function saveSvc(id){
+  const name=document.getElementById('s-name').value.trim();
+  const desc=document.getElementById('s-desc').value.trim();
+  const price=parseFloat(document.getElementById('s-price').value);
+  const dur=parseInt(document.getElementById('s-dur').value);
+  const cs=parseFloat(document.getElementById('s-cs').value);
+  const cm=parseFloat(document.getElementById('s-cm').value);
+  const cl=parseFloat(document.getElementById('s-cl').value);
+  const err=document.getElementById('s-err');
+  if(!name||!price||!dur){err.textContent='Заполните обязательные поля';return;}
+  const body={name,description:desc||undefined,basePrice:price,durationMin:dur,coefSmall:cs,coefMedium:cm,coefLarge:cl};
+  try{
+    if(id){await req(`/services/${id}`,{method:'PATCH',body:JSON.stringify(body)});}
+    else  {await req('/services',{method:'POST',body:JSON.stringify(body)});}
+    closeModal();await loadAll();
+    document.getElementById('svcs-list').innerHTML=svcRows();
+  }catch(e){err.textContent=e.message;}
+}
+
+async function deactivateSvc(id,name){
+  if(!confirm(`Удалить услугу «${name}»?`))return;
+  try{
+    await req(`/services/${id}`,{method:'DELETE'});
+    await loadAll();
+    document.getElementById('svcs-list').innerHTML=svcRows();
+  }catch(e){alert(e.message);}
+}
+
+/* ════════ MASTER VIEWS ════════ */
+function getMyAppts(){return D.appointments.filter(a=>a.staffId===AUTH?.user?.staffId)}
 
 function renderMyAppts(){
-  const appts = getMyAppts();
-  const today = new Date().toLocaleDateString('ru-RU');
-  const todayA = appts.filter(a=>fmtDate(a.startAt)===today);
+  const appts=getMyAppts().sort((a,b)=>new Date(b.startAt)-new Date(a.startAt));
   setHTML(`
   <div class="topbar"><h2>Мои записи</h2>
-    <div class="acts"><button class="ib" onclick="loadData().then(renderMyAppts)"><i class="ti ti-refresh" aria-hidden="true"></i> Обновить</button></div>
+    <div class="acts"><button class="ib" onclick="loadAll().then(renderMyAppts)"><i class="ti ti-refresh"></i> Обновить</button></div>
   </div>
-  <div class="g4" style="margin-bottom:16px">
-    <div class="mcard"><div class="ml">Сегодня</div><div class="mv">${todayA.length}</div></div>
-    <div class="mcard"><div class="ml">Всего записей</div><div class="mv">${appts.length}</div></div>
+  <div class="g4">
+    <div class="mcard"><div class="ml">Всего</div><div class="mv">${appts.length}</div></div>
     <div class="mcard"><div class="ml">Завершено</div><div class="mv">${appts.filter(a=>a.status==='completed').length}</div></div>
-    <div class="mcard"><div class="ml">Отменено</div><div class="mv">${appts.filter(a=>a.status==='cancelled').length}</div></div>
+    <div class="mcard"><div class="ml">Подтверждено</div><div class="mv">${appts.filter(a=>a.status==='confirmed').length}</div></div>
+    <div class="mcard"><div class="ml">Выручка</div><div class="mv">${appts.reduce((s,a)=>s+(a.totalPrice||0),0).toLocaleString('ru-RU')} ₽</div></div>
   </div>
   <div class="card">
-    <h3><i class="ti ti-calendar" style="color:var(--teal)" aria-hidden="true"></i> Мои записи</h3>
+    <h3><i class="ti ti-calendar" style="color:var(--teal)"></i> Мои записи</h3>
     ${appts.length===0?'<div style="color:var(--text3);font-size:13px">Записей нет</div>':''}
     <div style="overflow-x:auto">
-      <table class="tbl" style="min-width:400px">
-        <thead><tr><th>Дата / время</th><th>Клиент</th><th>Питомец</th><th>Услуга</th><th>Сумма</th><th>Статус</th></tr></thead>
-        <tbody>${appts.sort((a,b)=>new Date(b.startAt)-new Date(a.startAt)).map(a=>`<tr>
-          <td style="color:var(--text2)">${fmtDate(a.startAt)}<div style="font-size:10px">${fmtTime(a.startAt)}</div></td>
-          <td style="font-weight:500">${esc(a.client?.name||'—')}<div style="font-size:10px;color:var(--text2)">${esc(a.client?.phone||'')}</div></td>
+      <table class="tbl" style="min-width:500px">
+        <thead><tr><th>Дата</th><th>Клиент</th><th>Питомец</th><th>Услуга</th><th>Сумма</th><th>Статус</th></tr></thead>
+        <tbody>${appts.map(a=>`<tr>
+          <td style="color:var(--text2)">${fmtD(a.startAt)}<div style="font-size:10px">${fmtT(a.startAt)}</div></td>
+          <td><div style="font-weight:500">${esc(a.client?.name||'—')}</div><div style="font-size:10px;color:var(--text2)">${esc(a.client?.phone||'')}</div></td>
           <td>${esc(a.pet?.name||'—')}<div style="font-size:10px;color:var(--text2)">${esc(a.pet?.breed||'')}</div></td>
           <td style="font-size:11px">${esc(a.service?.name||'—')}</td>
           <td style="font-weight:500">${(a.totalPrice||0).toLocaleString('ru-RU')} ₽</td>
@@ -567,116 +607,73 @@ function renderMyAppts(){
   </div>`);
 }
 
-// ── Schedule editor for masters ──
-let scheduleData = {};
-
-function renderMySchedule(){
-  const myStaff = CACHE.staff.find(s=>s.id===AUTH?.user?.staffId);
+function renderMySched(){
+  const myStaff=D.staff.find(s=>s.id===AUTH?.user?.staffId);
   if(!myStaff){setHTML('<div class="alert">Профиль мастера не найден</div>');return;}
-
-  // Build schedule from workSchedules
-  scheduleData = {};
-  (myStaff.workSchedules||[]).forEach(ws=>{
-    scheduleData[ws.dayOfWeek] = {isWorking:ws.isWorking, startTime:ws.startTime, endTime:ws.endTime};
-  });
-
-  const today = new Date().toLocaleDateString('ru-RU');
-  const myAppts = getMyAppts().filter(a=>fmtDate(a.startAt)===today);
-
+  const ws={};
+  (myStaff.workSchedules||[]).forEach(s=>{ws[s.dayOfWeek]={isWorking:s.isWorking,start:s.startTime,end:s.endTime};});
   setHTML(`
-  <div class="topbar">
-    <h2>Моё расписание</h2>
-    <div class="acts">
-      <button class="ib" onclick="openScheduleEditor()"><i class="ti ti-edit" aria-hidden="true"></i> Изменить расписание</button>
-    </div>
+  <div class="topbar"><h2>Моё расписание</h2>
+    <div class="acts"><button class="ib" onclick="openSchedModal('${myStaff.id}')"><i class="ti ti-edit"></i> Изменить</button></div>
   </div>
   <div class="card">
-    <h3><i class="ti ti-clock" style="color:var(--teal)" aria-hidden="true"></i> Текущее расписание</h3>
-    ${[1,2,3,4,5,6,7].map(d=>{
-      const ws=scheduleData[d]||{isWorking:false,startTime:'09:00',endTime:'18:00'};
-      return `<div class="day-row">
-        <div class="day-name">${DAYS_RU[d-1]}</div>
-        <div style="flex:1;font-size:12px;color:${ws.isWorking?'var(--text)':'var(--text3)'}">
-          ${ws.isWorking?`${ws.startTime} — ${ws.endTime}`:'Выходной'}
-        </div>
-        <span class="badge ${ws.isWorking?'confirmed':'cancelled'}">${ws.isWorking?'Работает':'Выходной'}</span>
-      </div>`;
-    }).join('')}
-  </div>
-  <div class="card">
-    <h3><i class="ti ti-calendar" style="color:var(--teal)" aria-hidden="true"></i> Мои записи сегодня</h3>
-    ${myAppts.length===0?'<div style="color:var(--text3);font-size:13px">Записей нет</div>':''}
-    <table class="tbl">
-      <thead><tr><th>Время</th><th>Клиент</th><th>Питомец</th><th>Услуга</th><th>Статус</th></tr></thead>
-      <tbody>${myAppts.map(a=>`<tr>
-        <td style="font-weight:500">${fmtTime(a.startAt)}</td>
-        <td>${esc(a.client?.name||'—')}<div style="font-size:10px;color:var(--text2)">${esc(a.client?.phone||'')}</div></td>
-        <td>${esc(a.pet?.name||'—')}</td>
-        <td style="font-size:11px">${esc(a.service?.name||'—')}</td>
-        <td><span class="badge ${a.status}">${STATUS_LABEL[a.status]||a.status}</span></td>
-      </tr>`).join('')}</tbody>
-    </table>
+    <h3><i class="ti ti-clock" style="color:var(--teal)"></i> Рабочие дни</h3>
+    ${[1,2,3,4,5,6,7].map(d=>{const w=ws[d]||{isWorking:false,start:'09:00',end:'18:00'};return `
+      <div class="stat-row">
+        <span style="font-weight:500">${DAYS[d-1]}</span>
+        <span style="color:${w.isWorking?'var(--text)':'var(--text3)'}">${w.isWorking?`${w.start} — ${w.end}`:'Выходной'}</span>
+        <span class="badge ${w.isWorking?'confirmed':'cancelled'}">${w.isWorking?'Работает':'Выходной'}</span>
+      </div>`}).join('')}
   </div>`);
 }
 
-function openScheduleEditor(){
-  const editor = document.getElementById('schedule-editor');
-  editor.innerHTML = [1,2,3,4,5,6,7].map(d=>{
-    const ws=scheduleData[d]||{isWorking:false,startTime:'09:00',endTime:'18:00'};
-    return `<div class="day-row">
-      <div class="day-name">${DAYS_RU[d-1]}</div>
-      <div class="day-times">
-        <label class="toggle" aria-label="${DAYS_RU[d-1]} рабочий день">
-          <input type="checkbox" id="wd-${d}" ${ws.isWorking?'checked':''} onchange="toggleDay(${d})">
-          <span class="tslider"></span>
-        </label>
-        <input type="time" id="ws-${d}" value="${ws.startTime}" ${ws.isWorking?'':'disabled'}>
-        <span style="font-size:12px;color:var(--text3)">—</span>
-        <input type="time" id="we-${d}" value="${ws.endTime}" ${ws.isWorking?'':'disabled'}>
-      </div>
+function openSchedModal(staffId){
+  const myStaff=D.staff.find(s=>s.id===staffId);
+  const ws={};
+  (myStaff?.workSchedules||[]).forEach(s=>{ws[s.dayOfWeek]={isWorking:s.isWorking,start:s.startTime,end:s.endTime};});
+  document.getElementById('modal-body').innerHTML=`
+    <h3>Изменить расписание</h3>
+    ${[1,2,3,4,5,6,7].map(d=>{const w=ws[d]||{isWorking:d<=5,start:'09:00',end:'18:00'};return `
+      <div class="day-row">
+        <div class="day-name">${DAYS[d-1]}</div>
+        <div class="day-times">
+          <label class="toggle"><input type="checkbox" id="wd-${d}" ${w.isWorking?'checked':''} onchange="toggleDay(${d})"><span class="tslider"></span></label>
+          <input type="time" id="ws-${d}" value="${w.start}" ${w.isWorking?'':'disabled'}>
+          <span style="font-size:12px;color:var(--text3)">—</span>
+          <input type="time" id="we-${d}" value="${w.end}" ${w.isWorking?'':'disabled'}>
+        </div>
+      </div>`}).join('')}
+    <div id="sc-err" style="font-size:12px;color:var(--danger);margin-top:8px;min-height:16px"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Отмена</button>
+      <button class="btn-save" onclick="saveSchedule('${staffId}')">Сохранить</button>
     </div>`;
-  }).join('');
-  document.getElementById('schedule-modal').style.display='flex';
+  document.getElementById('modal').style.display='flex';
 }
 
 function toggleDay(d){
-  const checked = document.getElementById(`wd-${d}`).checked;
-  document.getElementById(`ws-${d}`).disabled = !checked;
-  document.getElementById(`we-${d}`).disabled = !checked;
+  const on=document.getElementById('wd-'+d).checked;
+  document.getElementById('ws-'+d).disabled=!on;
+  document.getElementById('we-'+d).disabled=!on;
 }
 
-function closeSchedule(){
-  document.getElementById('schedule-modal').style.display='none';
-}
-
-async function saveSchedule(){
-  const staffId = AUTH?.user?.staffId;
-  if(!staffId){alert('Профиль мастера не найден');return;}
-  const schedule = [1,2,3,4,5,6,7].map(d=>({
-    dayOfWeek: d,
-    isWorking: document.getElementById(`wd-${d}`).checked,
-    startTime: document.getElementById(`ws-${d}`).value || '09:00',
-    endTime:   document.getElementById(`we-${d}`).value || '18:00',
+async function saveSchedule(staffId){
+  const schedule=[1,2,3,4,5,6,7].map(d=>({
+    dayOfWeek:d,
+    isWorking:document.getElementById('wd-'+d).checked,
+    startTime:document.getElementById('ws-'+d).value||'09:00',
+    endTime:document.getElementById('we-'+d).value||'18:00',
   }));
-  try {
-    await apiFetch(`/staff/${staffId}/schedule`,{
-      method:'PUT',
-      body: JSON.stringify({schedule}),
-    });
-    closeSchedule();
-    await loadData();
-    renderMySchedule();
-  } catch(e){
-    alert('Ошибка сохранения: '+e.message);
-  }
+  try{
+    await req('/staff/'+staffId+'/schedule',{method:'PUT',body:JSON.stringify({schedule})});
+    closeModal();await loadAll();
+    if(isAdmin())renderMasters();else renderMySched();
+  }catch(e){const el=document.getElementById('sc-err');if(el)el.textContent=e.message;}
 }
 
-// ── Boot ──
-if(AUTH?.access_token){
-  showApp();
-} else {
-  document.getElementById('login-screen').style.display='flex';
-}
+/* ── Boot ── */
+if(AUTH?.access_token){startApp();}
+else{document.getElementById('login-screen').style.display='flex';}
 </script>
 </body>
 </html>
