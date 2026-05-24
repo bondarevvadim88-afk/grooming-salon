@@ -24,6 +24,56 @@ export class StaffService {
     return staff;
   }
 
+  async createStaff(data: { name: string; specialty: string; bio?: string }) {
+    return this.prisma.staff.create({
+      data: {
+        name:      data.name,
+        specialty: data.specialty,
+        bio:       data.bio || null,
+        workSchedules: {
+          create: [1,2,3,4,5,6,7].map(d => ({
+            dayOfWeek: d,
+            startTime: '09:00',
+            endTime:   '19:00',
+            isWorking: d <= 5,
+          })),
+        },
+      },
+      include: { workSchedules: true },
+    });
+  }
+
+  async updateStaff(id: string, data: {
+    name?: string; specialty?: string; bio?: string; isActive?: boolean; rating?: number;
+  }) {
+    return this.prisma.staff.update({
+      where: { id },
+      data,
+      include: { services: { include: { service: true } }, workSchedules: true },
+    });
+  }
+
+  async deactivateStaff(id: string) {
+    return this.prisma.staff.update({
+      where: { id },
+      data:  { isActive: false },
+    });
+  }
+
+  async linkService(staffId: string, serviceId: string) {
+    return this.prisma.staffService.upsert({
+      where:  { staffId_serviceId: { staffId, serviceId } },
+      update: {},
+      create: { staffId, serviceId },
+    });
+  }
+
+  async unlinkService(staffId: string, serviceId: string) {
+    return this.prisma.staffService.delete({
+      where: { staffId_serviceId: { staffId, serviceId } },
+    });
+  }
+
   async getAvailableSlots(staffId: string, dateStr: string, serviceId: string) {
     const service = await this.prisma.service.findUniqueOrThrow({ where: { id: serviceId } });
     const date    = new Date(dateStr);
@@ -39,7 +89,7 @@ export class StaffService {
     const booked   = await this.prisma.appointment.findMany({
       where: {
         staffId,
-        status: { notIn: ['CANCELLED', 'NO_SHOW'] },
+        status:  { notIn: ['CANCELLED', 'NO_SHOW'] },
         startAt: { gte: dayStart, lte: dayEnd },
       },
       select: { startAt: true, endAt: true },
