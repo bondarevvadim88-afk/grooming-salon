@@ -122,11 +122,13 @@
     .alert-box{padding:10px 14px;border-radius:var(--r);font-size:12px;margin-bottom:12px}
     .alert-box.err{background:var(--danger-bg);color:var(--danger)}
     .alert-box.ok{background:var(--teal-bg);color:var(--teal-dark)}
-    /* Service checkboxes in master modal */
+    /* Service checkboxes */
     .svc-check-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
     .svc-check-label{display:flex;align-items:center;gap:5px;font-size:12px;padding:4px 8px;border:.5px solid var(--border2);border-radius:20px;cursor:pointer;transition:all .12s}
     .svc-check-label:has(input:checked){background:var(--teal-bg);border-color:var(--teal);color:var(--teal-dark)}
     .svc-check-label input{display:none}
+    /* Step badge */
+    .step-badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--teal);color:#fff;font-size:11px;font-weight:600;flex-shrink:0}
   </style>
 </head>
 <body>
@@ -162,7 +164,7 @@ function toast(msg, type='ok'){
   el.style.cssText='position:fixed;top:16px;right:16px;z-index:9999;min-width:220px;max-width:360px';
   el.textContent=msg;
   document.body.appendChild(el);
-  setTimeout(()=>el.remove(),3000);
+  setTimeout(()=>el.remove(),3500);
 }
 
 // ── API helpers ──
@@ -293,7 +295,7 @@ function renderApp(){
         <a tabindex="0" role="button" onclick="doLogout()" style="color:var(--danger)">
           <i class="ti ti-logout"></i>Выйти</a>
       </nav>
-      <div class="s-version">v2.0.0 · ГрумПро</div>
+      <div class="s-version">v2.1.0 · ГрумПро</div>
     </aside>
     <main class="main" id="main-content" aria-live="polite"></main>
   </div>`;
@@ -319,8 +321,6 @@ async function renderDash(){
     return d===today;
   });
   const dayRev = todayA.filter(a=>['COMPLETED','IN_PROGRESS','inprog','completed'].includes(a.status)).reduce((s,a)=>s+(a.price||0),0);
-  const totalRev = APPTS.reduce((s,a)=>s+(a.price||0),0);
-  const noPct = APPTS.length ? Math.round(APPTS.filter(a=>['CANCELLED','cancelled'].includes(a.status)).length/APPTS.length*100) : 0;
   return `
   <div class="topbar"><h2>Дашборд</h2><div class="acts">
     <button class="ib" onclick="nav('dash',document.querySelector('.snav a.active'))"><i class="ti ti-refresh"></i> Обновить</button>
@@ -334,18 +334,18 @@ async function renderDash(){
   <div class="card">
     <h3><i class="ti ti-users" style="font-size:15px;color:var(--teal)"></i> Мастера (${MASTERS.length})</h3>
     <div style="overflow-x:auto"><table class="tbl">
-      <thead><tr><th>Мастер</th><th>Специальность</th><th>Рейтинг</th><th>Статус</th></tr></thead>
-      <tbody>${MASTERS.map((m,i)=>{const c=avaColor(i);return `<tr>
+      <thead><tr><th>Мастер</th><th>Специальность</th><th>Услуг</th><th>Статус</th></tr></thead>
+      <tbody>${MASTERS.map((m,i)=>{const c=avaColor(i);const svcCount=(m.services||[]).length;return `<tr>
         <td><div style="display:flex;align-items:center;gap:8px">${ava(m.name,c.bg,c.tc,24)} ${esc(m.name)}</div></td>
         <td style="color:var(--text2)">${esc(m.specialty||'')}</td>
-        <td>★ ${m.rating||'—'}</td>
+        <td>${svcCount>0?`<span style="color:var(--teal-dark);font-weight:500">${svcCount}</span>`:'<span style="color:var(--danger)">0 — не виден!</span>'}</td>
         <td><span class="badge ${m.isActive!==false?'confirmed':'cancelled'}">${m.isActive!==false?'Активен':'Отключён'}</span></td>
       </tr>`}).join('')}</tbody>
     </table></div>
   </div>`;
 }
 
-// ── SCHEDULE (simplified live) ──
+// ── SCHEDULE ──
 const SCHED_TIMES=['09:00','09:30','10:00','10:30','11:00','11:30','12:00','13:00','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00'];
 async function renderSched(){
   if(!MASTERS.length) await loadMasters();
@@ -411,7 +411,6 @@ async function renderHist(){
       <tbody>${APPTS.slice().reverse().map(a=>{
         const dt=a.startAt?new Date(a.startAt):'';
         const masterName=a.staff?.name||'—';
-        const mi=a.staff?ini(a.staff.name):'—';
         const idx=MASTERS.findIndex(m=>m.id===a.staffId);
         const c=avaColor(idx>=0?idx:0);
         return `<tr>
@@ -426,8 +425,7 @@ async function renderHist(){
   </div>`;
 }
 
-// ── MASTERS ──────────────────────────────────────────────────────────
-// BUG FIX: was using local DEMO data, now uses real API
+// ── MASTERS ──
 async function renderMasters(){
   await Promise.all([loadMasters(), loadSvcs()]);
   return `
@@ -451,6 +449,7 @@ function renderMasterCards(){
   return MASTERS.map((m,i)=>{
     const c=avaColor(i);
     const masterSvcs=(m.services||[]).map(ss=>ss.service||ss).filter(Boolean);
+    const hasServices=masterSvcs.length>0;
     return `<div class="card" id="mcard-${m.id}">
       <div style="display:flex;gap:14px;align-items:flex-start">
         ${ava(m.name,c.bg,c.tc,44)}
@@ -461,9 +460,14 @@ function renderMasterCards(){
           </div>
           <div style="font-size:12px;color:var(--text2);margin-bottom:6px">${esc(m.specialty||'')}</div>
           ${m.bio?`<div style="font-size:11px;color:var(--text3);margin-bottom:6px">${esc(m.bio)}</div>`:''}
-          <div style="font-size:11px;color:var(--text2);margin-bottom:6px">
-            <b>Услуги:</b> ${masterSvcs.length?masterSvcs.map(s=>`<span class="tag">${esc(s.name||s)}</span>`).join(''):
-            '<span style="color:var(--danger)">Не привязаны — мастер не виден в виджете!</span>'}
+          <div style="font-size:11px;margin-bottom:6px">
+            <b style="color:var(--text2)">Услуги:</b>
+            ${hasServices
+              ? masterSvcs.map(s=>`<span class="tag">${esc(s.name||s)}</span>`).join('')
+              : `<span style="color:var(--danger);font-weight:500">
+                  <i class="ti ti-alert-circle" style="font-size:12px;vertical-align:middle"></i>
+                  Не привязаны — нажмите «Привязать услуги»
+                </span>`}
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0">
@@ -472,8 +476,12 @@ function renderMasterCards(){
             <span class="tslider"></span>
           </label>
           <span style="font-size:10px;color:var(--text3)">${m.isActive!==false?'Активен':'Отключён'}</span>
-          <button class="ib" onclick="showLinkServicesModal('${m.id}')"><i class="ti ti-link"></i> Услуги</button>
-          <button class="ib" onclick="showEditMasterModal('${m.id}')"><i class="ti ti-edit"></i> Изменить</button>
+          <button class="ib primary" onclick="showLinkServicesModal('${m.id}')">
+            <i class="ti ti-link"></i> Привязать услуги
+          </button>
+          <button class="ib" onclick="showEditMasterModal('${m.id}')">
+            <i class="ti ti-edit"></i> Изменить
+          </button>
         </div>
       </div>
     </div>`;
@@ -490,15 +498,9 @@ async function toggleMasterActive(id, active){
   } catch(e){ toast('Ошибка: '+e.message,'err'); }
 }
 
-// ── ADD MASTER MODAL ──
-// BUG FIX: was missing entirely — this function now creates master via real API POST /staff
-function showAddMasterModal(){
-  showMasterModal(null);
-}
-function showEditMasterModal(id){
-  const m=MASTERS.find(x=>x.id===id);
-  showMasterModal(m);
-}
+// ── ADD / EDIT MASTER MODAL ──
+function showAddMasterModal(){ showMasterModal(null); }
+function showEditMasterModal(id){ showMasterModal(MASTERS.find(x=>x.id===id)||null); }
 
 function showMasterModal(master){
   const isEdit=!!master;
@@ -508,6 +510,9 @@ function showMasterModal(master){
   overlay.innerHTML=`
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <h3 id="modal-title">${isEdit?'Редактировать мастера':'Добавить мастера'}</h3>
+      ${!isEdit?`<div class="alert-box ok" style="margin-bottom:12px;font-size:11px">
+        <b>Шаг 1 из 2.</b> После создания вы сразу выберете услуги — это обязательно для появления в виджете.
+      </div>`:''}
       <div id="modal-err"></div>
       <div class="form-field">
         <label>Имя и фамилия *</label>
@@ -524,7 +529,7 @@ function showMasterModal(master){
       <div class="modal-acts">
         <button class="ib" onclick="document.getElementById('master-modal').remove()">Отмена</button>
         <button class="ib primary" id="m-save-btn" onclick="saveMaster(${isEdit?`'${master.id}'`:null})">
-          ${isEdit?'Сохранить':'Создать'}
+          ${isEdit?'Сохранить':'Далее: выбрать услуги →'}
         </button>
       </div>
     </div>`;
@@ -533,6 +538,7 @@ function showMasterModal(master){
   overlay.addEventListener('click',e=>{ if(e.target===overlay) overlay.remove(); });
 }
 
+// ── KEY FIX: saveMaster — after creation immediately opens service-link modal ──
 async function saveMaster(id){
   const name=(document.getElementById('m-name').value||'').trim();
   const specialty=(document.getElementById('m-spec').value||'').trim();
@@ -546,58 +552,80 @@ async function saveMaster(id){
   btn.disabled=true; btn.innerHTML='<div class="spinner"></div>';
   try{
     if(id){
+      // Edit existing master
       await apiPatch('/staff/'+id,{name,specialty,bio:bio||undefined});
       toast('Мастер обновлён');
+      document.getElementById('master-modal').remove();
+      await loadMasters();
+      const list=document.getElementById('masters-list');
+      if(list)list.innerHTML=renderMasterCards();
     } else {
-      // POST /staff — creates master in DB, will appear in widget after page reload
-      await apiPost('/staff',{name,specialty,bio:bio||undefined});
-      toast('Мастер создан! Он появится в виджете записи.');
+      // Create new master via POST /staff
+      const newMaster = await apiPost('/staff',{name,specialty,bio:bio||undefined});
+      document.getElementById('master-modal').remove();
+      // Reload masters so the new one is in MASTERS array
+      await loadMasters();
+      const list=document.getElementById('masters-list');
+      if(list)list.innerHTML=renderMasterCards();
+      // KEY FIX: immediately open service-linking modal for the new master
+      // Without this step the master has 0 services and is invisible in the widget
+      const createdId = newMaster.id || newMaster.staffId;
+      if(createdId){
+        showLinkServicesModal(createdId, true);
+      } else {
+        toast('Мастер создан! Не забудьте привязать услуги через кнопку «Привязать услуги».');
+      }
     }
-    document.getElementById('master-modal').remove();
-    await loadMasters();
-    const list=document.getElementById('masters-list');
-    if(list)list.innerHTML=renderMasterCards();
   } catch(e){
     errEl.innerHTML=`<div class="alert-box err">${esc(e.message==='HTTP 401'?'Нет прав. Войдите как администратор.':e.message)}</div>`;
-    btn.disabled=false; btn.textContent=id?'Сохранить':'Создать';
+    btn.disabled=false; btn.innerHTML=id?'Сохранить':'Далее: выбрать услуги →';
   }
 }
 
-// ── LINK SERVICES TO MASTER ──
-// BUG FIX: new function — without linking services the master is invisible in widget
-// Widget filters: S.masters.filter(m => m.services.some(x => x.serviceId === S.svc.id))
-async function showLinkServicesModal(masterId){
+// ── LINK SERVICES MODAL ──
+// isAfterCreate=true shows a special header explaining why this is required
+async function showLinkServicesModal(masterId, isAfterCreate){
   const master=MASTERS.find(m=>m.id===masterId);
   if(!master)return;
   if(!SVCS.length) await loadSvcs();
   const linked=new Set((master.services||[]).map(ss=>ss.serviceId||ss.service?.id));
+  const activeSvcs=SVCS.filter(s=>s.isActive!==false);
 
   const overlay=document.createElement('div');
   overlay.className='modal-overlay';
   overlay.id='link-modal';
   overlay.innerHTML=`
     <div class="modal" role="dialog" aria-modal="true">
-      <h3>Услуги мастера: ${esc(master.name)}</h3>
-      <p style="font-size:12px;color:var(--text2);margin-bottom:12px">
-        Мастер появится в виджете только для тех услуг, которые здесь отмечены.
-      </p>
-      <div id="link-err"></div>
-      <div class="svc-check-list">
-        ${SVCS.filter(s=>s.isActive!==false).map(s=>`
-          <label class="svc-check-label">
-            <input type="checkbox" value="${s.id}" ${linked.has(s.id)?'checked':''}>
-            ${esc(s.name)}
-          </label>`).join('')}
+      <h3 style="display:flex;align-items:center;gap:8px">
+        ${isAfterCreate?'<span class="step-badge">2</span>':''} Услуги мастера: ${esc(master.name)}
+      </h3>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:12px;padding:8px 10px;background:var(--teal-bg);border-radius:var(--r)">
+        <b>Важно:</b> мастер появляется в виджете только для отмеченных здесь услуг.
+        Без хотя бы одной услуги клиент его не увидит.
       </div>
+      <div id="link-err"></div>
+      ${activeSvcs.length===0
+        ? `<p style="font-size:13px;color:var(--danger)">Нет активных услуг. Сначала добавьте услуги в разделе «Услуги».</p>`
+        : `<div class="svc-check-list">
+            ${activeSvcs.map(s=>`
+              <label class="svc-check-label">
+                <input type="checkbox" value="${s.id}" ${linked.has(s.id)?'checked':''}>
+                ${esc(s.name)}
+              </label>`).join('')}
+          </div>`}
       <div class="modal-acts">
-        <button class="ib" onclick="document.getElementById('link-modal').remove()">Отмена</button>
+        <button class="ib" onclick="document.getElementById('link-modal').remove()">
+          ${isAfterCreate?'Пропустить':'Отмена'}
+        </button>
         <button class="ib primary" id="link-save-btn" onclick="saveLinkServices('${masterId}')">
           Сохранить
         </button>
       </div>
     </div>`;
   document.body.appendChild(overlay);
-  overlay.addEventListener('click',e=>{ if(e.target===overlay) overlay.remove(); });
+  if(!isAfterCreate){
+    overlay.addEventListener('click',e=>{ if(e.target===overlay) overlay.remove(); });
+  }
 }
 
 async function saveLinkServices(masterId){
@@ -617,7 +645,10 @@ async function saveLinkServices(masterId){
       ...toAdd.map(serviceId=>apiPost(`/staff/${masterId}/services`,{serviceId})),
       ...toRemove.map(serviceId=>apiDelete(`/staff/${masterId}/services/${serviceId}`)),
     ]);
-    toast('Услуги обновлены! Мастер виден в виджете для выбранных услуг.');
+    const addedCount=toAdd.length;
+    toast(addedCount>0
+      ? `Готово! Мастер виден в виджете для ${addedCount} услуг.`
+      : 'Услуги обновлены.');
     document.getElementById('link-modal').remove();
     await loadMasters();
     const list=document.getElementById('masters-list');
@@ -630,7 +661,7 @@ async function saveLinkServices(masterId){
 
 // ── SERVICES ──
 async function renderSvcs(){
-  await loadSvcs();
+  await Promise.all([loadSvcs(), loadMasters()]);
   return `
   <div class="topbar"><h2>Услуги</h2></div>
   <div class="card">
@@ -641,7 +672,7 @@ async function renderSvcs(){
   <div class="card">
     <h3>Привязка мастер × услуга</h3>
     <p style="font-size:11px;color:var(--text2);margin-bottom:10px">
-      ✓ — мастер выполняет услугу и будет виден в виджете при её выборе.
+      ✓ — мастер выполняет услугу и виден в виджете при её выборе клиентом.
     </p>
     <div style="overflow-x:auto">
       <table class="tbl" style="min-width:400px">
@@ -683,12 +714,10 @@ function renderSvcRows(){
 // ── BOOT ──
 async function boot(){
   try{
-    // Verify token is valid
     CURRENT_USER = await apiGet('/auth/me');
     renderApp();
     nav('dash', null);
   } catch(e){
-    // Token invalid or expired
     TOKEN=null; localStorage.removeItem('admin_token');
     renderLogin();
   }
