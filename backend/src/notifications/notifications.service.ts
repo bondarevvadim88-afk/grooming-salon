@@ -1,12 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
+import { PrismaService } from '../prisma/prisma.service';
 
 type ApptData = {
   id: string;
   startAt: Date;
   endAt: Date;
   totalPrice: number;
+  staffId: string;
   client:  { name: string; phone: string; email?: string | null };
   pet:     { name: string; breed?: string | null };
   staff:   { name: string };
@@ -18,7 +20,10 @@ export class NotificationsService {
   private readonly logger = new Logger(NotificationsService.name);
   private mailer: nodemailer.Transporter | null = null;
 
-  constructor(private readonly config: ConfigService) {
+  constructor(
+    private readonly config: ConfigService,
+    private readonly prisma: PrismaService,
+  ) {
     const host = config.get('SMTP_HOST');
     const user = config.get('SMTP_USER');
     const pass = config.get('SMTP_PASS');
@@ -42,10 +47,8 @@ export class NotificationsService {
   async scheduleAll(appt: ApptData): Promise<void> {
     this.logger.log(`Scheduling notifications for appointment ${appt.id}`);
 
-    // Send confirmation immediately
     await this.sendConfirmation(appt);
 
-    // Schedule reminders (in production use BullMQ with delays)
     const now      = Date.now();
     const startMs  = new Date(appt.startAt).getTime();
     const delay24h = startMs - 24 * 60 * 60 * 1000 - now;
@@ -62,7 +65,15 @@ export class NotificationsService {
   async sendCancellation(appt: ApptData): Promise<void> {
     const msg = this.buildCancelMsg(appt);
     await this.dispatchAll(appt.client, msg, appt);
-    await this.notifyStaff(appt, `❌ Отменена запись: ${appt.client.name} — ${appt.service.name} в ${this.fmtTime(appt.startAt)}`);
+
+    const baseText = `❌ Отменена запись:
+Клиент: ${appt.client.name} (${appt.client.phone})
+Услуга: ${appt.service.name}
+Питомец: ${appt.pet.name}${appt.pet.breed ? ' · ' + appt.pet.breed : ''}
+Время: ${this.fmtDate(appt.startAt)} ${this.fmtTime(appt.startAt)}`;
+
+    await this.notifyAdmin(appt, baseText);
+    await this.notifyMaster(appt, baseText);
   }
 
   // ── Channels ─────────────────────────────────────────────────────────
@@ -99,8 +110,7 @@ export class NotificationsService {
     this.logger.log(`Email sent to ${to}`);
   }
 
-  private async notifyStaff(appt: ApptData, text: string) {
-    // Get admin email from config
+  private async notifyAdmin(appt: ApptData, text: string) {
     const adminEmail = this.config.get('ADMIN_EMAIL');
     if (adminEmail) {
       await this.sendEmail(adminEmail, {
@@ -108,6 +118,29 @@ export class NotificationsService {
         text,
         html: `<p>${text.replace(/\n/g, '<br>')}</p>`,
       }).catch(e => this.logger.warn('Admin email failed: ' + e.message));
+    }
+
+    const token  = this.config.get('TELEGRAM_BOT_TOKEN');
+    const chatId = this.config.get('TELEGRAM_ADMIN_CHAT_ID');
+    if (token && chatId) {
+      await this.sendTelegram(text).catch(e => this.logger.warn('Admin telegram failed: ' + e.message));
+    }
+  }
+
+  private async notifyMaster(appt: ApptData, text: string) {
+    try {
+      const masterUser = await this.prisma.user.findFirst({
+        where: { staffId: appt.staffId, role: 'MASTER' },
+      });
+      if (!masterUser?.email) return;
+      await this.sendEmail(masterUser.email, {
+        subject: `ГрумПро: ${text.slice(0, 50)}`,
+        text,
+        html: `<p>${text.replace(/\n/g, '<br>')}</p>`,
+      });
+      this.logger.log(`Master notified: ${masterUser.email}`);
+    } catch (e: any) {
+      this.logger.warn('notifyMaster failed: ' + e.message);
     }
   }
 
@@ -118,10 +151,10 @@ export class NotificationsService {
     const sender = this.config.get('SMS_SENDER') || 'GROOMING';
     if (!apiKey) return;
 
-    const clean  = phone.replace(/\D/g, '');
-    const url    = `https://smsc.ru/sys/send.php?login=${encodeURIComponent(apiKey)}&psw=&phones=${clean}&mes=${encodeURIComponent(text.slice(0, 160))}&sender=${sender}&fmt=3`;
-    const res    = await fetch(url);
-    const data   = await res.json();
+    const clean = phone.replace(/\D/g, '');
+    const url   = `https://smsc.ru/sys/send.php?login=${encodeURIComponent(apiKey)}&psw=&phones=${clean}&mes=${encodeURIComponent(text.slice(0, 160))}&sender=${sender}&fmt=3`;
+    const res   = await fetch(url);
+    const data  = await res.json();
     if (data.error) throw new Error('SMS error: ' + data.error_code);
     this.logger.log(`SMS sent to ${phone}`);
   }
@@ -193,12 +226,12 @@ export class NotificationsService {
   private buildConfirmMsg(appt: ApptData) {
     const date = this.fmtDate(appt.startAt);
     const time = this.fmtTime(appt.startAt);
-    const text = `✅ Запись подтверждена!\n\nУслуга: ${appt.service.name}\nМастер: ${appt.staff.name}\nПитомец: ${appt.pet.name}${appt.pet.breed ? ' (' + appt.pet.breed + ')' : ''}\nДата: ${date} в ${time}\nСтоимость: от ${appt.totalPrice.toLocaleString('ru-RU')} ₽\n\nДо встречи в салоне ГрумПро! 🐾`;
+    const text = `✅ Запись создана!\n\nУслуга: ${appt.service.name}\nМастер: ${appt.staff.name}\nПитомец: ${appt.pet.name}${appt.pet.breed ? ' (' + appt.pet.breed + ')' : ''}\nДата: ${date} в ${time}\nСтоимость: от ${appt.totalPrice.toLocaleString('ru-RU')} ₽\n\nДо встречи в салоне ГрумПро! 🐾`;
     return {
-      subject: `Запись подтверждена — ${date} ${time}`,
+      subject: `Запись создана — ${date} ${time}`,
       text,
       html: `<div style="font-family:sans-serif;max-width:480px">
-        <h2 style="color:#1D9E75">✅ Запись подтверждена!</h2>
+        <h2 style="color:#1D9E75">✅ Запись создана!</h2>
         <table style="border-collapse:collapse;width:100%">
           <tr><td style="padding:6px 0;color:#6b6b68">Услуга</td><td style="padding:6px 0;font-weight:500">${appt.service.name}</td></tr>
           <tr><td style="padding:6px 0;color:#6b6b68">Мастер</td><td style="padding:6px 0">${appt.staff.name}</td></tr>
@@ -233,9 +266,16 @@ export class NotificationsService {
   private async sendConfirmation(appt: ApptData) {
     const msg = this.buildConfirmMsg(appt);
     await this.dispatchAll(appt.client, msg, appt);
-    // Notify admin and master
-    const staffNotify = `🆕 Новая запись!\n${appt.client.name} (${appt.client.phone})\n${appt.service.name} — ${this.fmtDate(appt.startAt)} ${this.fmtTime(appt.startAt)}\nПитомец: ${appt.pet.name}`;
-    await this.notifyStaff(appt, staffNotify);
+
+    const notifyText = `🆕 Новая запись!
+Клиент: ${appt.client.name} (${appt.client.phone})
+Услуга: ${appt.service.name}
+Питомец: ${appt.pet.name}${appt.pet.breed ? ' · ' + appt.pet.breed : ''}
+Время: ${this.fmtDate(appt.startAt)} ${this.fmtTime(appt.startAt)}
+Мастер: ${appt.staff.name}`;
+
+    await this.notifyAdmin(appt, notifyText);
+    await this.notifyMaster(appt, notifyText);
   }
 
   private async sendReminder24h(appt: ApptData) {
