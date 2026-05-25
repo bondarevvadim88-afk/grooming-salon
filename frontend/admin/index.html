@@ -523,6 +523,14 @@ function showMasterModal(master){
         <input id="m-spec" type="text" value="${esc(master?.specialty||'')}" placeholder="Декоративные породы, кошки" maxlength="120">
       </div>
       <div class="form-field">
+<div class="form-field">
+  <label>E‑mail мастера *</label>
+  <input id="m-email" type="email" value="${esc(master?.email||'')}" placeholder="master@example.com" maxlength="120">
+</div>
+<div class="form-field">
+  <label>Пароль для входа мастера</label>
+  <input id="m-pass" type="text" placeholder="Если оставить пустым — сгенерируем автоматически" maxlength="64">
+</div>
         <label>О мастере</label>
         <textarea id="m-bio" placeholder="Опыт, особенности работы...">${esc(master?.bio||'')}</textarea>
       </div>
@@ -543,6 +551,8 @@ async function saveMaster(id){
   const name=(document.getElementById('m-name').value||'').trim();
   const specialty=(document.getElementById('m-spec').value||'').trim();
   const bio=(document.getElementById('m-bio').value||'').trim();
+const email    = (document.getElementById('m-email').value||'').trim();
+let   pass     = (document.getElementById('m-pass').value||'').trim();
   const errEl=document.getElementById('modal-err');
   if(!name||!specialty){
     errEl.innerHTML='<div class="alert-box err">Заполните имя и специализацию</div>';
@@ -550,7 +560,14 @@ async function saveMaster(id){
   }
   const btn=document.getElementById('m-save-btn');
   btn.disabled=true; btn.innerHTML='<div class="spinner"></div>';
-  try{
+if(!name || !specialty || !email){
+  errEl.innerHTML='<div class="alert-box err">Заполните имя, специализацию и e‑mail</div>';
+  return;
+}
+if(!pass){
+  // простой генератор пароля, можно улучшить при желании
+  pass = Math.random().toString(36).slice(-10);
+}  try{
     if(id){
       // Edit existing master
       await apiPatch('/staff/'+id,{name,specialty,bio:bio||undefined});
@@ -562,7 +579,24 @@ async function saveMaster(id){
     } else {
       // Create new master via POST /staff
       const newMaster = await apiPost('/staff',{name,specialty,bio:bio||undefined});
-      document.getElementById('master-modal').remove();
+// Создаём пользователя-мастера, чтобы были email/логин
+  try {
+    await apiPost('/auth/register', {
+      email,
+      password: pass,
+      role: 'MASTER',
+      staffId: newMaster.id,
+    });
+    toast('Мастер создан, данные для входа отправьте мастеру: ' + email);
+  } catch(eReg){
+    console.error('Register master user failed', eReg);
+    toast('Мастер создан, но не удалось создать аккаунт для входа: ' + (eReg.message||eReg));
+  }
+
+  document.getElementById('master-modal').remove();
+  // Reload masters …
+  await loadMasters(); 
+     document.getElementById('master-modal').remove();
       // Reload masters so the new one is in MASTERS array
       await loadMasters();
       const list=document.getElementById('masters-list');
