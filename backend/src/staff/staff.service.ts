@@ -39,7 +39,9 @@ export class StaffService {
           })),
         },
       },
-      include: { workSchedules: true },
+      // include services so the admin panel receives the id and can immediately
+      // open the service-linking modal without an extra GET request
+      include: { services: { include: { service: true } }, workSchedules: true },
     });
   }
 
