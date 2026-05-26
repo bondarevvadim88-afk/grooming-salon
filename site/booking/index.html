@@ -386,17 +386,11 @@ async function submitBooking(){
       throw new Error('Не удалось создать клиента');
     }
 
-    const startAtLocal=`${S.date}T${S.time}`;
-    const startAtDate=new Date(startAtLocal);
-    if(Number.isNaN(startAtDate.getTime())){
-      throw new Error('Некорректные дата или время');
-    }
-
     await post('/appointments',{
       petId:pet.id,
       serviceId:S.svc.id,
       staffId:S.master.id,
-      startAt:startAtDate.toISOString()
+      startAt:S.time
     });
 
     S.step++;renderSteps();renderSuccess();
