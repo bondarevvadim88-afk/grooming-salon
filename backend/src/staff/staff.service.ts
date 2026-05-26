@@ -10,7 +10,7 @@ export class StaffService {
   findAll() {
     return this.prisma.staff.findMany({
       where:   { isActive: true },
-      include: { services: { include: { service: true } }, workSchedules: true },
+      include: { services: { include: { service: true } }, workSchedules: true, breaks: true },
       orderBy: { name: 'asc' },
     });
   }
@@ -18,7 +18,7 @@ export class StaffService {
   async findOne(id: string) {
     const staff = await this.prisma.staff.findUnique({
       where:   { id },
-      include: { services: { include: { service: true } }, workSchedules: true },
+      include: { services: { include: { service: true } }, workSchedules: true, breaks: true },
     });
     if (!staff) throw new NotFoundException('Staff not found');
     return staff;
@@ -41,7 +41,7 @@ export class StaffService {
       },
       // include services so the admin panel receives the id and can immediately
       // open the service-linking modal without an extra GET request
-      include: { services: { include: { service: true } }, workSchedules: true },
+      include: { services: { include: { service: true } }, workSchedules: true, breaks: true },
     });
   }
 
@@ -51,7 +51,7 @@ export class StaffService {
     return this.prisma.staff.update({
       where: { id },
       data,
-      include: { services: { include: { service: true } }, workSchedules: true },
+      include: { services: { include: { service: true } }, workSchedules: true, breaks: true },
     });
   }
 
@@ -60,6 +60,19 @@ export class StaffService {
       where: { id },
       data:  { isActive: false },
     });
+  }
+
+  async updateBreaks(
+    staffId: string,
+    breaks: Array<{ dayOfWeek: number; startTime: string; endTime: string }>,
+  ) {
+    await this.prisma.workBreak.deleteMany({ where: { staffId } });
+    if (breaks.length > 0) {
+      await this.prisma.workBreak.createMany({
+        data: breaks.map(b => ({ staffId, dayOfWeek: b.dayOfWeek, startTime: b.startTime, endTime: b.endTime })),
+      });
+    }
+    return this.findOne(staffId);
   }
 
   async linkService(staffId: string, serviceId: string) {
@@ -97,6 +110,10 @@ export class StaffService {
       select: { startAt: true, endAt: true },
     });
 
+    const staffBreaks = await this.prisma.workBreak.findMany({
+      where: { staffId, dayOfWeek: dow },
+    });
+
     const [sh, sm] = schedule.startTime.split(':').map(Number);
     const [eh, em] = schedule.endTime.split(':').map(Number);
     const workStart = sh * 60 + sm;
@@ -107,11 +124,19 @@ export class StaffService {
       const slotStart = new Date(date);
       slotStart.setHours(Math.floor(t / 60), t % 60, 0, 0);
       const slotEnd = new Date(slotStart.getTime() + service.durationMin * 60_000);
-      const conflict = booked.some(b =>
+      const bookedConflict = booked.some(b =>
         b.startAt.getTime() < slotEnd.getTime() &&
         b.endAt.getTime()   > slotStart.getTime(),
       );
-      slots.push({ startAt: slotStart.toISOString(), available: !conflict });
+      const breakConflict = staffBreaks.some(b => {
+        const [bh, bm] = b.startTime.split(':').map(Number);
+        const [eh, em] = b.endTime.split(':').map(Number);
+        const brStart = new Date(date); brStart.setHours(bh, bm, 0, 0);
+        const brEnd   = new Date(date); brEnd.setHours(eh, em, 0, 0);
+        return brStart.getTime() < slotEnd.getTime() &&
+               brEnd.getTime()   > slotStart.getTime();
+      });
+      slots.push({ startAt: slotStart.toISOString(), available: !bookedConflict && !breakConflict });
     }
     return { slots };
   }

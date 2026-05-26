@@ -68,6 +68,21 @@ export class StaffController {
     return this.svc.updateSchedule(staffId, body.schedule);
   }
 
+  @Put(':id/breaks')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update breaks for staff' })
+  updateBreaks(
+    @Param('id') staffId: string,
+    @Body() body: { breaks: Array<{ dayOfWeek: number; startTime: string; endTime: string }> },
+    @Request() req: any,
+  ) {
+    if (req.user.role === 'MASTER' && req.user.staffId !== staffId) {
+      throw new ForbiddenException('Нет доступа');
+    }
+    return this.svc.updateBreaks(staffId, body.breaks || []);
+  }
+
   @Post(':id/services')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')

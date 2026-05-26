@@ -66,6 +66,7 @@ model Staff {
   updatedAt    DateTime @updatedAt
 
   workSchedules WorkSchedule[]
+  breaks        WorkBreak[]
   appointments  Appointment[]
   services      StaffService[]
 
@@ -85,6 +86,19 @@ model WorkSchedule {
 
   @@unique([staffId, dayOfWeek])
   @@index([staffId])
+}
+
+model WorkBreak {
+  id        String @id @default(uuid())
+  staffId   String
+  dayOfWeek Int
+  startTime String
+  endTime   String
+
+  staff Staff @relation(fields: [staffId], references: [id], onDelete: Cascade)
+
+  @@index([staffId])
+  @@index([staffId, dayOfWeek])
 }
 
 model Service {

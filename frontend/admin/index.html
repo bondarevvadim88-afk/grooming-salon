@@ -442,11 +442,14 @@ function renderWorkcalFor(staffId){
   const rows = days.map(day=>{
     const w = schedMap.get(day.d) || { isWorking: day.d<=5, startTime:'09:00', endTime:'18:00'};
     const checked = w.isWorking!==false;
+    const br = (m.breaks||[]).find(b=>b.dayOfWeek===day.d);
     return `<tr>
       <td style="white-space:nowrap">${day.label}</td>
       <td style="text-align:center"><input type="checkbox" data-day="${day.d}" class="ws-day-check" ${checked?'checked':''}></td>
       <td><input type="time" class="ws-from" data-day="${day.d}" value="${w.startTime||'09:00'}" ${checked?'':'disabled'}></td>
       <td><input type="time" class="ws-to" data-day="${day.d}" value="${w.endTime||'18:00'}" ${checked?'':'disabled'}></td>
+      <td><input type="time" class="ws-break-from" data-day="${day.d}" value="${br?.startTime||''}" ${checked?'':'disabled'} placeholder="—"></td>
+      <td><input type="time" class="ws-break-to" data-day="${day.d}" value="${br?.endTime||''}" ${checked?'':'disabled'} placeholder="—"></td>
     </tr>`;
   }).join('');
 
@@ -455,7 +458,7 @@ function renderWorkcalFor(staffId){
       ch.addEventListener('change',e=>{
         const day = e.target.getAttribute('data-day');
         const on = e.target.checked;
-        document.querySelectorAll(`.ws-from[data-day="${day}"],.ws-to[data-day="${day}"]`).forEach(inp=>{
+        document.querySelectorAll(`.ws-from[data-day="${day}"],.ws-to[data-day="${day}"],.ws-break-from[data-day="${day}"],.ws-break-to[data-day="${day}"]`).forEach(inp=>{
           inp.disabled = !on;
         });
       });
@@ -476,8 +479,8 @@ function renderWorkcalFor(staffId){
       Укажите дни и часы, когда мастер доступен для записи. Виджет использует эти данные при расчёте свободных слотов.
     </p>
     <div style="overflow-x:auto">
-      <table class="tbl" style="min-width:520px">
-        <thead><tr><th>День</th><th style="text-align:center">Работает</th><th>С</th><th>До</th></tr></thead>
+      <table class="tbl" style="min-width:640px">
+        <thead><tr><th>День</th><th style="text-align:center">Работает</th><th>С</th><th>До</th><th>Перерыв с</th><th>Перерыв до</th></tr></thead>
         <tbody>${rows}</tbody>
       </table>
     </div>
@@ -500,7 +503,16 @@ async function saveWorkSchedule(staffId){
     return { dayOfWeek:d, isWorking:on, startTime, endTime };
   });
   try{
+    const breakItems = [...document.querySelectorAll('.ws-day-check')].map(ch=>{
+      const d = Number(ch.getAttribute('data-day'));
+      if(!ch.checked) return null;
+      const fromEl = document.querySelector(`.ws-break-from[data-day="${d}"]`);
+      const toEl   = document.querySelector(`.ws-break-to[data-day="${d}"]`);
+      if(!fromEl?.value || !toEl?.value) return null;
+      return { dayOfWeek:d, startTime:fromEl.value, endTime:toEl.value };
+    }).filter(Boolean);
     await apiPut('/staff/'+staffId+'/schedule',{ schedule: items });
+    await apiPut('/staff/'+staffId+'/breaks',{ breaks: breakItems });
     toast('График сохранён');
     await loadMasters();
     document.getElementById('main-content').innerHTML=renderWorkcalFor(staffId);
