@@ -179,6 +179,13 @@ async function apiPost(path,body){
   if(!r.ok)throw new Error(data.message||'Ошибка сервера');
   return data;
 }
+async function apiPut(path,body){
+  const r=await fetch(API+path,{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+TOKEN},body:JSON.stringify(body)});
+  const data=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(data.message||'Ошибка сервера');
+  return data;
+}
+
 async function apiPatch(path,body){
   const r=await fetch(API+path,{method:'PATCH',headers:{'Content-Type':'application/json',Authorization:'Bearer '+TOKEN},body:JSON.stringify(body)});
   const data=await r.json().catch(()=>({}));
@@ -523,6 +530,17 @@ function showMasterModal(master){
         <input id="m-spec" type="text" value="${esc(master?.specialty||'')}" placeholder="Декоративные породы, кошки" maxlength="120">
       </div>
       <div class="form-field">
+        <label>График работы (ежедневно)</label>
+        <div style="display:flex;gap:8px;align-items:center;font-size:12px">
+          <span>c</span>
+          <input id="m-work-from" type="time" value="${(master?.workSchedules||[]).find(w=>w.isWorking)?.startTime||'09:00'}">
+          <span>до</span>
+          <input id="m-work-to" type="time" value="${(master?.workSchedules||[]).find(w=>w.isWorking)?.endTime||'19:00'}">
+          <span style="color:var(--text3);font-size:11px">(используется для расчёта слотов в виджете)</span>
+        </div>
+      </div>
+
+      <div class="form-field">
 <div class="form-field">
   <label>E‑mail мастера *</label>
   <input id="m-email" type="email" value="${esc(master?.email||'')}" placeholder="master@example.com" maxlength="120">
@@ -551,6 +569,8 @@ async function saveMaster(id){
   const name=(document.getElementById('m-name').value||'').trim();
   const specialty=(document.getElementById('m-spec').value||'').trim();
   const bio=(document.getElementById('m-bio').value||'').trim();
+  const workFrom = (document.getElementById('m-work-from')?.value||'09:00');
+  const workTo   = (document.getElementById('m-work-to')?.value||'19:00');
 const email    = (document.getElementById('m-email').value||'').trim();
 let   pass     = (document.getElementById('m-pass').value||'').trim();
   const errEl=document.getElementById('modal-err');
@@ -571,6 +591,16 @@ if(!pass){
     if(id){
       // Edit existing master
       await apiPatch('/staff/'+id,{name,specialty,bio:bio||undefined});
+      try {
+        await apiPut('/staff/'+id+'/schedule', {
+          schedule: [1,2,3,4,5,6,7].map(d => ({
+            dayOfWeek: d,
+            isWorking: true,
+            startTime: workFrom,
+            endTime: workTo,
+          })),
+        });
+      } catch(eSch){ console.error('Update schedule failed', eSch); }
       toast('Мастер обновлён');
       document.getElementById('master-modal').remove();
       await loadMasters();
@@ -579,6 +609,16 @@ if(!pass){
     } else {
       // Create new master via POST /staff
       const newMaster = await apiPost('/staff',{name,specialty,bio:bio||undefined});
+      try {
+        await apiPut('/staff/'+(newMaster.id||newMaster.staffId)+'/schedule', {
+          schedule: [1,2,3,4,5,6,7].map(d => ({
+            dayOfWeek: d,
+            isWorking: true,
+            startTime: workFrom,
+            endTime: workTo,
+          })),
+        });
+      } catch(eSch){ console.error('Create schedule failed', eSch); }
 // Создаём пользователя-мастера, чтобы были email/логин
   try {
     await apiPost('/auth/register', {
