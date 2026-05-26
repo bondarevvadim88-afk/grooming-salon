@@ -291,6 +291,8 @@ function renderApp(){
           <i class="ti ti-layout-dashboard"></i>Дашборд</a>
         <a tabindex="0" role="button" onclick="nav('sched',this)" onkeydown="if(event.key==='Enter'){nav('sched',this)}">
           <i class="ti ti-calendar"></i>Расписание</a>
+        <a tabindex="0" role="button" onclick="nav('workcal',this)" onkeydown="if(event.key==='Enter'){nav('workcal',this)}">
+          <i class="ti ti-calendar-time"></i>График работы</a>
         <a tabindex="0" role="button" onclick="nav('hist',this)" onkeydown="if(event.key==='Enter'){nav('hist',this)}">
           <i class="ti ti-clock-history"></i>История</a>
         <div class="sep"></div>
@@ -402,6 +404,109 @@ function schedNav(dir){
   if(dir===0){schedDate=new Date();}
   else{schedDate=new Date(schedDate);schedDate.setDate(schedDate.getDate()+dir);}
   nav('sched',null);
+}
+
+// ── WORK SCHEDULE (per staff, per weekday) ──
+async function renderWorkcal(){
+  if(!MASTERS.length) await loadMasters();
+  const days = [
+    { d:1, label:'Понедельник' },
+    { d:2, label:'Вторник' },
+    { d:3, label:'Среда' },
+    { d:4, label:'Четверг' },
+    { d:5, label:'Пятница' },
+    { d:6, label:'Суббота' },
+    { d:7, label:'Воскресенье' },
+  ];
+  if(MASTERS.length===0){
+    return `<div class="topbar"><h2>График работы мастеров</h2></div>
+      <div class="card"><p style="font-size:13px;color:var(--text2)">Нет мастеров. Добавьте мастеров в разделе «Мастера».</p></div>`;
+  }
+  const firstId = MASTERS[0].id;
+  return renderWorkcalFor(firstId);
+}
+
+function renderWorkcalFor(staffId){
+  const days = [
+    { d:1, short:'Пн', label:'Понедельник' },
+    { d:2, short:'Вт', label:'Вторник' },
+    { d:3, short:'Ср', label:'Среда' },
+    { d:4, short:'Чт', label:'Четверг' },
+    { d:5, short:'Пт', label:'Пятница' },
+    { d:6, short:'Сб', label:'Суббота' },
+    { d:7, short:'Вс', label:'Воскресенье' },
+  ];
+  const m = MASTERS.find(x=>x.id===staffId) || MASTERS[0];
+  const schedMap = new Map((m.workSchedules||[]).map(w=>[w.dayOfWeek,w]));
+  const staffOptions = MASTERS.map(x=>`<option value="${x.id}" ${x.id===m.id?'selected':''}>${esc(x.name)}</option>`).join('');
+  const rows = days.map(day=>{
+    const w = schedMap.get(day.d) || { isWorking: day.d<=5, startTime:'09:00', endTime:'18:00'};
+    const checked = w.isWorking!==false;
+    return `<tr>
+      <td style="white-space:nowrap">${day.label}</td>
+      <td style="text-align:center"><input type="checkbox" data-day="${day.d}" class="ws-day-check" ${checked?'checked':''}></td>
+      <td><input type="time" class="ws-from" data-day="${day.d}" value="${w.startTime||'09:00'}" ${checked?'':'disabled'}></td>
+      <td><input type="time" class="ws-to" data-day="${day.d}" value="${w.endTime||'18:00'}" ${checked?'':'disabled'}></td>
+    </tr>`;
+  }).join('');
+
+  setTimeout(()=>{
+    document.querySelectorAll('.ws-day-check').forEach(ch=>{
+      ch.addEventListener('change',e=>{
+        const day = e.target.getAttribute('data-day');
+        const on = e.target.checked;
+        document.querySelectorAll(`.ws-from[data-day="${day}"],.ws-to[data-day="${day}"]`).forEach(inp=>{
+          inp.disabled = !on;
+        });
+      });
+    });
+  },0);
+
+  return `
+  <div class="topbar">
+    <h2>График работы мастеров</h2>
+    <div class="acts">
+      <select id="ws-staff" onchange="document.getElementById('main-content').innerHTML=renderWorkcalFor(this.value)">
+        ${staffOptions}
+      </select>
+    </div>
+  </div>
+  <div class="card">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px">
+      Укажите дни и часы, когда мастер доступен для записи. Виджет использует эти данные при расчёте свободных слотов.
+    </p>
+    <div style="overflow-x:auto">
+      <table class="tbl" style="min-width:520px">
+        <thead><tr><th>День</th><th style="text-align:center">Работает</th><th>С</th><th>До</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    <div style="margin-top:16px;display:flex;justify-content:flex-end;gap:8px">
+      <button class="ib" onclick="nav('dash',document.querySelector('.snav a'))">Отмена</button>
+      <button class="ib primary" onclick="saveWorkSchedule('${m.id}')"><i class="ti ti-device-floppy"></i> Сохранить график</button>
+    </div>
+  </div>`;
+}
+
+async function saveWorkSchedule(staffId){
+  const checks=[...document.querySelectorAll('.ws-day-check')];
+  const items = checks.map(ch=>{
+    const d = Number(ch.getAttribute('data-day'));
+    const on = ch.checked;
+    const fromEl = document.querySelector(`.ws-from[data-day="${d}"]`);
+    const toEl   = document.querySelector(`.ws-to[data-day="${d}"]`);
+    const startTime = (fromEl && fromEl.value)||'09:00';
+    const endTime   = (toEl && toEl.value)||'18:00';
+    return { dayOfWeek:d, isWorking:on, startTime, endTime };
+  });
+  try{
+    await apiPut('/staff/'+staffId+'/schedule',{ schedule: items });
+    toast('График сохранён');
+    await loadMasters();
+    document.getElementById('main-content').innerHTML=renderWorkcalFor(staffId);
+  } catch(e){
+    alert('Не удалось сохранить график: '+(e.message||e));
+  }
 }
 
 // ── HISTORY ──
