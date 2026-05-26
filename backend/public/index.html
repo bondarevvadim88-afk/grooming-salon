@@ -2,445 +2,691 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Запись на груминг</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/dist/tabler-icons.min.css">
+  <title>Lyubi Grooming — груминг‑салон в Амстердаме</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Профессиональный груминг собак и кошек в салоне Lyubi Grooming. Комфорт, безопасность и красота без стресса. Онлайн‑запись за пару кликов.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
   <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f4;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px}
-    .wrap{max-width:640px;width:100%}
-    .hdr{text-align:center;margin-bottom:1.5rem}
-    .hdr h1{font-size:22px;font-weight:500;color:#1a1a18}
-    .hdr p{font-size:14px;color:#6b6b68;margin-top:4px}
-    .steps{display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem}
-    .sd{display:flex;flex-direction:column;align-items:center;gap:3px}
-    .sd .num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;border:1px solid rgba(0,0,0,.15);background:#fff;color:#6b6b68;transition:all .2s}
-    .sd .lbl{font-size:10px;color:#9e9e9a;white-space:nowrap}
-    .sd.active .num{background:#1D9E75;border-color:#1D9E75;color:#fff}
-    .sd.done .num{background:#E1F5EE;border-color:#5DCAA5;color:#0F6E56}
-    .sl{width:32px;height:1px;background:rgba(0,0,0,.1);margin-bottom:14px}
-    .sl.done{background:#5DCAA5}
-    .card{background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:12px;padding:20px}
-    .stitle{font-size:16px;font-weight:500;color:#1a1a18;margin-bottom:1rem}
-    .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    @media(max-width:520px){.g2,.g3{grid-template-columns:1fr}}
-    .svc{border:1px solid rgba(0,0,0,.1);border-radius:8px;padding:10px;cursor:pointer;transition:all .15s}
-    .svc:hover,.svc.sel{border-color:#1D9E75;background:#E1F5EE}
-    .svc i{font-size:18px;color:#0F6E56;margin-bottom:2px;display:block}
-    .svc .sn{font-size:13px;font-weight:500;color:#1a1a18}
-    .svc .sd2{font-size:11px;color:#6b6b68;margin:2px 0}
-    .svc .sp{font-size:12px;font-weight:500;color:#0F6E56}
-    .mcard{border:1px solid rgba(0,0,0,.1);border-radius:8px;padding:12px;cursor:pointer;transition:all .15s}
-    .mcard:hover{border-color:#1D9E75}
-    .mcard.sel{border:2px solid #1D9E75;background:#E1F5EE}
-    .mava{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;margin-bottom:8px}
-    label{font-size:13px;color:#6b6b68;display:block;margin-bottom:4px;margin-top:10px}
-    label:first-child{margin-top:0}
-    input{width:100%;padding:8px 10px;border:1px solid rgba(0,0,0,.15);border-radius:8px;font-size:13px;color:#1a1a18;background:#fff;outline:none;transition:border-color .15s;font-family:inherit}
-    input:focus{border-color:#1D9E75}
-    .ptrow{display:flex;gap:8px;margin-top:4px}
-    .ptb{flex:1;padding:7px;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#fff;font-size:12px;color:#6b6b68;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px;font-family:inherit}
-    .ptb:hover,.ptb.sel{border-color:#1D9E75;background:#E1F5EE;color:#0F6E56;font-weight:500}
-    .psz{display:flex;gap:8px;margin-top:4px}
-    .szb{flex:1;padding:7px;border:1px solid rgba(0,0,0,.12);border-radius:8px;background:#fff;font-size:12px;color:#6b6b68;cursor:pointer;transition:all .15s;text-align:center;font-family:inherit}
-    .szb:hover,.szb.sel{border-color:#1D9E75;background:#E1F5EE;color:#0F6E56;font-weight:500}
-    .cnav{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-    .cnav button{background:#fff;border:1px solid rgba(0,0,0,.12);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:13px;color:#6b6b68;font-family:inherit}
-    .cnav span{font-size:14px;font-weight:500;color:#1a1a18}
-    .cgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-top:4px}
-    .cdh{font-size:10px;color:#9e9e9a;text-align:center;padding:3px 0}
-    .cd{text-align:center;padding:6px 2px;border-radius:6px;font-size:12px;cursor:pointer;transition:all .15s;color:#6b6b68;user-select:none}
-    .cd:hover:not(.empty):not(.past){background:#E1F5EE;color:#0F6E56}
-    .cd.sel{background:#1D9E75;color:#fff}
-    .cd.today:not(.sel){font-weight:600;color:#1a1a18}
-    .cd.empty,.cd.past{opacity:.3;cursor:default}
-    .tgrid{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-    .tbtn{padding:6px 12px;border:1px solid rgba(0,0,0,.12);border-radius:8px;font-size:12px;color:#6b6b68;cursor:pointer;background:#fff;transition:all .15s;font-family:inherit}
-    .tbtn:hover:not(.busy){border-color:#1D9E75;color:#0F6E56}
-    .tbtn.sel{background:#1D9E75;border-color:#1D9E75;color:#fff}
-    .tbtn.busy{opacity:.35;cursor:not-allowed;text-decoration:line-through}
-    .sr{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(0,0,0,.07);font-size:13px}
-    .sr:last-child{border-bottom:none;font-weight:500;font-size:14px}
-    .acts{display:flex;gap:8px;margin-top:1.25rem;justify-content:flex-end}
-    .bp{background:#1D9E75;border:none;border-radius:8px;padding:9px 20px;font-size:13px;font-weight:500;color:#fff;cursor:pointer;transition:opacity .15s;font-family:inherit;display:inline-flex;align-items:center;gap:5px}
-    .bp:hover{opacity:.9}
-    .bp:disabled{opacity:.4;cursor:not-allowed}
-    .bs{background:#fff;border:1px solid rgba(0,0,0,.15);border-radius:8px;padding:9px 16px;font-size:13px;color:#6b6b68;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px}
-    .err{font-size:11px;color:#A32D2D;margin-top:4px;min-height:16px}
-    .ok-wrap{text-align:center;padding:1.5rem 1rem}
-    .ok-icon{width:52px;height:52px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
-    .ok-box{background:#f5f5f4;border-radius:8px;padding:12px 16px;text-align:left;margin:0 auto 1.25rem;max-width:380px}
-    .ok-row{display:flex;gap:8px;align-items:center;padding:3px 0;font-size:12px;color:#6b6b68}
-    .ok-row i{color:#1D9E75;font-size:15px;flex-shrink:0}
-    .loader{display:flex;align-items:center;justify-content:center;padding:40px}
-    .spinner{width:28px;height:28px;border:3px solid #E1F5EE;border-top-color:#1D9E75;border-radius:50%;animation:spin .7s linear infinite}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .alert{background:#FCEBEB;color:#791F1F;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px}
-    .progress-bar{height:3px;background:#E1F5EE;border-radius:0 0 12px 12px;margin:-20px -20px 16px;overflow:hidden}
-    .progress-fill{height:100%;background:#1D9E75;transition:width .3s}
+    :root {
+      --bg: #f7f6f2;
+      --bg-alt: #ffffff;
+      --accent: #01696f;
+      --accent-soft: #e1f5ee;
+      --danger: #a13544;
+      --text: #22211d;
+      --text-muted: #6b6b68;
+      --border: rgba(0,0,0,0.08);
+      --radius: 16px;
+      --shadow-sm: 0 8px 24px rgba(0,0,0,0.06);
+      --space: 16px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at top left,#f0ede6 0,#f7f6f2 40%,#fafaf8 100%);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    img { max-width: 100%; display: block; border-radius: 12px; }
+    a { color: inherit; text-decoration: none; }
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 20px 16px 64px;
+    }
+
+    /* HEADER */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 8px 0 20px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+    }
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #fff 0, #e1f5ee 35%, #01696f 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: 0 6px 18px rgba(1,105,111,0.28);
+    }
+    .logo-mark svg { width: 20px; height: 20px; }
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .logo-text span:first-child {
+      font-family: "Playfair Display", serif;
+      font-weight: 600;
+      letter-spacing: .04em;
+      font-size: 15px;
+    }
+    .logo-text span:last-child {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: .08em;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    nav a {
+      position: relative;
+      padding: 4px 0;
+    }
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: 0;
+      width: 0;
+      height: 2px;
+      border-radius: 999px;
+      background: var(--accent);
+      transition: width .18s ease-out;
+    }
+    nav a:hover::after {
+      width: 100%;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all .18s ease-out;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(1,105,111,0.35);
+    }
+    .btn-primary:hover {
+      background: #0c4e54;
+      transform: translateY(-1px);
+      box-shadow: 0 14px 36px rgba(1,105,111,0.40);
+    }
+    .btn-outline {
+      background: transparent;
+      border-color: var(--border);
+      color: var(--text);
+    }
+    .btn-outline:hover {
+      border-color: var(--accent);
+    }
+
+    /* HERO */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0,1.4fr) minmax(0,1fr);
+      gap: 32px;
+      padding: 24px 0 40px;
+      align-items: center;
+    }
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border-radius: 999px;
+      padding: 4px 10px;
+      margin-bottom: 10px;
+    }
+    .hero-title {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(26px, 4vw, 38px);
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .hero-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 420px;
+      margin-bottom: 18px;
+    }
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .hero-note {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .hero-badges span {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.8);
+    }
+    .hero-media {
+      position: relative;
+    }
+    .hero-card {
+      background: var(--bg-alt);
+      border-radius: 24px;
+      box-shadow: var(--shadow-sm);
+      padding: 16px;
+      display: grid;
+      gap: 10px;
+    }
+    .hero-pet {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-pet-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: #f3eee5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .hero-pet-info {
+      font-size: 12px;
+    }
+    .hero-pet-info strong {
+      display: block;
+      font-size: 13px;
+    }
+    .hero-list {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .hero-tag {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      align-self: flex-start;
+    }
+
+    /* SECTION WRAPPER */
+    section {
+      padding: 26px 0;
+    }
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .section-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 380px;
+    }
+
+    /* SERVICES / PACKAGES */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4,minmax(0,1fr));
+      gap: 14px;
+    }
+    .card {
+      background: rgba(255,255,255,0.9);
+      border-radius: var(--radius);
+      padding: 14px 14px 16px;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .card h3 {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .card-price {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent);
+    }
+    .card-list {
+      font-size: 12px;
+      color: var(--text-muted);
+      list-style: none;
+      padding-left: 0;
+    }
+    .card-list li::before {
+      content: "• ";
+    }
+    .card-tag {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      align-self: flex-start;
+    }
+
+    /* BENEFITS */
+    .benefits {
+      display: grid;
+      grid-template-columns: repeat(3,minmax(0,1fr));
+      gap: 14px;
+    }
+    .benefit {
+      background: rgba(255,255,255,0.9);
+      border-radius: var(--radius);
+      padding: 14px 14px 16px;
+      border: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .benefit strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* PROCESS */
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4,minmax(0,1fr));
+      gap: 14px;
+      font-size: 12px;
+    }
+    .process-step {
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.9);
+      border: 1px solid var(--border);
+      padding: 12px 12px 14px;
+    }
+    .process-step span {
+      display: inline-flex;
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      margin-bottom: 6px;
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+    .process-step h3 {
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+    .process-step p {
+      color: var(--text-muted);
+    }
+
+    /* CONTACTS */
+    .contacts {
+      display: grid;
+      grid-template-columns: minmax(0,1.2fr) minmax(0,1fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .contacts-card {
+      background: rgba(255,255,255,0.9);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 14px 14px 16px;
+      font-size: 13px;
+    }
+    .contacts-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .contacts-label {
+      color: var(--text-muted);
+      font-size: 12px;
+      min-width: 80px;
+    }
+    .contacts-value a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer {
+      margin-top: 32px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 960px) {
+      .hero {
+        grid-template-columns: minmax(0,1.2fr);
+      }
+      .hero-media { order: -1; }
+      .cards-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .benefits { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .process-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .contacts { grid-template-columns: minmax(0,1fr); }
+    }
+    @media (max-width: 640px) {
+      header { flex-wrap: wrap; }
+      nav { display: none; }
+      .cards-grid { grid-template-columns: minmax(0,1fr); }
+      .benefits { grid-template-columns: minmax(0,1fr); }
+      .process-grid { grid-template-columns: minmax(0,1fr); }
+    }
   </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="hdr">
-    <div style="width:38px;height:38px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;margin:0 auto 8px">
-      <i class="ti ti-scissors" style="font-size:18px;color:#1D9E75" aria-hidden="true"></i>
+<div class="page">
+  <header>
+    <div class="logo-wrap">
+      <div class="logo-mark" aria-label="Lyubi Grooming">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 19c1.5-3.5 3.5-6 7-9 2.5 3 4.5 5.5 7 9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+          <circle cx="9" cy="7" r="2" fill="currentColor"/>
+          <circle cx="15" cy="7" r="2" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span>Lyubi Grooming</span>
+        <span>Груминг‑салон для собак и кошек</span>
+      </div>
     </div>
-    <h1>Запись на груминг</h1>
-    <p>Услуга → Мастер → Питомец → Время → Контакты</p>
-  </div>
-  <div class="steps" id="sbar" aria-label="Шаги записи"></div>
-  <div class="card" id="scont" role="main"></div>
+    <nav>
+      <a href="#services">Услуги</a>
+      <a href="#benefits">Почему мы</a>
+      <a href="#process">Как проходит визит</a>
+      <a href="#contacts">Контакты</a>
+      <a class="btn btn-outline" href="https://www.lyubi-grooming.ru/booking">
+        Онлайн‑запись
+      </a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div>
+        <div class="hero-kicker">
+          <span>груминг без стресса</span>
+        </div>
+        <h1 class="hero-title">
+          Красота и комфорт для&nbsp;питомца<br>в одном визите
+        </h1>
+        <p class="hero-sub">
+          Полный спектр уходовых процедур для собак и кошек: от гигиенического ухода до комплексного груминга. Работаем бережно, без наркоза и грубости.
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="https://www.lyubi-grooming.ru/booking">
+            Записаться онлайн
+          </a>
+          <a class="btn btn-outline" href="#services">
+            Смотреть услуги
+          </a>
+        </div>
+        <div class="hero-note">
+          Свободные окна на этой неделе. Онлайн‑запись занимает меньше минуты.
+        </div>
+        <div class="hero-badges">
+          <span>Индивидуальный подход к каждой породе</span>
+          <span>Только проф. косметика</span>
+          <span>Фото до/после по желанию</span>
+        </div>
+      </div>
+      <div class="hero-media" aria-hidden="true">
+        <div class="hero-card">
+          <div class="hero-pet">
+            <div class="hero-pet-avatar">🐶</div>
+            <div class="hero-pet-info">
+              <strong>Мальтипу, полный груминг</strong>
+              <span>Мытьё, стрижка, когти, уши, глаза</span>
+            </div>
+          </div>
+          <div class="hero-list">
+            Следим за комфортом: без седации, с перерывами, с аккуратной сушкой и расчёсыванием.
+          </div>
+          <div class="hero-tag">Записаться → за 5 шагов: услуга → мастер → питомец → время → контакты</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES / PACKAGES -->
+    <section id="services">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Популярные комплексы груминга</h2>
+          <p class="section-sub">
+            Прозрачные пакеты услуг по аналогии с Vetcity: от базовой гигиены до полного обновления шерсти и тримминга.[web:120]
+          </p>
+        </div>
+        <a class="btn btn-outline" href="https://www.lyubi-grooming.ru/booking">
+          Выбрать услугу и записаться
+        </a>
+      </div>
+      <div class="cards-grid">
+        <article class="card">
+          <span class="card-tag">All groom</span>
+          <h3>Полный комплекс со стрижкой</h3>
+          <div class="card-price">от 5 500 ₽</div>
+          <ul class="card-list">
+            <li>мытьё и сушка</li>
+            <li>стрижка по породе или под машинку</li>
+            <li>чистка ушей и обработка глаз</li>
+            <li>стрижка когтей</li>
+          </ul>
+        </article>
+        <article class="card">
+          <span class="card-tag">Groom &amp; Go</span>
+          <h3>Гигиенический уход</h3>
+          <div class="card-price">от 4 000 ₽</div>
+          <ul class="card-list">
+            <li>мытьё и сушка‑вычёсывание</li>
+            <li>стрижка зон гигиены и лап</li>
+            <li>обработка глаз, чистка ушей</li>
+            <li>стрижка когтей</li>
+          </ul>
+        </article>
+        <article class="card">
+          <span class="card-tag">Wash &amp; Go</span>
+          <h3>Купание и уход за шерстью</h3>
+          <div class="card-price">от 3 000 ₽</div>
+          <ul class="card-list">
+            <li>мытьё в 1–2 этапа</li>
+            <li>сушка‑вычёсывание</li>
+            <li>чистка ушей</li>
+            <li>стрижка когтей</li>
+          </ul>
+        </article>
+        <article class="card">
+          <span class="card-tag">Shed Control</span>
+          <h3>Экспресс‑линька</h3>
+          <div class="card-price">от 5 000 ₽</div>
+          <ul class="card-list">
+            <li>поэтапное мытьё для снижения линьки</li>
+            <li>интенсивное вычёсывание</li>
+            <li>уход за ушами и когтями</li>
+            <li>рекомендации по домашнему уходу</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- BENEFITS -->
+    <section id="benefits">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Почему владельцы выбирают Lyubi Grooming</h2>
+          <p class="section-sub">
+            Мы собрали лучшие практики городских груминг‑салонов: прозрачные пакеты, спокойная атмосфера, бережное отношение и понятная онлайн‑запись.[web:120]
+          </p>
+        </div>
+      </div>
+      <div class="benefits">
+        <div class="benefit">
+          <strong>Бережный груминг без стресса</strong>
+          Работаем без наркоза и грубой фиксации, делаем паузы, даём питомцу привыкнуть к мастеру и инструментам.
+        </div>
+        <div class="benefit">
+          <strong>Опытные мастера</strong>
+          Мастера специализируются на разных породах и типах шерсти. Для каждого питомца подбираем подходящий комплекс ухода.
+        </div>
+        <div class="benefit">
+          <strong>Онлайн‑запись за минуту</strong>
+          Выбираете услугу, мастера, дату и время, указываете данные питомца — и запись готова.[web:127]
+        </div>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section id="process">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Как проходит визит</h2>
+          <p class="section-sub">
+            От записи до забора питомца — всё прозрачно и предсказуемо. Вы всегда знаете, что происходит на каждом шаге.
+          </p>
+        </div>
+      </div>
+      <div class="process-grid">
+        <div class="process-step">
+          <span>1</span>
+          <h3>Онлайн‑запись</h3>
+          <p>Выбираете услугу, мастера и удобное время, оставляете контакты и данные питомца.</p>
+        </div>
+        <div class="process-step">
+          <span>2</span>
+          <h3>Приветствие и осмотр</h3>
+          <p>Мастер знакомится с питомцем, уточняет пожелания по длине шерсти, форме стрижки и чувствительным зонам.</p>
+        </div>
+        <div class="process-step">
+          <span>3</span>
+          <h3>Груминг‑процедуры</h3>
+          <p>Комплекс процедур по выбранному пакету: мытьё, стрижка, уход за ушами, глазами и когтями.</p>
+        </div>
+        <div class="process-step">
+          <span>4</span>
+          <h3>Финал и рекомендации</h3>
+          <p>Вы забираете питомца, мастер даёт рекомендации по домашнему уходу и интервалам между визитами.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section>
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Готовы записаться?</h2>
+          <p class="section-sub">
+            Нажмите на кнопку — откроется страница онлайн‑записи, где вы выберете услугу, мастера и время визита.
+          </p>
+        </div>
+        <a class="btn btn-primary" href="https://www.lyubi-grooming.ru/booking">
+          Перейти к онлайн‑записи
+        </a>
+      </div>
+    </section>
+
+    <!-- CONTACTS -->
+    <section id="contacts">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Контакты и график работы</h2>
+          <p class="section-sub">
+            Напишите или позвоните, если остались вопросы по услугам, подготовке питомца или особенностям груминга.
+          </p>
+        </div>
+      </div>
+      <div class="contacts">
+        <div class="contacts-card">
+          <div class="contacts-row">
+            <div class="contacts-label">Телефон</div>
+            <div class="contacts-value">
+              <a href="tel:+7XXXXXXXXXX">+7 ХХХ ХХХ‑ХХ‑ХХ</a>
+            </div>
+          </div>
+          <div class="contacts-row">
+            <div class="contacts-label">Почта</div>
+            <div class="contacts-value">
+              <a href="mailto:info@lyubi-grooming.ru">info@lyubi-grooming.ru</a>
+            </div>
+          </div>
+          <div class="contacts-row">
+            <div class="contacts-label">Адрес</div>
+            <div class="contacts-value">
+              Уточните фактический адрес салона здесь
+            </div>
+          </div>
+          <div class="contacts-row">
+            <div class="contacts-label">График</div>
+            <div class="contacts-value">
+              Ежедневно, 10:00–21:00 (настройте под свой режим)
+            </div>
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:var(--text-muted);">
+            Навигацию и подробную схему прохода можно дополнительно разместить здесь или на отдельной странице.
+          </div>
+        </div>
+        <div class="contacts-card">
+          <div style="font-size:13px;margin-bottom:8px;font-weight:500;">Онлайн‑запись</div>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">
+            Нажмите на кнопку ниже — откроется страница записи, которую мы уже настроили раньше.
+          </p>
+          <a class="btn btn-primary" href="https://www.lyubi-grooming.ru/booking">
+            Записаться на груминг
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>© Lyubi Grooming, 2026</div>
+    <div>Сделано с заботой о питомцах</div>
+  </footer>
 </div>
-<script>
-"use strict";
-
-const API = 'https://grooming-salon-production.up.railway.app';
-const STEPS = ['Услуга','Мастер','Питомец','Дата','Контакты','Готово'];
-const DAYS = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
-const MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-const AVA = [{bg:'#E1F5EE',tc:'#0F6E56'},{bg:'#E6F1FB',tc:'#185FA5'},{bg:'#EEEDFE',tc:'#534AB7'}];
-const SVC_ICONS = {bath:'ti-droplet',full:'ti-cut',trim:'ti-scissors',nails:'ti-hand-stop',spa:'ti-sparkles',puppy:'ti-star'};
-
-const S = {
-  step:0, services:[], masters:[], slots:[],
-  svc:null, master:null,
-  petType:'dog', petName:'', petBreed:'', petSize:'MEDIUM',
-  date:null, time:null,
-  name:'', phone:'', email:'',
-  calYear:new Date().getFullYear(), calMonth:new Date().getMonth(),
-  loading:false,
-  // Created IDs after booking
-  createdApptId: null,
-};
-
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
-function calcPrice(svc,sz){if(!svc)return 0;const m={SMALL:svc.coefSmall,MEDIUM:svc.coefMedium,LARGE:svc.coefLarge};return Math.round(svc.basePrice*(m[sz]||1)/10)*10}
-function ava(idx,sz=20){const a=AVA[idx%AVA.length];const n=S.masters[idx]?.name||'';const i=n.split(' ').slice(0,2).map(w=>w[0]).join('');return `<div class="mava" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.42)}px;background:${a.bg};color:${a.tc}">${esc(i)}</div>`}
-function masterAva(m,idx,sz=20){const a=AVA[idx%AVA.length];const i=(m.name||'').split(' ').slice(0,2).map(w=>w[0]).join('');return `<span style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.42)}px;background:${a.bg};color:${a.tc};border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:500;flex-shrink:0">${esc(i)}</span>`}
-function fmtLong(d){return d.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'})}
-function fmtISO(d){const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`}
-function fmtTime(iso){return new Date(iso).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}
-function svcIcon(id){for(const[k,v]of Object.entries(SVC_ICONS))if(id.includes(k))return v;return 'ti-scissors'}
-function setHTML(html){document.getElementById('scont').innerHTML=html}
-function showLoader(){setHTML('<div class="loader"><div class="spinner"></div></div>')}
-
-async function apiGet(path){
-  const r=await fetch(API+path);
-  if(!r.ok)throw new Error('Ошибка '+r.status);
-  return r.json();
-}
-async function apiPost(path,body){
-  const r=await fetch(API+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  const data=await r.json().catch(()=>({}));
-  if(!r.ok)throw new Error(data.message||'Ошибка сервера');
-  return data;
-}
-
-// Steps bar
-function renderSteps(){
-  const pct = Math.round(S.step / (STEPS.length-1) * 100);
-  document.getElementById('sbar').innerHTML = STEPS.map((s,i)=>{
-    const c=i<S.step?'done':i===S.step?'active':'';
-    const n=i<S.step?'<i class="ti ti-check" style="font-size:11px"></i>':i+1;
-    const l=i<STEPS.length-1?`<div class="sl${i<S.step?' done':''}"></div>`:'';
-    return `<div class="sd ${c}"><div class="num">${n}</div><div class="lbl">${esc(s)}</div></div>${l}`;
-  }).join('');
-}
-
-// Step 0: Services
-function renderSvcs(){
-  setHTML(`
-    <div class="stitle">Выберите услугу</div>
-    <div class="g2">${S.services.map(s=>`
-      <div class="svc${S.svc?.id===s.id?' sel':''}" onclick="selSvc('${s.id}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')selSvc('${s.id}')">
-        <i class="ti ${svcIcon(s.id)}"></i>
-        <div class="sn">${esc(s.name)}</div>
-        <div class="sd2">${esc(s.description||'')}</div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px">
-          <span class="sp">от ${calcPrice(s,'SMALL').toLocaleString('ru-RU')} ₽</span>
-          <span style="font-size:10px;color:#9e9e9a">${s.durationMin} мин</span>
-        </div>
-      </div>`).join('')}</div>
-    <div class="acts"><button class="bp" onclick="next()" ${!S.svc?'disabled':''}>Далее <i class="ti ti-arrow-right"></i></button></div>`);
-}
-
-// Step 1: Masters
-function renderMasters(){
-  const list = S.svc ? S.masters.filter(m=>(m.services||[]).some(x=>x.serviceId===S.svc.id)) : S.masters;
-  setHTML(`
-    <div class="stitle">Выберите мастера</div>
-    <div class="g3">${list.map((m,i)=>{const a=AVA[i%AVA.length];const ini=(m.name||'').split(' ').slice(0,2).map(w=>w[0]).join('');return `
-      <div class="mcard${S.master?.id===m.id?' sel':''}" onclick="selMaster('${m.id}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')selMaster('${m.id}')">
-        <div class="mava" style="background:${a.bg};color:${a.tc}">${esc(ini)}</div>
-        <div style="font-size:13px;font-weight:500;color:#1a1a18;margin-bottom:2px">${esc(m.name)}</div>
-        <div style="font-size:11px;color:#6b6b68;margin-bottom:4px">${esc(m.specialty)}</div>
-        <div style="font-size:11px;color:#0F6E56">★ ${m.rating} <span style="color:#9e9e9a">(${m.reviewsCount})</span></div>
-      </div>`}).join('')}</div>
-    <div class="acts">
-      <button class="bs" onclick="prev()"><i class="ti ti-arrow-left"></i> Назад</button>
-      <button class="bp" onclick="next()" ${!S.master?'disabled':''}>Далее <i class="ti ti-arrow-right"></i></button>
-    </div>`);
-}
-
-// Step 2: Pet
-function renderPet(){
-  setHTML(`
-    <div class="stitle">О вашем питомце</div>
-    <label>Вид питомца</label>
-    <div class="ptrow">
-      ${[['dog','ti-bone','Собака'],['cat','ti-paw','Кошка'],['other','ti-star','Другое']].map(([v,ic,lb])=>`
-        <button class="ptb${S.petType===v?' sel':''}" onclick="S.petType='${v}';renderPet()"><i class="ti ${ic}"></i> ${lb}</button>`).join('')}
-    </div>
-    <label>Кличка *</label>
-    <input id="pname" type="text" value="${esc(S.petName)}" placeholder="Например, Барсик" oninput="S.petName=this.value">
-    <label>Порода</label>
-    <input id="pbr" type="text" value="${esc(S.petBreed)}" placeholder="Например, лабрадор" oninput="S.petBreed=this.value">
-    <label>Размер питомца</label>
-    <div class="psz">
-      ${[['SMALL','Мелкий','до 5 кг'],['MEDIUM','Средний','5–20 кг'],['LARGE','Крупный','от 20 кг']].map(([v,lb,sub])=>`
-        <button class="szb${S.petSize===v?' sel':''}" onclick="S.petSize='${v}';renderPet()">
-          ${lb}<br><span style="font-size:10px;opacity:.7">${sub}</span>
-        </button>`).join('')}
-    </div>
-    ${S.svc?`<div style="font-size:11px;color:#9e9e9a;margin-top:8px">Стоимость «${esc(S.svc.name)}»: <b style="color:#0F6E56">${calcPrice(S.svc,S.petSize).toLocaleString('ru-RU')} ₽</b></div>`:''}
-    <div id="pet-err" class="err"></div>
-    <div class="acts">
-      <button class="bs" onclick="prev()"><i class="ti ti-arrow-left"></i> Назад</button>
-      <button class="bp" onclick="validatePet()">Далее <i class="ti ti-arrow-right"></i></button>
-    </div>`);
-}
-
-// Step 3: DateTime
-function renderDateTime(){
-  const now=new Date(),today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
-  const y=S.calYear,m=S.calMonth;
-  const fd=new Date(y,m,1).getDay(),sh=fd===0?6:fd-1;
-  const dim=new Date(y,m+1,0).getDate();
-  let cells=Array(sh).fill('<div class="cd empty"></div>');
-  for(let d=1;d<=dim;d++){
-    const dd=new Date(y,m,d);
-    const ip=dd.getTime()<today.getTime(),it=dd.getTime()===today.getTime();
-    const is=S.date&&S.date.getTime()===dd.getTime();
-    const cls=['cd',ip?'past':'',it&&!is?'today':'',is?'sel':''].filter(Boolean).join(' ');
-    cells.push(`<div class="${cls}"${!ip?` onclick="selDate(${y},${m},${d})"`:''}>${d}</div>`);
-  }
-  let timesHTML='<div style="font-size:12px;color:#9e9e9a;padding:8px 0">Выберите дату</div>';
-  if(S.loading)timesHTML='<div class="loader" style="padding:12px"><div class="spinner"></div></div>';
-  else if(S.date&&S.slots.length)timesHTML=S.slots.map(sl=>{
-    const lbl=fmtTime(sl.startAt),is=S.time===sl.startAt,busy=!sl.available;
-    return `<button class="tbtn${busy?' busy':''}${is?' sel':''}" ${busy?'disabled':` onclick="S.time='${sl.startAt}';renderDateTime()"`}>${lbl}</button>`;
-  }).join('');
-  else if(S.date)timesHTML='<div style="font-size:12px;color:#9e9e9a;padding:8px 0">Нет доступных слотов на этот день</div>';
-
-  const midx=S.masters.findIndex(x=>x.id===S.master?.id);
-  const a=AVA[midx%AVA.length];
-  const ini=S.master?(S.master.name||'').split(' ').slice(0,2).map(w=>w[0]).join(''):'';
-
-  setHTML(`
-    <div class="stitle">Дата и время</div>
-    ${S.master?`<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f5f5f4;border-radius:8px;margin-bottom:12px;font-size:12px">
-      <div style="width:28px;height:28px;border-radius:50%;background:${a.bg};color:${a.tc};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500">${esc(ini)}</div>
-      <div><b>${esc(S.master.name)}</b> · ${esc(S.master.specialty)}</div>
-    </div>`:''}
-    <div class="cnav">
-      <button onclick="prevMonth()"><i class="ti ti-chevron-left"></i></button>
-      <span>${MONTHS[m]} ${y}</span>
-      <button onclick="nextMonth()"><i class="ti ti-chevron-right"></i></button>
-    </div>
-    <div class="cgrid">${DAYS.map(d=>`<div class="cdh">${d}</div>`).join('')}${cells.join('')}</div>
-    <div style="margin-top:1rem">
-      <div style="font-size:13px;font-weight:500;margin-bottom:6px">Время</div>
-      <div class="tgrid">${timesHTML}</div>
-    </div>
-    <div id="dt-err" class="err"></div>
-    <div class="acts">
-      <button class="bs" onclick="prev()"><i class="ti ti-arrow-left"></i> Назад</button>
-      <button class="bp" onclick="validateDT()">Далее <i class="ti ti-arrow-right"></i></button>
-    </div>`);
-}
-
-// Step 4: Contact
-function renderContact(){
-  if(!S.svc||!S.master){prev();return;}
-  const price=calcPrice(S.svc,S.petSize);
-  const midx=S.masters.findIndex(x=>x.id===S.master.id);
-  const a=AVA[midx%AVA.length];
-  const ini=(S.master.name||'').split(' ').slice(0,2).map(w=>w[0]).join('');
-  setHTML(`
-    <div class="stitle">Ваши контакты</div>
-    <div style="background:#f5f5f4;border-radius:8px;padding:10px 12px;margin-bottom:1rem">
-      <div style="font-size:11px;color:#6b6b68;margin-bottom:6px;font-weight:500">Итог записи</div>
-      <div class="sr"><span style="color:#6b6b68">Услуга</span><span>${esc(S.svc.name)}</span></div>
-      <div class="sr"><span style="color:#6b6b68">Мастер</span>
-        <span style="display:flex;align-items:center;gap:6px">
-          <span style="width:20px;height:20px;border-radius:50%;background:${a.bg};color:${a.tc};display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:500">${esc(ini)}</span>
-          ${esc(S.master.name)}
-        </span>
-      </div>
-      <div class="sr"><span style="color:#6b6b68">Питомец</span><span>${esc(S.petName)}${S.petBreed?', '+esc(S.petBreed):''} · ${S.petSize==='SMALL'?'мелкий':S.petSize==='MEDIUM'?'средний':'крупный'}</span></div>
-      <div class="sr"><span style="color:#6b6b68">Дата и время</span><span>${S.date?fmtLong(S.date):''}, ${S.time?fmtTime(S.time):''}</span></div>
-      <div class="sr"><span style="color:#6b6b68">Стоимость</span><span style="color:#0F6E56;font-weight:500">от ${price.toLocaleString('ru-RU')} ₽</span></div>
-    </div>
-    <label>Ваше имя *</label>
-    <input id="oname" type="text" value="${esc(S.name)}" placeholder="Иван Петров" oninput="S.name=this.value" autocomplete="name">
-    <label>Телефон *</label>
-    <input id="ophone" type="tel" value="${esc(S.phone)}" placeholder="+7 900 000-00-00" oninput="S.phone=this.value" autocomplete="tel">
-    <label>E-mail <span style="color:#9e9e9a;font-size:11px">(необязательно)</span></label>
-    <input id="oemail" type="email" value="${esc(S.email)}" placeholder="ivan@example.com" oninput="S.email=this.value" autocomplete="email">
-    <div style="margin-top:10px;font-size:11px;color:#9e9e9a">Подтверждение придёт по SMS. Напоминание за 2 ч до визита.</div>
-    <div id="cerr" class="err"></div>
-    <div class="acts">
-      <button class="bs" onclick="prev()"><i class="ti ti-arrow-left"></i> Назад</button>
-      <button class="bp" id="sbtn" onclick="submitBooking()"><i class="ti ti-calendar-check"></i> Записаться</button>
-    </div>`);
-}
-
-// Step 5: Success
-function renderSuccess(){
-  if(!S.svc||!S.master){resetForm();return;}
-  const midx=S.masters.findIndex(x=>x.id===S.master.id);
-  const a=AVA[midx%AVA.length];
-  const ini=(S.master.name||'').split(' ').slice(0,2).map(w=>w[0]).join('');
-  setHTML(`
-    <div class="ok-wrap">
-      <div class="ok-icon"><i class="ti ti-circle-check" style="font-size:24px;color:#1D9E75"></i></div>
-      <h2 style="font-size:20px;font-weight:500;margin-bottom:8px">Запись подтверждена!</h2>
-      <p style="font-size:13px;color:#6b6b68;margin-bottom:1.25rem">Ждём вас и ${esc(S.petName)}. Детали отправлены на ${esc(S.phone)}.</p>
-      <div class="ok-box">
-        <div class="ok-row"><i class="ti ti-scissors"></i><span>${esc(S.svc.name)}</span></div>
-        <div class="ok-row">
-          <div style="width:22px;height:22px;border-radius:50%;background:${a.bg};color:${a.tc};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;flex-shrink:0">${esc(ini)}</div>
-          <span>${esc(S.master.name)}</span>
-        </div>
-        <div class="ok-row"><i class="ti ti-paw"></i><span>${esc(S.petName)}${S.petBreed?' · '+esc(S.petBreed):''} · ${S.petSize==='SMALL'?'мелкий':S.petSize==='MEDIUM'?'средний':'крупный'}</span></div>
-        <div class="ok-row"><i class="ti ti-calendar"></i><span>${S.date?fmtLong(S.date):''}</span></div>
-        <div class="ok-row"><i class="ti ti-clock"></i><span>${S.time?fmtTime(S.time):''}</span></div>
-      </div>
-      <button class="bp" onclick="resetForm()"><i class="ti ti-plus"></i> Новая запись</button>
-    </div>`);
-}
-
-// ── Actions ──
-function selSvc(id){S.svc=S.services.find(x=>x.id===id)||null;S.master=null;S.date=null;S.time=null;S.slots=[];renderSvcs()}
-function selMaster(id){S.master=S.masters.find(x=>x.id===id)||null;S.date=null;S.time=null;S.slots=[];renderMasters()}
-
-async function selDate(y,m,d){
-  S.date=new Date(y,m,d);S.time=null;S.slots=[];S.loading=true;renderDateTime();
-  try{const r=await apiGet(`/staff/${S.master.id}/slots?date=${fmtISO(S.date)}&serviceId=${S.svc.id}`);S.slots=r.slots||[];}
-  catch(e){S.slots=[];}
-  S.loading=false;renderDateTime();
-}
-function prevMonth(){
-  const n=new Date();
-  if(S.calYear===n.getFullYear()&&S.calMonth===n.getMonth())return;
-  if(S.calMonth===0){S.calMonth=11;S.calYear--;}else S.calMonth--;
-  S.date=null;S.time=null;S.slots=[];renderDateTime();
-}
-function nextMonth(){
-  if(S.calMonth===11){S.calMonth=0;S.calYear++;}else S.calMonth++;
-  S.date=null;S.time=null;S.slots=[];renderDateTime();
-}
-function prev(){if(S.step>0){S.step--;render();}}
-function next(){
-  if(S.step===0&&!S.svc)return;
-  if(S.step===1&&!S.master)return;
-  S.step++;render();
-}
-function validatePet(){
-  S.petName=(document.getElementById('pname')?.value||'').trim();
-  S.petBreed=(document.getElementById('pbr')?.value||'').trim();
-  if(!S.petName){const e=document.getElementById('pet-err');if(e)e.textContent='Введите кличку питомца';return;}
-  S.step++;render();
-}
-function validateDT(){
-  if(!S.date||!S.time){const e=document.getElementById('dt-err');if(e)e.textContent='Выберите дату и время';return;}
-  S.step++;render();
-}
-
-// ── FULL BOOKING FLOW ──
-async function submitBooking(){
-  S.name=(document.getElementById('oname')?.value||'').trim();
-  S.phone=(document.getElementById('ophone')?.value||'').trim();
-  S.email=(document.getElementById('oemail')?.value||'').trim();
-  const errEl=document.getElementById('cerr');
-
-  if(!S.name){if(errEl)errEl.textContent='Введите ваше имя';return;}
-  if(!S.phone||!/^(?:\+7|8)[\d\s\-()\d]{9,}$/.test(S.phone)){if(errEl)errEl.textContent='Введите корректный номер телефона';return;}
-
-  const btn=document.getElementById('sbtn');
-  if(btn){btn.disabled=true;btn.textContent='Отправка…';}
-  if(errEl)errEl.textContent='';
-
-  try {
-    // Step 1: create or find client (idempotent)
-    const client = await apiPost('/clients',{
-      name:S.name, phone:S.phone, ...(S.email?{email:S.email}:{})
-    });
-    if(!client?.id) throw new Error('Не удалось создать клиента');
-
-    // Step 2: create pet
-    const petTypeMap={dog:'DOG',cat:'CAT',other:'OTHER'};
-    const pet = await apiPost(`/clients/${client.id}/pets`,{
-      name:  S.petName,
-      type:  petTypeMap[S.petType]||'DOG',
-      size:  S.petSize,
-      ...(S.petBreed?{breed:S.petBreed}:{}),
-    });
-    if(!pet?.id) throw new Error('Не удалось создать профиль питомца');
-
-    // Step 3: create appointment
-    const appt = await apiPost('/appointments',{
-      serviceId: S.svc.id,
-      staffId:   S.master.id,
-      petId:     pet.id,
-      startAt:   S.time,
-    });
-    S.createdApptId = appt?.id;
-
-    // Success!
-    S.step++;
-    renderSteps();
-    renderSuccess();
-
-  } catch(e){
-    if(btn){btn.disabled=false;btn.innerHTML='<i class="ti ti-calendar-check"></i> Записаться';}
-    if(errEl)errEl.textContent=e.message||'Ошибка. Попробуйте ещё раз.';
-  }
-}
-
-function resetForm(){
-  Object.assign(S,{
-    step:0,svc:null,master:null,petType:'dog',petName:'',petBreed:'',petSize:'MEDIUM',
-    date:null,time:null,slots:[],name:'',phone:'',email:'',createdApptId:null,
-    calYear:new Date().getFullYear(),calMonth:new Date().getMonth(),loading:false
-  });
-  render();
-}
-
-function render(){
-  renderSteps();
-  if(S.step===0)renderSvcs();
-  else if(S.step===1)renderMasters();
-  else if(S.step===2)renderPet();
-  else if(S.step===3)renderDateTime();
-  else if(S.step===4)renderContact();
-  else renderSuccess();
-}
-
-// ── Boot ──
-async function boot(){
-  renderSteps();showLoader();
-  try{
-    const [svcs,masters]=await Promise.all([apiGet('/services'),apiGet('/staff')]);
-    S.services=svcs;S.masters=masters;render();
-  }catch(e){
-    setHTML(`<div class="alert">Не удалось загрузить данные: ${esc(e.message)}</div>
-      <div class="acts"><button class="bp" onclick="boot()">Повторить</button></div>`);
-  }
-}
-boot();
-</script>
 </body>
 </html>
