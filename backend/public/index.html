@@ -325,6 +325,81 @@
       margin-bottom: 4px;
     }
 
+    /* TEAM / MASTERS */
+    .team {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
+      gap: 14px;
+    }
+    .team-card {
+      background: rgba(255,255,255,0.9);
+      border-radius: var(--radius);
+      padding: 14px 14px 16px;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .team-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .team-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: #f3eee5;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .team-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 14px;
+    }
+    .team-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .team-role {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .team-bio {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* TESTIMONIALS */
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+      gap: 14px;
+    }
+    .testimonial {
+      background: rgba(255,255,255,0.95);
+      border-radius: var(--radius);
+      padding: 14px 14px 16px;
+      border: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .testimonial-quote {
+      font-size: 22px;
+      line-height: 1;
+      margin-bottom: 4px;
+      color: var(--accent);
+    }
+    .testimonial-name {
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--text);
+      font-weight: 500;
+    }
+
     /* PROCESS */
     .process-grid {
       display: grid;
@@ -643,6 +718,90 @@
           <strong>Онлайн‑запись за минуту</strong>
           Выбираете услугу, мастера, дату и время, указываете данные питомца — и запись готова.[web:127]
         </div>
+      </div>
+    </section>
+
+    <!-- TEAM / MASTERS -->
+    <section id="team">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Мастера, которым можно доверить хвост</h2>
+          <p class="section-sub">
+            Небольшая команда с фокусом на спокойный груминг: каждый мастер специализируется на своих породах и типах шерсти.
+          </p>
+        </div>
+      </div>
+      <div class="team">
+        <article class="team-card">
+          <div class="team-head">
+            <div class="team-avatar">
+              <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop" alt="Анна, мастер по декоративным породам">
+            </div>
+            <div>
+              <div class="team-name">Анна</div>
+              <div class="team-role">декоративные породы и щенки</div>
+            </div>
+          </div>
+          <p class="team-bio">
+            Специалист по мягкому знакомству с салоном. Помогает тревожным питомцам привыкнуть к фену и инструментам.
+          </p>
+        </article>
+        <article class="team-card">
+          <div class="team-head">
+            <div class="team-avatar">
+              <img src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=400&auto=format&fit=crop" alt="Мария, мастер по кошкам">
+            </div>
+            <div>
+              <div class="team-name">Мария</div>
+              <div class="team-role">кошки и чувствительная шерсть</div>
+            </div>
+          </div>
+          <p class="team-bio">
+            Аккуратный груминг кошек без лишнего шума и запахов. Внимательно следит за реакцией питомца на каждом этапе.
+          </p>
+        </article>
+        <article class="team-card">
+          <div class="team-head">
+            <div class="team-avatar">
+              <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=400&auto=format&fit=crop" alt="Олег, мастер по крупным породам">
+            </div>
+            <div>
+              <div class="team-name">Олег</div>
+              <div class="team-role">крупные породы</div>
+            </div>
+          </div>
+          <p class="team-bio">
+            Спокойный характер и уверенная работа с большими собаками. Подбирает формат ухода под темперамент питомца.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Что говорят владельцы</h2>
+          <p class="section-sub">
+            Для нас важно, чтобы питомцы выходили из салона не только красивыми, но и спокойными. Вот что пишут клиенты после визита.
+          </p>
+        </div>
+      </div>
+      <div class="testimonials">
+        <article class="testimonial">
+          <div class="testimonial-quote">“</div>
+          <p>
+            Обычно собака боится салонов, но здесь спокойно зашла, не тянула домой и всё время была рядом с мастером. Вышла мягкая, расчёсанная и без стресса.
+          </p>
+          <div class="testimonial-name">Кристина и Боня</div>
+        </article>
+        <article class="testimonial">
+          <div class="testimonial-quote">“</div>
+          <p>
+            Очень нравится спокойная атмосфера: без громкой музыки и лишних людей. Видно, что с питомцем разговаривают и объясняют каждое действие.
+          </p>
+          <div class="testimonial-name">Илья и Мира</div>
+        </article>
       </div>
     </section>
 
