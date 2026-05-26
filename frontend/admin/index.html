@@ -136,7 +136,7 @@
 
 <script>
 "use strict";
-const API = 'https://www.lyubi-grooming.ru/v1';
+const API = 'https://www.lyubi-grooming.ru';
 
 // ── Auth state ──
 let TOKEN = localStorage.getItem('admin_token') || null;
@@ -318,7 +318,11 @@ async function loadSvcs(){
   SVCS = await apiGet('/services');
 }
 async function loadAppts(){
-  try { APPTS = await apiGet('/appointments'); } catch(e){ APPTS=[]; }
+  try {
+    const r = await fetch('https://www.lyubi-grooming.ru/v1/appointments', {headers:TOKEN?{Authorization:'Bearer '+TOKEN}:{}});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    APPTS = await r.json();
+  } catch(e){ APPTS=[]; }
 }
 
 // ── DASHBOARD ──
