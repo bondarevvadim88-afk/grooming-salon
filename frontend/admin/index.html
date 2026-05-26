@@ -208,7 +208,7 @@ const STATUS_LABEL={confirmed:'Подтверждена',pending:'Ожидает
 function nav(page,el){
   document.querySelectorAll('.snav a').forEach(a=>a.classList.remove('active'));
   if(el)el.classList.add('active');
-  const pages={dash:renderDash,sched:renderSched,hist:renderHist,masters:renderMasters,svcs:renderSvcs};
+  const pages={dash:renderDash,sched:renderSched,workcal:renderWorkcal,hist:renderHist,masters:renderMasters,svcs:renderSvcs};
   try{
     document.getElementById('main-content').innerHTML='<div style="padding:32px;text-align:center"><div class="spinner"></div></div>';
     const result = (pages[page]??renderDash)();
