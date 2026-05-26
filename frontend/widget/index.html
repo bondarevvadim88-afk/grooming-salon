@@ -390,7 +390,7 @@ async function submitBooking(){
       petId:pet.id,
       serviceId:S.svc.id,
       staffId:S.master.id,
-      startAt:`${S.date}T${S.time}:00`
+      startAt:new Date(`${S.date}T${S.time}:00`).toISOString()
     });
 
     S.step++;renderSteps();renderSuccess();
