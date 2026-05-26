@@ -378,7 +378,7 @@ async function submitBooking(){
     if(client?.id){
       pet=await post(`/clients/${client.id}/pets`,{
         name:S.petName,
-        type:S.petType||'dog',
+        type:((S.petType||'dog').toUpperCase()),
         breed:S.petBreed||'',
         size:S.petSize||'MEDIUM'
       });
