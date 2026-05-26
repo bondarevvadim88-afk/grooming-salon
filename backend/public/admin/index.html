@@ -319,10 +319,16 @@ async function loadSvcs(){
 }
 async function loadAppts(){
   try {
-    const r = await fetch('https://www.lyubi-grooming.ru/v1/appointments', {headers:TOKEN?{Authorization:'Bearer '+TOKEN}:{}});
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    APPTS = await r.json();
-  } catch(e){ APPTS=[]; }
+    const r = await fetch(API+'/appointments', {headers:TOKEN?{Authorization:'Bearer '+TOKEN}:{}});
+    const txt = await r.text();
+    if(!r.ok) throw new Error('HTTP '+r.status+' | '+txt.slice(0,300));
+    try { APPTS = JSON.parse(txt); }
+    catch(_) { throw new Error('Bad JSON: '+txt.slice(0,300)); }
+    toast('appointments loaded: '+APPTS.length);
+  } catch(e){
+    APPTS=[];
+    toast('loadAppts error: '+e.message, 'err');
+  }
 }
 
 // ── DASHBOARD ──
