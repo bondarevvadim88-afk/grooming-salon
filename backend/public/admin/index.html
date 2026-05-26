@@ -320,15 +320,9 @@ async function loadSvcs(){
 async function loadAppts(){
   try {
     const r = await fetch(API+'/appointments', {headers:TOKEN?{Authorization:'Bearer '+TOKEN}:{}});
-    const txt = await r.text();
-    if(!r.ok) throw new Error('HTTP '+r.status+' | '+txt.slice(0,300));
-    try { APPTS = JSON.parse(txt); }
-    catch(_) { throw new Error('Bad JSON: '+txt.slice(0,300)); }
-    toast('appointments loaded: '+APPTS.length);
-  } catch(e){
-    APPTS=[];
-    toast('loadAppts error: '+e.message, 'err');
-  }
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    APPTS = await r.json();
+  } catch(e){ APPTS=[]; }
 }
 
 // ── DASHBOARD ──
@@ -339,7 +333,7 @@ async function renderDash(){
     const d = a.startAt ? new Date(a.startAt).toLocaleDateString('ru-RU') : '';
     return d===today;
   });
-  const dayRev = todayA.filter(a=>['COMPLETED','IN_PROGRESS','inprog','completed'].includes(a.status)).reduce((s,a)=>s+(a.price||0),0);
+  const dayRev = todayA.filter(a=>['COMPLETED','IN_PROGRESS','inprog','completed'].includes(a.status)).reduce((s,a)=>s+(a.totalPrice||0),0);
   return `
   <div class="topbar"><h2>Дашборд</h2><div class="acts">
     <button class="ib" onclick="nav('dash',document.querySelector('.snav a.active'))"><i class="ti ti-refresh"></i> Обновить</button>
@@ -402,7 +396,7 @@ async function renderSched(){
               return at===t&&(x.staffId===m.id||(x.staff&&x.staff.id===m.id));
             });
             if(a){const cls=['PENDING','pending'].includes(a.status)?'wait':['COMPLETED','completed'].includes(a.status)?'done':'booked';
-              return `<div class="sched-slot ${cls}" title="${esc((a.client?.name||a.clientName||''))} — ${esc((a.service?.name||a.serviceName||''))}"><div style="font-weight:500">${esc(a.petName||'')}</div></div>`;}
+              return `<div class="sched-slot ${cls}" title="${esc((a.client?.name||a.clientName||''))} — ${esc((a.service?.name||a.serviceName||''))}"><div style="font-weight:500">${esc(a.pet?.name||a.petName||'')}</div></div>`;}
             return `<div class="sched-slot free"></div>`;
           }).join('')}
         `).join('')}
@@ -549,7 +543,7 @@ async function renderHist(){
         const c=avaColor(idx>=0?idx:0);
         return `<tr>
           <td style="color:var(--text2)">${dt?dt.toLocaleDateString('ru-RU'):''}<div style="font-size:10px">${dt?dt.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):''}</div></td>
-          <td><div style="font-weight:500">${esc(a.client?.name||a.clientName||'—')}</div><div style="font-size:10px;color:var(--text2)">${esc(a.petName||'')}</div></td>
+          <td><div style="font-weight:500">${esc(a.client?.name||a.clientName||'—')}</div><div style="font-size:10px;color:var(--text2)">${esc(a.pet?.name||a.petName||'')}</div></td>
           <td><div style="display:flex;align-items:center;gap:4px">${ava(masterName,c.bg,c.tc,18)}<span style="font-size:10px">${esc(masterName.split(' ')[0])}</span></div></td>
           <td style="font-size:11px">${esc(a.service?.name||a.serviceName||'—')}</td>
           <td><span class="badge ${(a.status||'').toLowerCase()}">${STATUS_LABEL[a.status]||a.status}</span></td>
