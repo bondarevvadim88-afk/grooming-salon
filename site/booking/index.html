@@ -376,23 +376,14 @@ async function submitBooking(){
 
     let pet=null;
     if(client?.id){
-      pet=await post('/pets',{
-        clientId:client.id,
+      pet=await post(`/clients/${client.id}/pets`,{
         name:S.petName,
         type:S.petType||'dog',
         breed:S.petBreed||'',
         size:S.petSize||'MEDIUM'
       });
     }else{
-      pet=await post('/pets',{
-        clientName:S.name,
-        phone:S.phone,
-        email:S.email||'',
-        name:S.petName,
-        type:S.petType||'dog',
-        breed:S.petBreed||'',
-        size:S.petSize||'MEDIUM'
-      });
+      throw new Error('Не удалось создать клиента');
     }
 
     await post('/appointments',{
