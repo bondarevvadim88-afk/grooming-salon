@@ -418,7 +418,72 @@
       .benefits { grid-template-columns: minmax(0,1fr); }
       .process-grid { grid-template-columns: minmax(0,1fr); }
     }
-  </style>
+  
+  /* Pastel redesign */
+  :root {
+    --bg: #f4f0ea;          /* общий фон (теплый off-white) */
+    --bg-alt: #fbf7f2;      /* фон карточек */
+    --accent: #b79bcf;      /* основной акцент — лаванда */
+    --accent-soft: #efe6f7; /* мягкий фон под акцентом */
+    --accent-2: #9fc7b5;    /* вторичный акцент — мята */
+    --accent-3: #e4a58a;    /* тёплый персиковый акцент */
+    --danger: #b45b6c;
+    --text: #2b2522;
+    --text-muted: #6f6a65;
+    --border: rgba(0,0,0,0.07);
+    --radius: 18px;
+    --shadow-sm: 0 14px 40px rgba(23, 15, 6, 0.08);
+    --space: 16px;
+  }
+
+  body {
+    font-family: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background:
+      radial-gradient(circle at top left, #f0e7dd 0, #f4f0ea 40%, #fbf7f2 100%);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 12px 32px rgba(183,155,207,0.45);
+  }
+  .btn-primary:hover {
+    background: #9e82c0;
+    transform: translateY(-1px);
+    box-shadow: 0 16px 40px rgba(183,155,207,0.55);
+  }
+
+  .btn-outline {
+    background: transparent;
+    border-color: rgba(0,0,0,0.06);
+    color: var(--text);
+  }
+  .btn-outline:hover {
+    border-color: var(--accent-2);
+    color: var(--accent-2);
+  }
+
+  .hero-card {
+    background: var(--bg-alt);
+    border-radius: 24px;
+    box-shadow: var(--shadow-sm);
+    padding: 18px;
+  }
+
+  .hero-badges span {
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,0.04);
+    background: rgba(255,255,255,0.9);
+  }
+  .hero-badges span:nth-child(1) { background: #efe6f7; color: #5e4f85; }
+  .hero-badges span:nth-child(2) { background: #e5f2ec; color: #456b5c; }
+  .hero-badges span:nth-child(3) { background: #fbe9df; color: #9b5c3c; }
+
+</style>
 </head>
 <body>
 <div class="page">
