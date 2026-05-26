@@ -360,10 +360,49 @@ async function submitBooking(){
   const err=document.getElementById('cerr');
   if(!S.name){if(err)err.textContent='Введите ваше имя';return;}
   if(!S.phone||!/^(?:\+7|8)[\d\s\-()\d]{9,}$/.test(S.phone)){if(err)err.textContent='Введите корректный номер телефона';return;}
+  if(!S.petName){if(err)err.textContent='Укажите кличку питомца';return;}
+  if(!S.svc?.id){if(err)err.textContent='Не выбрана услуга';return;}
+  if(!S.master?.id){if(err)err.textContent='Не выбран мастер';return;}
+  if(!S.date||!S.time){if(err)err.textContent='Не выбраны дата и время';return;}
+
   const btn=document.getElementById('sbtn');
   if(btn){btn.disabled=true;btn.textContent='Отправка…';}
+
   try{
-    await post('/clients',{name:S.name,phone:S.phone,...(S.email?{email:S.email}:{})}).catch(()=>{});
+    let client=null;
+    try{
+      client=await post('/clients',{name:S.name,phone:S.phone,...(S.email?{email:S.email}:{})});
+    }catch(_){}
+
+    let pet=null;
+    if(client?.id){
+      pet=await post('/pets',{
+        clientId:client.id,
+        name:S.petName,
+        type:S.petType||'dog',
+        breed:S.petBreed||'',
+        size:S.petSize||'MEDIUM'
+      });
+    }else{
+      pet=await post('/pets',{
+        clientName:S.name,
+        phone:S.phone,
+        email:S.email||'',
+        name:S.petName,
+        type:S.petType||'dog',
+        breed:S.petBreed||'',
+        size:S.petSize||'MEDIUM'
+      });
+    }
+
+    await post('/appointments',{
+      petId:pet.id,
+      serviceId:S.svc.id,
+      staffId:S.master.id,
+      date:S.date,
+      startTime:S.time
+    });
+
     S.step++;renderSteps();renderSuccess();
   }catch(e){
     if(btn){btn.disabled=false;btn.innerHTML='<i class="ti ti-calendar-check"></i> Записаться';}
