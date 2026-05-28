@@ -89,22 +89,44 @@ export class StaffService {
     });
   }
 
-  async getAvailableSlots(staffId: string, dateStr: string, serviceId: string) {
-    const service = await this.prisma.service.findUniqueOrThrow({ where: { id: serviceId } });
-    const date    = new Date(dateStr);
-    const dow     = date.getDay() === 0 ? 7 : date.getDay();
+  async getAvailableSlots(
+    staffId: string,
+    dateStr: string,
+    serviceId?: string,
+    durationMin?: number,
+  ) {
+    let duration = durationMin;
+
+    if (!duration && serviceId) {
+      const service = await this.prisma.service.findUniqueOrThrow({
+        where: { id: serviceId },
+      });
+      duration = service.durationMin;
+    }
+
+    if (!duration || Number.isNaN(duration) || duration <= 0) {
+      duration = 60;
+    }
+
+    const date = new Date(dateStr);
+    const dow = date.getDay() === 0 ? 7 : date.getDay();
 
     const schedule = await this.prisma.workSchedule.findFirst({
       where: { staffId, dayOfWeek: dow, isWorking: true },
     });
-    if (!schedule) return { slots: [] };
 
-    const dayStart = new Date(date); dayStart.setHours(0, 0, 0, 0);
-    const dayEnd   = new Date(date); dayEnd.setHours(23, 59, 59, 999);
-    const booked   = await this.prisma.appointment.findMany({
+    if (!schedule) return [];
+
+    const dayStart = new Date(date);
+    dayStart.setHours(0, 0, 0, 0);
+
+    const dayEnd = new Date(date);
+    dayEnd.setHours(23, 59, 59, 999);
+
+    const booked = await this.prisma.appointment.findMany({
       where: {
         staffId,
-        status:  { notIn: ['CANCELLED', 'NO_SHOW'] },
+        status: { notIn: ['CANCELLED', 'NO_SHOW'] },
         startAt: { gte: dayStart, lte: dayEnd },
       },
       select: { startAt: true, endAt: true },
@@ -115,30 +137,46 @@ export class StaffService {
     });
 
     const [sh, sm] = schedule.startTime.split(':').map(Number);
-    const [eh, em] = schedule.endTime.split(':').map(Number);
+    const [workEh, workEm] = schedule.endTime.split(':').map(Number);
     const workStart = sh * 60 + sm;
-    const workEnd   = eh * 60 + em;
+    const workEnd = workEh * 60 + workEm;
+
     const slots: { startAt: string; available: boolean }[] = [];
 
-    for (let t = workStart; t + service.durationMin <= workEnd; t += SLOT_INTERVAL_MIN) {
+    for (let t = workStart; t + duration <= workEnd; t += SLOT_INTERVAL_MIN) {
       const slotStart = new Date(date);
       slotStart.setHours(Math.floor(t / 60), t % 60, 0, 0);
-      const slotEnd = new Date(slotStart.getTime() + service.durationMin * 60_000);
-      const bookedConflict = booked.some(b =>
+
+      const slotEnd = new Date(slotStart.getTime() + duration * 60_000);
+
+      const bookedConflict = booked.some((b) =>
         b.startAt.getTime() < slotEnd.getTime() &&
-        b.endAt.getTime()   > slotStart.getTime(),
+        b.endAt.getTime() > slotStart.getTime(),
       );
-      const breakConflict = staffBreaks.some(b => {
+
+      const breakConflict = staffBreaks.some((b) => {
         const [bh, bm] = b.startTime.split(':').map(Number);
-        const [eh, em] = b.endTime.split(':').map(Number);
-        const brStart = new Date(date); brStart.setHours(bh, bm, 0, 0);
-        const brEnd   = new Date(date); brEnd.setHours(eh, em, 0, 0);
-        return brStart.getTime() < slotEnd.getTime() &&
-               brEnd.getTime()   > slotStart.getTime();
+        const [brEh, brEm] = b.endTime.split(':').map(Number);
+
+        const brStart = new Date(date);
+        brStart.setHours(bh, bm, 0, 0);
+
+        const brEnd = new Date(date);
+        brEnd.setHours(brEh, brEm, 0, 0);
+
+        return (
+          brStart.getTime() < slotEnd.getTime() &&
+          brEnd.getTime() > slotStart.getTime()
+        );
       });
-      slots.push({ startAt: slotStart.toISOString(), available: !bookedConflict && !breakConflict });
+
+      slots.push({
+        startAt: slotStart.toISOString(),
+        available: !bookedConflict && !breakConflict,
+      });
     }
-    return { slots };
+
+    return slots;
   }
 
   async updateSchedule(

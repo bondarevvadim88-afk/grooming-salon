@@ -38,3 +38,6 @@ nginx/ssl/
 # ── Logs ─────────────────────────────────────────────────────────────
 logs/
 *.log
+
+# Local Netlify folder
+.netlify

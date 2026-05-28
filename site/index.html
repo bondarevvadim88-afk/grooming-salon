@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Lyubi Grooming — груминг‑салон в Амстердаме</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Профессиональный груминг собак и кошек в салоне Lyubi Grooming. Комфорт, безопасность и красота без стресса. Онлайн‑запись за пару кликов.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f6f2;
+      --bg-alt: #ffffff;
+      --accent: #01696f;
+      --accent-soft: #e1f5ee;
+      --danger: #a13544;
+      --text: #22211d;
+      --text-muted: #6b6b68;
+      --border: rgba(0,0,0,0.08);
+      --radius: 16px;
+      --shadow-sm: 0 8px 24px rgba(0,0,0,0.06);
+      --space: 16px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at top left,#f0ede6 0,#f7f6f2 40%,#fafaf8 100%);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    img { max-width: 100%; display: block; border-radius: 12px; }
+    a { color: inherit; text-decoration: none; }
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 20px 16px 64px;
+    }
+
+    /* HEADER */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 8px 0 20px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+    }
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #fff 0, #e1f5ee 35%, #01696f 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: 0 6px 18px rgba(1,105,111,0.28);
+    }
+    .logo-mark svg { width: 20px; height: 20px; }
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .logo-text span:first-child {
+      font-family: "Playfair Display", serif;
+      font-weight: 600;
+      letter-spacing: .04em;
+      font-size: 15px;
+    }
+    .logo-text span:last-child {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: .08em;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    nav a {
+      position: relative;
+      padding: 4px 0;
+    }
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: 0;
+      width: 0;
+      height: 2px;
+      border-radius: 999px;
+      background: var(--accent);
+      transition: width .18s ease-out;
+    }
+    nav a:hover::after {
+      width: 100%;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all .18s ease-out;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(1,105,111,0.35);
+    }
+    .btn-primary:hover {
+      background: #0c4e54;
+      transform: translateY(-1px);
+      box-shadow: 0 14px 36px rgba(1,105,111,0.40);
+    }
+    .btn-outline {
+      background: transparent;
+      border-color: var(--border);
+      color: var(--text);
+    }
+    .btn-outline:hover {
+      border-color: var(--accent);
+    }
+
+    /* HERO */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0,1.4fr) minmax(0,1fr);
+      gap: 32px;
+      padding: 24px 0 40px;
+      align-items: center;
+    }
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border-radius: 999px;
+      padding: 4px 10px;
+      margin-bottom: 10px;
+    }
+    .hero-title {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(26px, 4vw, 38px);
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .hero-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 420px;
+      margin-bottom: 18px;
+    }
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .hero-note {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .hero-badges span {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.8);
+    }
+    .hero-media {
+      position: relative;
+    }
+    .hero-card {
+      background: var(--bg-alt);
+      border-radius: 24px;
+      box-shadow: var(--shadow-sm);
+      padding: 16px;
+      display: grid;
+      gap: 10px;
+    }
+    .hero-pet {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-pet-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: #f3eee5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .hero-pet-info {
+      font-size: 12px;
+    }
+    .hero-pet-info strong {
+      display: block;
+      font-size: 13px;
+    }
+    .hero-list {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .hero-tag {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      align-self: flex-start;
+    }
+
+    /* SECTION WRAPPER */
+    section {
+      padding: 26px 0;
+    }
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .section-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 380px;
+    }
+
+    /* SERVICES / PACKAGES */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4,minmax(0,1fr));
+      gap: 14px;
+    }
+    .card {
+      background: rgba(255,255,255,0.9);
+      border-radius: var(--radius);
+      padding: 14px 14px 16px;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .card h3 {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .card-price {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent);
+    }
+    .card-list {
+      font-size: 12px;
+      color: var(--text-muted);
+      list-style: none;
+      padding-left: 0;
+    }
+    .card-list li::before {
+      content: "• ";
+    }
+    .card-tag {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      align-self: flex-start;
+    }
+
+    /* BENEFITS */
+    .benefits {
+      display: grid;
+      grid-template-columns: repeat(3,minmax(0,1fr));
+      gap: 14px;
+    }
+    .benefit {
+      background: rgba(255,255,255,0.9);
+      border-radius: var(--radius);
+      padding: 14px 14px 16px;
+      border: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .benefit strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* PROCESS */
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4,minmax(0,1fr));
+      gap: 14px;
+      font-size: 12px;
+    }
+    .process-step {
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.9);
+      border: 1px solid var(--border);
+      padding: 12px 12px 14px;
+    }
+    .process-step span {
+      display: inline-flex;
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      margin-bottom: 6px;
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+    .process-step h3 {
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+    .process-step p {
+      color: var(--text-muted);
+    }
+
+    /* CONTACTS */
+    .contacts {
+      display: grid;
+      grid-template-columns: minmax(0,1.2fr) minmax(0,1fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .contacts-card {
+      background: rgba(255,255,255,0.9);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 14px 14px 16px;
+      font-size: 13px;
+    }
+    .contacts-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .contacts-label {
+      color: var(--text-muted);
+      font-size: 12px;
+      min-width: 80px;
+    }
+    .contacts-value a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer {
+      margin-top: 32px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 960px) {
+      .hero {
+        grid-template-columns: minmax(0,1.2fr);
+      }
+      .hero-media { order: -1; }
+      .cards-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .benefits { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .process-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .contacts { grid-template-columns: minmax(0,1fr); }
+    }
+    @media (max-width: 640px) {
+      header { flex-wrap: wrap; }
+      nav { display: none; }
+      .cards-grid { grid-template-columns: minmax(0,1fr); }
+      .benefits { grid-template-columns: minmax(0,1fr); }
+      .process-grid { grid-template-columns: minmax(0,1fr); }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="logo-wrap">
+      <div class="logo-mark" aria-label="Lyubi Grooming">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 19c1.5-3.5 3.5-6 7-9 2.5 3 4.5 5.5 7 9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+          <circle cx="9" cy="7" r="2" fill="currentColor"/>
+          <circle cx="15" cy="7" r="2" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span>Lyubi Grooming</span>
+        <span>Груминг‑салон для собак и кошек</span>
+      </div>
+    </div>
+    <nav>
+      <a href="#services">Услуги</a>
+      <a href="#benefits">Почему мы</a>
+      <a href="#process">Как проходит визит</a>
+      <a href="#contacts">Контакты</a>
+      <a class="btn btn-outline" href="https://www.lyubi-grooming.ru/booking">
+        Онлайн‑запись
+      </a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div>
+        <div class="hero-kicker">
+          <span>груминг без стресса</span>
+        </div>
+        <h1 class="hero-title">
+          Красота и комфорт для&nbsp;питомца<br>в одном визите
+        </h1>
+        <p class="hero-sub">
+          Полный спектр уходовых процедур для собак и кошек: от гигиенического ухода до комплексного груминга. Работаем бережно, без наркоза и грубости.
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="https://www.lyubi-grooming.ru/booking">
+            Записаться онлайн
+          </a>
+          <a class="btn btn-outline" href="#services">
+            Смотреть услуги
+          </a>
+        </div>
+        <div class="hero-note">
+          Свободные окна на этой неделе. Онлайн‑запись занимает меньше минуты.
+        </div>
+        <div class="hero-badges">
+          <span>Индивидуальный подход к каждой породе</span>
+          <span>Только проф. косметика</span>
+          <span>Фото до/после по желанию</span>
+        </div>
+      </div>
+      <div class="hero-media" aria-hidden="true">
+        <div class="hero-card">
+          <div class="hero-pet">
+            <div class="hero-pet-avatar">🐶</div>
+            <div class="hero-pet-info">
+              <strong>Мальтипу, полный груминг</strong>
+              <span>Мытьё, стрижка, когти, уши, глаза</span>
+            </div>
+          </div>
+          <div class="hero-list">
+            Следим за комфортом: без седации, с перерывами, с аккуратной сушкой и расчёсыванием.
+          </div>
+          <div class="hero-tag">Записаться → за 5 шагов: услуга → мастер → питомец → время → контакты</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES / PACKAGES -->
+    <section id="services">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Популярные комплексы груминга</h2>
+          <p class="section-sub">
+            Прозрачные пакеты услуг по аналогии с Vetcity: от базовой гигиены до полного обновления шерсти и тримминга.[web:120]
+          </p>
+        </div>
+        <a class="btn btn-outline" href="https://www.lyubi-grooming.ru/booking">
+          Выбрать услугу и записаться
+        </a>
+      </div>
+      <div class="cards-grid">
+        <article class="card">
+          <span class="card-tag">All groom</span>
+          <h3>Полный комплекс со стрижкой</h3>
+          <div class="card-price">от 5 500 ₽</div>
+          <ul class="card-list">
+            <li>мытьё и сушка</li>
+            <li>стрижка по породе или под машинку</li>
+            <li>чистка ушей и обработка глаз</li>
+            <li>стрижка когтей</li>
+          </ul>
+        </article>
+        <article class="card">
+          <span class="card-tag">Groom &amp; Go</span>
+          <h3>Гигиенический уход</h3>
+          <div class="card-price">от 4 000 ₽</div>
+          <ul class="card-list">
+            <li>мытьё и сушка‑вычёсывание</li>
+            <li>стрижка зон гигиены и лап</li>
+            <li>обработка глаз, чистка ушей</li>
+            <li>стрижка когтей</li>
+          </ul>
+        </article>
+        <article class="card">
+          <span class="card-tag">Wash &amp; Go</span>
+          <h3>Купание и уход за шерстью</h3>
+          <div class="card-price">от 3 000 ₽</div>
+          <ul class="card-list">
+            <li>мытьё в 1–2 этапа</li>
+            <li>сушка‑вычёсывание</li>
+            <li>чистка ушей</li>
+            <li>стрижка когтей</li>
+          </ul>
+        </article>
+        <article class="card">
+          <span class="card-tag">Shed Control</span>
+          <h3>Экспресс‑линька</h3>
+          <div class="card-price">от 5 000 ₽</div>
+          <ul class="card-list">
+            <li>поэтапное мытьё для снижения линьки</li>
+            <li>интенсивное вычёсывание</li>
+            <li>уход за ушами и когтями</li>
+            <li>рекомендации по домашнему уходу</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- BENEFITS -->
+    <section id="benefits">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Почему владельцы выбирают Lyubi Grooming</h2>
+          <p class="section-sub">
+            Мы собрали лучшие практики городских груминг‑салонов: прозрачные пакеты, спокойная атмосфера, бережное отношение и понятная онлайн‑запись.[web:120]
+          </p>
+        </div>
+      </div>
+      <div class="benefits">
+        <div class="benefit">
+          <strong>Бережный груминг без стресса</strong>
+          Работаем без наркоза и грубой фиксации, делаем паузы, даём питомцу привыкнуть к мастеру и инструментам.
+        </div>
+        <div class="benefit">
+          <strong>Опытные мастера</strong>
+          Мастера специализируются на разных породах и типах шерсти. Для каждого питомца подбираем подходящий комплекс ухода.
+        </div>
+        <div class="benefit">
+          <strong>Онлайн‑запись за минуту</strong>
+          Выбираете услугу, мастера, дату и время, указываете данные питомца — и запись готова.[web:127]
+        </div>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section id="process">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Как проходит визит</h2>
+          <p class="section-sub">
+            От записи до забора питомца — всё прозрачно и предсказуемо. Вы всегда знаете, что происходит на каждом шаге.
+          </p>
+        </div>
+      </div>
+      <div class="process-grid">
+        <div class="process-step">
+          <span>1</span>
+          <h3>Онлайн‑запись</h3>
+          <p>Выбираете услугу, мастера и удобное время, оставляете контакты и данные питомца.</p>
+        </div>
+        <div class="process-step">
+          <span>2</span>
+          <h3>Приветствие и осмотр</h3>
+          <p>Мастер знакомится с питомцем, уточняет пожелания по длине шерсти, форме стрижки и чувствительным зонам.</p>
+        </div>
+        <div class="process-step">
+          <span>3</span>
+          <h3>Груминг‑процедуры</h3>
+          <p>Комплекс процедур по выбранному пакету: мытьё, стрижка, уход за ушами, глазами и когтями.</p>
+        </div>
+        <div class="process-step">
+          <span>4</span>
+          <h3>Финал и рекомендации</h3>
+          <p>Вы забираете питомца, мастер даёт рекомендации по домашнему уходу и интервалам между визитами.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section>
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Готовы записаться?</h2>
+          <p class="section-sub">
+            Нажмите на кнопку — откроется страница онлайн‑записи, где вы выберете услугу, мастера и время визита.
+          </p>
+        </div>
+        <a class="btn btn-primary" href="https://www.lyubi-grooming.ru/booking">
+          Перейти к онлайн‑записи
+        </a>
+      </div>
+    </section>
+
+    <!-- CONTACTS -->
+    <section id="contacts">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Контакты и график работы</h2>
+          <p class="section-sub">
+            Напишите или позвоните, если остались вопросы по услугам, подготовке питомца или особенностям груминга.
+          </p>
+        </div>
+      </div>
+      <div class="contacts">
+        <div class="contacts-card">
+          <div class="contacts-row">
+            <div class="contacts-label">Телефон</div>
+            <div class="contacts-value">
+              <a href="tel:+7XXXXXXXXXX">+7 ХХХ ХХХ‑ХХ‑ХХ</a>
+            </div>
+          </div>
+          <div class="contacts-row">
+            <div class="contacts-label">Почта</div>
+            <div class="contacts-value">
+              <a href="mailto:info@lyubi-grooming.ru">info@lyubi-grooming.ru</a>
+            </div>
+          </div>
+          <div class="contacts-row">
+            <div class="contacts-label">Адрес</div>
+            <div class="contacts-value">
+              Уточните фактический адрес салона здесь
+            </div>
+          </div>
+          <div class="contacts-row">
+            <div class="contacts-label">График</div>
+            <div class="contacts-value">
+              Ежедневно, 10:00–21:00 (настройте под свой режим)
+            </div>
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:var(--text-muted);">
+            Навигацию и подробную схему прохода можно дополнительно разместить здесь или на отдельной странице.
+          </div>
+        </div>
+        <div class="contacts-card">
+          <div style="font-size:13px;margin-bottom:8px;font-weight:500;">Онлайн‑запись</div>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">
+            Нажмите на кнопку ниже — откроется страница записи, которую мы уже настроили раньше.
+          </p>
+          <a class="btn btn-primary" href="https://www.lyubi-grooming.ru/booking">
+            Записаться на груминг
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>© Lyubi Grooming, 2026</div>
+    <div>Сделано с заботой о питомцах</div>
+  </footer>
+</div>
+</body>
+</html>

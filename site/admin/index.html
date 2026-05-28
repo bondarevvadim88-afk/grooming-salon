@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ГрумПро — административная панель управления записями, мастерами и услугами">
+  <title>ГрумПро — Административная панель</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/dist/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    .sr-only { position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
+    :root {
+      --bg:#fff; --bg2:#f5f5f4; --bg3:#f0efed;
+      --text:#1a1a18; --text2:#6b6b68; --text3:#9e9e9a;
+      --border:rgba(0,0,0,.10); --border2:rgba(0,0,0,.20);
+      --teal:#1D9E75; --teal-bg:#E1F5EE; --teal-dark:#0F6E56;
+      --amber:#854F0B; --amber-bg:#FAEEDA;
+      --blue:#185FA5; --blue-bg:#E6F1FB;
+      --purple:#534AB7; --purple-bg:#EEEDFE;
+      --danger:#A32D2D; --danger-bg:#FCEBEB;
+      --r:8px; --rl:12px;
+      --font:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    }
+    @media(prefers-color-scheme:dark){:root{
+      --bg:#1c1c1a;--bg2:#242422;--bg3:#2c2c2a;
+      --text:#e8e8e4;--text2:#9e9e9a;--text3:#6b6b68;
+      --border:rgba(255,255,255,.10);--border2:rgba(255,255,255,.18);
+      --teal-bg:#04342C;
+    }}
+    body{font-family:var(--font);background:var(--bg3);color:var(--text);font-size:14px;min-height:100vh}
+    .app{display:flex;min-height:100vh}
+    .sidebar{width:200px;flex-shrink:0;background:var(--bg);border-right:.5px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+    .main{flex:1;min-width:0;padding:24px;overflow-y:auto}
+    .s-logo{display:flex;align-items:center;gap:9px;padding:16px 16px 14px;border-bottom:.5px solid var(--border)}
+    .s-logo .ico{width:30px;height:30px;border-radius:8px;background:var(--teal-bg);display:flex;align-items:center;justify-content:center}
+    .s-logo span{font-size:14px;font-weight:500}
+    .snav{padding:8px 0;flex:1}
+    .snav a{display:flex;align-items:center;gap:9px;padding:9px 16px;font-size:13px;cursor:pointer;color:var(--text2);text-decoration:none;transition:background .12s,color .12s}
+    .snav a:hover{background:var(--bg2);color:var(--text)}
+    .snav a:focus{outline:2px solid var(--teal);outline-offset:-2px}
+    .snav a.active{background:var(--teal-bg);color:var(--teal-dark);font-weight:500}
+    .snav a i{font-size:16px;flex-shrink:0}
+    .snav .sep{height:.5px;background:var(--border);margin:6px 14px}
+    .s-version{padding:10px 16px;font-size:11px;color:var(--text3)}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+    .topbar h2{font-size:17px;font-weight:500}
+    .topbar .acts{display:flex;gap:8px}
+    .card{background:var(--bg);border:.5px solid var(--border);border-radius:var(--rl);padding:14px 16px;margin-bottom:14px}
+    .card h3{font-size:13px;font-weight:500;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+    .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+    .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:14px}
+    @media(max-width:900px){.g2{grid-template-columns:1fr}}
+    @media(max-width:700px){.g4{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:480px){.g4{grid-template-columns:1fr}.sidebar{width:56px}.s-logo span,.s-version{display:none}.snav a{padding:10px;justify-content:center}.snav a i{font-size:18px}.main{padding:12px}}
+    .mcard{background:var(--bg2);border-radius:var(--r);padding:12px 14px}
+    .mcard .ml{font-size:11px;color:var(--text2);margin-bottom:4px}
+    .mcard .mv{font-size:22px;font-weight:500}
+    .mcard .md{font-size:11px;margin-top:2px}
+    .ib{background:none;border:.5px solid var(--border2);border-radius:var(--r);padding:6px 12px;font-size:12px;color:var(--text2);cursor:pointer;transition:border-color .12s,color .12s;display:inline-flex;align-items:center;gap:5px}
+    .ib:hover{border-color:var(--teal);color:var(--teal-dark)}
+    .ib:focus{outline:2px solid var(--teal);outline-offset:2px}
+    .ib.primary{background:var(--teal);border-color:var(--teal);color:#fff}
+    .ib.primary:hover{opacity:.9}
+    .badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500}
+    .badge.confirmed{background:#E1F5EE;color:#085041}
+    .badge.pending{background:#FAEEDA;color:#633806}
+    .badge.cancelled{background:#FCEBEB;color:#791F1F}
+    .badge.completed{background:#E6F1FB;color:#0C447C}
+    .badge.inprog{background:#EEEDFE;color:#3C3489}
+    .tbl{width:100%;border-collapse:collapse;font-size:12px}
+    .tbl th{text-align:left;padding:6px 8px;font-size:11px;font-weight:500;color:var(--text2);border-bottom:.5px solid var(--border)}
+    .tbl td{padding:8px;border-bottom:.5px solid var(--border);color:var(--text);vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .tbl tr:last-child td{border-bottom:none}
+    .tbl tr:hover td{background:var(--bg2)}
+    .ava{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;font-weight:500;flex-shrink:0}
+    .bar-wrap{margin-bottom:8px}
+    .bar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:3px}
+    .bar-track{height:6px;background:var(--border);border-radius:3px}
+    .bar-fill{height:6px;border-radius:3px}
+    .tag{display:inline-block;font-size:10px;padding:2px 6px;border-radius:8px;background:var(--bg2);color:var(--text2);margin:2px 2px 0 0}
+    .sched-wrap{overflow-x:auto}
+    .sched-grid{display:grid;gap:3px}
+    .sched-hdr{font-size:11px;font-weight:500;color:var(--text2);text-align:center;padding:4px;background:var(--bg2);border-radius:var(--r)}
+    .sched-time{font-size:11px;color:var(--text3);text-align:right;padding:5px 6px 0 0}
+    .sched-slot{border-radius:5px;padding:4px 5px;min-height:28px;font-size:10px;cursor:pointer;border:.5px solid transparent;transition:all .12s}
+    .sched-slot.free{background:var(--bg2)}
+    .sched-slot.free:hover{border-color:var(--teal);background:var(--teal-bg)}
+    .sched-slot.booked{background:var(--teal-bg);color:#085041;border-color:#9FE1CB}
+    .sched-slot.wait{background:#FAEEDA;color:#633806;border-color:#FAC775}
+    .sched-slot.done{background:#E6F1FB;color:#0C447C;border-color:#B5D4F4}
+    .filter-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+    .filter-row select,.filter-row input{font-size:12px;padding:5px 8px;border:.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text)}
+    .filter-row input{flex:1;min-width:140px}
+    .toggle{position:relative;width:30px;height:17px;display:inline-block}
+    .toggle input{opacity:0;width:0;height:0;position:absolute}
+    .tslider{position:absolute;inset:0;border-radius:9px;background:var(--border2);cursor:pointer;transition:.2s}
+    .tslider::before{content:'';position:absolute;width:13px;height:13px;left:2px;top:2px;border-radius:50%;background:#fff;transition:.2s}
+    .toggle input:checked+.tslider{background:var(--teal)}
+    .toggle input:checked+.tslider::before{transform:translateX(13px)}
+    .svc-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:.5px solid var(--border);gap:10px}
+    .svc-row:last-child{border-bottom:none}
+    .stat-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:.5px solid var(--border);font-size:12px}
+    .stat-row:last-child{border-bottom:none}
+    /* Modal */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
+    .modal{background:var(--bg);border-radius:var(--rl);padding:24px;width:100%;max-width:440px;box-shadow:0 8px 32px rgba(0,0,0,.18)}
+    .modal h3{font-size:15px;font-weight:500;margin-bottom:16px}
+    .form-field{margin-bottom:12px}
+    .form-field label{display:block;font-size:12px;color:var(--text2);margin-bottom:4px}
+    .form-field input,.form-field select,.form-field textarea{width:100%;padding:8px 10px;border:.5px solid var(--border2);border-radius:var(--r);font-size:13px;color:var(--text);background:var(--bg);outline:none;font-family:var(--font);transition:border-color .15s}
+    .form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--teal)}
+    .form-field textarea{resize:vertical;min-height:70px}
+    .form-err{font-size:11px;color:var(--danger);margin-top:4px}
+    .modal-acts{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+    /* Login screen */
+    .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg3);padding:16px}
+    .login-box{background:var(--bg);border:.5px solid var(--border);border-radius:var(--rl);padding:32px;width:100%;max-width:360px}
+    .login-box h1{font-size:18px;font-weight:500;margin-bottom:4px}
+    .login-box p{font-size:12px;color:var(--text2);margin-bottom:20px}
+    .spinner{width:20px;height:20px;border:2px solid var(--teal-bg);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .alert-box{padding:10px 14px;border-radius:var(--r);font-size:12px;margin-bottom:12px}
+    .alert-box.err{background:var(--danger-bg);color:var(--danger)}
+    .alert-box.ok{background:var(--teal-bg);color:var(--teal-dark)}
+    /* Service checkboxes */
+    .svc-check-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+    .svc-check-label{display:flex;align-items:center;gap:5px;font-size:12px;padding:4px 8px;border:.5px solid var(--border2);border-radius:20px;cursor:pointer;transition:all .12s}
+    .svc-check-label:has(input:checked){background:var(--teal-bg);border-color:var(--teal);color:var(--teal-dark)}
+    .svc-check-label input{display:none}
+    /* Step badge */
+    .step-badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--teal);color:#fff;font-size:11px;font-weight:600;flex-shrink:0}
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script>
+"use strict";
+const API = 'https://grooming-salon-production.up.railway.app';
+
+// ── Auth state ──
+let TOKEN = localStorage.getItem('admin_token') || null;
+let CURRENT_USER = null;
+
+// ── App state ──
+let MASTERS = [];
+let SVCS = [];
+let APPTS = [];
+let schedDate = new Date();
+
+const AVA_COLORS = [
+  {bg:'#E1F5EE',tc:'#0F6E56'},
+  {bg:'#E6F1FB',tc:'#185FA5'},
+  {bg:'#EEEDFE',tc:'#534AB7'},
+  {bg:'#FAEEDA',tc:'#854F0B'},
+];
+function avaColor(idx){ return AVA_COLORS[idx % AVA_COLORS.length]; }
+function ini(name){ return (name||'').split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase(); }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function fmtDate(d){ return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric'}); }
+function toast(msg, type='ok'){
+  const el=document.createElement('div');
+  el.className='alert-box '+(type==='err'?'err':'ok');
+  el.style.cssText='position:fixed;top:16px;right:16px;z-index:9999;min-width:220px;max-width:360px';
+  el.textContent=msg;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),3500);
+}
+
+// ── API helpers ──
+async function apiGet(path){
+  const r=await fetch(API+path,{headers:TOKEN?{Authorization:'Bearer '+TOKEN}:{}});
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  return r.json();
+}
+async function apiPost(path,body){
+  const r=await fetch(API+path,{method:'POST',headers:{'Content-Type':'application/json',...(TOKEN?{Authorization:'Bearer '+TOKEN}:{})},body:JSON.stringify(body)});
+  const data=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(data.message||'Ошибка сервера');
+  return data;
+}
+async function apiPatch(path,body){
+  const r=await fetch(API+path,{method:'PATCH',headers:{'Content-Type':'application/json',Authorization:'Bearer '+TOKEN},body:JSON.stringify(body)});
+  const data=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(data.message||'Ошибка сервера');
+  return data;
+}
+async function apiDelete(path){
+  const r=await fetch(API+path,{method:'DELETE',headers:{Authorization:'Bearer '+TOKEN}});
+  if(!r.ok){ const d=await r.json().catch(()=>({})); throw new Error(d.message||'Ошибка сервера'); }
+  return r.status===204?{}:r.json().catch(()=>({}));
+}
+
+// ── Helpers ──
+function ava(name,bg,tc,sz=20){
+  return `<div class="ava" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.42)}px;background:${bg};color:${tc}">${esc(ini(name))}</div>`;
+}
+const STATUS_LABEL={confirmed:'Подтверждена',pending:'Ожидает',cancelled:'Отменена',completed:'Завершена',inprog:'В работе',CONFIRMED:'Подтверждена',PENDING:'Ожидает',CANCELLED:'Отменена',COMPLETED:'Завершена',IN_PROGRESS:'В работе'};
+
+// ── Navigation ──
+function nav(page,el){
+  document.querySelectorAll('.snav a').forEach(a=>a.classList.remove('active'));
+  if(el)el.classList.add('active');
+  const pages={dash:renderDash,sched:renderSched,hist:renderHist,masters:renderMasters,svcs:renderSvcs};
+  try{
+    document.getElementById('main-content').innerHTML='<div style="padding:32px;text-align:center"><div class="spinner"></div></div>';
+    const result = (pages[page]??renderDash)();
+    if(result instanceof Promise){
+      result.then(html=>{ document.getElementById('main-content').innerHTML=html||''; }).catch(e=>{
+        document.getElementById('main-content').innerHTML=`<div class="alert-box err">Ошибка загрузки: ${esc(e.message)}</div>`;
+      });
+    } else {
+      document.getElementById('main-content').innerHTML=result||'';
+    }
+  } catch(err){
+    document.getElementById('main-content').innerHTML=`<div class="alert-box err">Ошибка рендера: ${esc(err.message)}</div>`;
+  }
+}
+
+// ── LOGIN SCREEN ──
+function renderLogin(){
+  document.getElementById('root').innerHTML=`
+  <div class="login-wrap">
+    <div class="login-box">
+      <div style="width:36px;height:36px;border-radius:10px;background:var(--teal-bg);display:flex;align-items:center;justify-content:center;margin-bottom:14px">
+        <i class="ti ti-scissors" style="font-size:18px;color:var(--teal-dark)"></i>
+      </div>
+      <h1>ГрумПро</h1>
+      <p>Войдите в административную панель</p>
+      <div id="login-err"></div>
+      <div class="form-field">
+        <label>E-mail</label>
+        <input id="lemail" type="email" placeholder="admin@example.com" autocomplete="email">
+      </div>
+      <div class="form-field">
+        <label>Пароль</label>
+        <input id="lpass" type="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="ib primary" style="width:100%;justify-content:center;padding:10px" onclick="doLogin()">
+        <i class="ti ti-login"></i> Войти
+      </button>
+    </div>
+  </div>`;
+  document.getElementById('lemail').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('lpass').focus(); });
+  document.getElementById('lpass').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
+}
+
+async function doLogin(){
+  const email=document.getElementById('lemail').value.trim();
+  const pass=document.getElementById('lpass').value;
+  const errEl=document.getElementById('login-err');
+  errEl.innerHTML='';
+  if(!email||!pass){ errEl.innerHTML='<div class="alert-box err">Введите e-mail и пароль</div>'; return; }
+  try{
+    const data=await apiPost('/auth/login',{email,password:pass});
+    TOKEN=data.access_token||data.token;
+    if(!TOKEN) throw new Error('Токен не получен');
+    localStorage.setItem('admin_token',TOKEN);
+    CURRENT_USER=data.user||null;
+    await boot();
+  } catch(e){
+    errEl.innerHTML=`<div class="alert-box err">${esc(e.message==='HTTP 401'?'Неверный e-mail или пароль':e.message)}</div>`;
+  }
+}
+
+function doLogout(){
+  TOKEN=null; CURRENT_USER=null;
+  localStorage.removeItem('admin_token');
+  MASTERS=[]; SVCS=[]; APPTS=[];
+  renderLogin();
+}
+
+// ── MAIN APP SHELL ──
+function renderApp(){
+  document.getElementById('root').innerHTML=`
+  <div class="app">
+    <aside class="sidebar" aria-label="Боковая навигация">
+      <div class="s-logo">
+        <div class="ico"><i class="ti ti-scissors" style="font-size:15px;color:var(--teal-dark)"></i></div>
+        <span>ГрумПро</span>
+      </div>
+      <nav class="snav">
+        <a class="active" tabindex="0" role="button" onclick="nav('dash',this)" onkeydown="if(event.key==='Enter'){nav('dash',this)}">
+          <i class="ti ti-layout-dashboard"></i>Дашборд</a>
+        <a tabindex="0" role="button" onclick="nav('sched',this)" onkeydown="if(event.key==='Enter'){nav('sched',this)}">
+          <i class="ti ti-calendar"></i>Расписание</a>
+        <a tabindex="0" role="button" onclick="nav('hist',this)" onkeydown="if(event.key==='Enter'){nav('hist',this)}">
+          <i class="ti ti-clock-history"></i>История</a>
+        <div class="sep"></div>
+        <a tabindex="0" role="button" onclick="nav('masters',this)" onkeydown="if(event.key==='Enter'){nav('masters',this)}">
+          <i class="ti ti-users"></i>Мастера</a>
+        <a tabindex="0" role="button" onclick="nav('svcs',this)" onkeydown="if(event.key==='Enter'){nav('svcs',this)}">
+          <i class="ti ti-cut"></i>Услуги</a>
+        <div class="sep"></div>
+        <a tabindex="0" role="button" onclick="doLogout()" style="color:var(--danger)">
+          <i class="ti ti-logout"></i>Выйти</a>
+      </nav>
+      <div class="s-version">v2.1.0 · ГрумПро</div>
+    </aside>
+    <main class="main" id="main-content" aria-live="polite"></main>
+  </div>`;
+}
+
+// ── LOAD DATA ──
+async function loadMasters(){
+  MASTERS = await apiGet('/staff');
+}
+async function loadSvcs(){
+  SVCS = await apiGet('/services');
+}
+async function loadAppts(){
+  try { APPTS = await apiGet('/appointments'); } catch(e){ APPTS=[]; }
+}
+
+// ── DASHBOARD ──
+async function renderDash(){
+  await Promise.all([loadMasters(), loadSvcs(), loadAppts()]);
+  const today = new Date().toLocaleDateString('ru-RU');
+  const todayA = APPTS.filter(a=>{
+    const d = a.startAt ? new Date(a.startAt).toLocaleDateString('ru-RU') : '';
+    return d===today;
+  });
+  const dayRev = todayA.filter(a=>['COMPLETED','IN_PROGRESS','inprog','completed'].includes(a.status)).reduce((s,a)=>s+(a.price||0),0);
+  return `
+  <div class="topbar"><h2>Дашборд</h2><div class="acts">
+    <button class="ib" onclick="nav('dash',document.querySelector('.snav a.active'))"><i class="ti ti-refresh"></i> Обновить</button>
+  </div></div>
+  <div class="g4">
+    <div class="mcard"><div class="ml">Мастеров активных</div><div class="mv">${MASTERS.filter(m=>m.isActive!==false).length}</div></div>
+    <div class="mcard"><div class="ml">Услуг</div><div class="mv">${SVCS.filter(s=>s.isActive!==false).length}</div></div>
+    <div class="mcard"><div class="ml">Записей сегодня</div><div class="mv">${todayA.length}</div></div>
+    <div class="mcard"><div class="ml">Выручка сегодня</div><div class="mv">${dayRev.toLocaleString('ru-RU')} ₽</div></div>
+  </div>
+  <div class="card">
+    <h3><i class="ti ti-users" style="font-size:15px;color:var(--teal)"></i> Мастера (${MASTERS.length})</h3>
+    <div style="overflow-x:auto"><table class="tbl">
+      <thead><tr><th>Мастер</th><th>Специальность</th><th>Услуг</th><th>Статус</th></tr></thead>
+      <tbody>${MASTERS.map((m,i)=>{const c=avaColor(i);const svcCount=(m.services||[]).length;return `<tr>
+        <td><div style="display:flex;align-items:center;gap:8px">${ava(m.name,c.bg,c.tc,24)} ${esc(m.name)}</div></td>
+        <td style="color:var(--text2)">${esc(m.specialty||'')}</td>
+        <td>${svcCount>0?`<span style="color:var(--teal-dark);font-weight:500">${svcCount}</span>`:'<span style="color:var(--danger)">0 — не виден!</span>'}</td>
+        <td><span class="badge ${m.isActive!==false?'confirmed':'cancelled'}">${m.isActive!==false?'Активен':'Отключён'}</span></td>
+      </tr>`}).join('')}</tbody>
+    </table></div>
+  </div>`;
+}
+
+// ── SCHEDULE ──
+const SCHED_TIMES=['09:00','09:30','10:00','10:30','11:00','11:30','12:00','13:00','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00'];
+async function renderSched(){
+  if(!MASTERS.length) await loadMasters();
+  if(!APPTS.length) await loadAppts();
+  const dateStr=fmtDate(schedDate);
+  const todayA=APPTS.filter(a=>{
+    const d=a.startAt?new Date(a.startAt).toLocaleDateString('ru-RU'):'';
+    return d===dateStr;
+  });
+  const cols=`64px repeat(${MASTERS.length},1fr)`;
+  return `
+  <div class="topbar">
+    <h2>Расписание</h2>
+    <div class="acts">
+      <button class="ib" onclick="schedNav(-1)"><i class="ti ti-chevron-left"></i></button>
+      <button class="ib" onclick="schedNav(0)">Сегодня</button>
+      <button class="ib" onclick="schedNav(1)"><i class="ti ti-chevron-right"></i></button>
+    </div>
+  </div>
+  <div class="card">
+    <div style="font-size:13px;font-weight:500;margin-bottom:10px;color:var(--text2)">
+      ${schedDate.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+    </div>
+    ${MASTERS.length===0?'<p style="color:var(--text2);font-size:13px">Нет мастеров. Добавьте мастеров в разделе «Мастера».</p>':
+    `<div class="sched-wrap">
+      <div class="sched-grid" style="grid-template-columns:${cols}">
+        <div class="sched-hdr"></div>
+        ${MASTERS.map((m,i)=>{const c=avaColor(i);return`<div class="sched-hdr"><div style="display:flex;align-items:center;justify-content:center;gap:5px">${ava(m.name,c.bg,c.tc,22)}<span>${esc(m.name.split(' ')[0])}</span></div></div>`;}).join('')}
+        ${SCHED_TIMES.map(t=>`
+          <div class="sched-time">${t}</div>
+          ${MASTERS.map(m=>{
+            const a=todayA.find(x=>{
+              if(!x.startAt)return false;
+              const at=new Date(x.startAt).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+              return at===t&&(x.staffId===m.id||(x.staff&&x.staff.id===m.id));
+            });
+            if(a){const cls=['PENDING','pending'].includes(a.status)?'wait':['COMPLETED','completed'].includes(a.status)?'done':'booked';
+              return `<div class="sched-slot ${cls}" title="${esc((a.client?.name||a.clientName||''))} — ${esc((a.service?.name||a.serviceName||''))}"><div style="font-weight:500">${esc(a.petName||'')}</div></div>`;}
+            return `<div class="sched-slot free"></div>`;
+          }).join('')}
+        `).join('')}
+      </div>
+    </div>`}
+  </div>`;
+}
+function schedNav(dir){
+  if(dir===0){schedDate=new Date();}
+  else{schedDate=new Date(schedDate);schedDate.setDate(schedDate.getDate()+dir);}
+  nav('sched',null);
+}
+
+// ── HISTORY ──
+async function renderHist(){
+  if(!MASTERS.length) await loadMasters();
+  await loadAppts();
+  return `
+  <div class="topbar"><h2>История визитов</h2></div>
+  <div class="card">
+    <h3><i class="ti ti-table" style="font-size:15px;color:var(--teal)"></i> Все записи (${APPTS.length})</h3>
+    ${APPTS.length===0?'<p style="font-size:13px;color:var(--text2)">Записей пока нет.</p>':
+    `<div style="overflow-x:auto"><table class="tbl" style="min-width:500px">
+      <thead><tr><th>Дата</th><th>Клиент / питомец</th><th>Мастер</th><th>Услуга</th><th>Статус</th></tr></thead>
+      <tbody>${APPTS.slice().reverse().map(a=>{
+        const dt=a.startAt?new Date(a.startAt):'';
+        const masterName=a.staff?.name||'—';
+        const idx=MASTERS.findIndex(m=>m.id===a.staffId);
+        const c=avaColor(idx>=0?idx:0);
+        return `<tr>
+          <td style="color:var(--text2)">${dt?dt.toLocaleDateString('ru-RU'):''}<div style="font-size:10px">${dt?dt.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):''}</div></td>
+          <td><div style="font-weight:500">${esc(a.client?.name||a.clientName||'—')}</div><div style="font-size:10px;color:var(--text2)">${esc(a.petName||'')}</div></td>
+          <td><div style="display:flex;align-items:center;gap:4px">${ava(masterName,c.bg,c.tc,18)}<span style="font-size:10px">${esc(masterName.split(' ')[0])}</span></div></td>
+          <td style="font-size:11px">${esc(a.service?.name||a.serviceName||'—')}</td>
+          <td><span class="badge ${(a.status||'').toLowerCase()}">${STATUS_LABEL[a.status]||a.status}</span></td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table></div>`}
+  </div>`;
+}
+
+// ── MASTERS ──
+async function renderMasters(){
+  await Promise.all([loadMasters(), loadSvcs()]);
+  return `
+  <div class="topbar">
+    <h2>Мастера</h2>
+    <div class="acts">
+      <button class="ib primary" onclick="showAddMasterModal()">
+        <i class="ti ti-plus"></i> Добавить мастера
+      </button>
+    </div>
+  </div>
+  <div id="masters-list">${renderMasterCards()}</div>`;
+}
+
+function renderMasterCards(){
+  if(MASTERS.length===0){
+    return `<div class="card"><p style="font-size:13px;color:var(--text2);text-align:center;padding:20px">
+      Мастеров пока нет. Нажмите «Добавить мастера» чтобы создать первого.
+    </p></div>`;
+  }
+  return MASTERS.map((m,i)=>{
+    const c=avaColor(i);
+    const masterSvcs=(m.services||[]).map(ss=>ss.service||ss).filter(Boolean);
+    const hasServices=masterSvcs.length>0;
+    return `<div class="card" id="mcard-${m.id}">
+      <div style="display:flex;gap:14px;align-items:flex-start">
+        ${ava(m.name,c.bg,c.tc,44)}
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px">
+            <span style="font-size:14px;font-weight:500">${esc(m.name)}</span>
+            <span style="font-size:11px;color:var(--teal-dark)">★ ${m.rating||'—'}</span>
+          </div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:6px">${esc(m.specialty||'')}</div>
+          ${m.bio?`<div style="font-size:11px;color:var(--text3);margin-bottom:6px">${esc(m.bio)}</div>`:''}
+          <div style="font-size:11px;margin-bottom:6px">
+            <b style="color:var(--text2)">Услуги:</b>
+            ${hasServices
+              ? masterSvcs.map(s=>`<span class="tag">${esc(s.name||s)}</span>`).join('')
+              : `<span style="color:var(--danger);font-weight:500">
+                  <i class="ti ti-alert-circle" style="font-size:12px;vertical-align:middle"></i>
+                  Не привязаны — нажмите «Привязать услуги»
+                </span>`}
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0">
+          <label class="toggle" aria-label="${m.isActive!==false?'Деактивировать':'Активировать'} ${esc(m.name)}">
+            <input type="checkbox" ${m.isActive!==false?'checked':''} onchange="toggleMasterActive('${m.id}',this.checked)">
+            <span class="tslider"></span>
+          </label>
+          <span style="font-size:10px;color:var(--text3)">${m.isActive!==false?'Активен':'Отключён'}</span>
+          <button class="ib primary" onclick="showLinkServicesModal('${m.id}')">
+            <i class="ti ti-link"></i> Привязать услуги
+          </button>
+          <button class="ib" onclick="showEditMasterModal('${m.id}')">
+            <i class="ti ti-edit"></i> Изменить
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function toggleMasterActive(id, active){
+  try{
+    await apiPatch('/staff/'+id, {isActive: active});
+    await loadMasters();
+    const list=document.getElementById('masters-list');
+    if(list)list.innerHTML=renderMasterCards();
+    toast(active?'Мастер активирован':'Мастер деактивирован');
+  } catch(e){ toast('Ошибка: '+e.message,'err'); }
+}
+
+// ── ADD / EDIT MASTER MODAL ──
+function showAddMasterModal(){ showMasterModal(null); }
+function showEditMasterModal(id){ showMasterModal(MASTERS.find(x=>x.id===id)||null); }
+
+function showMasterModal(master){
+  const isEdit=!!master;
+  const overlay=document.createElement('div');
+  overlay.className='modal-overlay';
+  overlay.id='master-modal';
+  overlay.innerHTML=`
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <h3 id="modal-title">${isEdit?'Редактировать мастера':'Добавить мастера'}</h3>
+      ${!isEdit?`<div class="alert-box ok" style="margin-bottom:12px;font-size:11px">
+        <b>Шаг 1 из 2.</b> После создания вы сразу выберете услуги — это обязательно для появления в виджете.
+      </div>`:''}
+      <div id="modal-err"></div>
+      <div class="form-field">
+        <label>Имя и фамилия *</label>
+        <input id="m-name" type="text" value="${esc(master?.name||'')}" placeholder="Иван Иванов" maxlength="80">
+      </div>
+      <div class="form-field">
+        <label>Специализация *</label>
+        <input id="m-spec" type="text" value="${esc(master?.specialty||'')}" placeholder="Декоративные породы, кошки" maxlength="120">
+      </div>
+      <div class="form-field">
+<div class="form-field">
+  <label>E‑mail мастера *</label>
+  <input id="m-email" type="email" value="${esc(master?.email||'')}" placeholder="master@example.com" maxlength="120">
+</div>
+<div class="form-field">
+  <label>Пароль для входа мастера</label>
+  <input id="m-pass" type="text" placeholder="Если оставить пустым — сгенерируем автоматически" maxlength="64">
+</div>
+        <label>О мастере</label>
+        <textarea id="m-bio" placeholder="Опыт, особенности работы...">${esc(master?.bio||'')}</textarea>
+      </div>
+      <div class="modal-acts">
+        <button class="ib" onclick="document.getElementById('master-modal').remove()">Отмена</button>
+        <button class="ib primary" id="m-save-btn" onclick="saveMaster(${isEdit?`'${master.id}'`:null})">
+          ${isEdit?'Сохранить':'Далее: выбрать услуги →'}
+        </button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  document.getElementById('m-name').focus();
+  overlay.addEventListener('click',e=>{ if(e.target===overlay) overlay.remove(); });
+}
+
+// ── KEY FIX: saveMaster — after creation immediately opens service-link modal ──
+async function saveMaster(id){
+  const name=(document.getElementById('m-name').value||'').trim();
+  const specialty=(document.getElementById('m-spec').value||'').trim();
+  const bio=(document.getElementById('m-bio').value||'').trim();
+const email    = (document.getElementById('m-email').value||'').trim();
+let   pass     = (document.getElementById('m-pass').value||'').trim();
+  const errEl=document.getElementById('modal-err');
+  if(!name||!specialty){
+    errEl.innerHTML='<div class="alert-box err">Заполните имя и специализацию</div>';
+    return;
+  }
+  const btn=document.getElementById('m-save-btn');
+  btn.disabled=true; btn.innerHTML='<div class="spinner"></div>';
+if(!name || !specialty || !email){
+  errEl.innerHTML='<div class="alert-box err">Заполните имя, специализацию и e‑mail</div>';
+  return;
+}
+if(!pass){
+  // простой генератор пароля, можно улучшить при желании
+  pass = Math.random().toString(36).slice(-10);
+}  try{
+    if(id){
+      // Edit existing master
+      await apiPatch('/staff/'+id,{name,specialty,bio:bio||undefined});
+      toast('Мастер обновлён');
+      document.getElementById('master-modal').remove();
+      await loadMasters();
+      const list=document.getElementById('masters-list');
+      if(list)list.innerHTML=renderMasterCards();
+    } else {
+      // Create new master via POST /staff
+      const newMaster = await apiPost('/staff',{name,specialty,bio:bio||undefined});
+// Создаём пользователя-мастера, чтобы были email/логин
+  try {
+    await apiPost('/auth/register', {
+      email,
+      password: pass,
+      role: 'MASTER',
+      staffId: newMaster.id,
+    });
+    toast('Мастер создан, данные для входа отправьте мастеру: ' + email);
+  } catch(eReg){
+    console.error('Register master user failed', eReg);
+    toast('Мастер создан, но не удалось создать аккаунт для входа: ' + (eReg.message||eReg));
+  }
+
+  document.getElementById('master-modal').remove();
+  // Reload masters …
+  await loadMasters(); 
+     document.getElementById('master-modal').remove();
+      // Reload masters so the new one is in MASTERS array
+      await loadMasters();
+      const list=document.getElementById('masters-list');
+      if(list)list.innerHTML=renderMasterCards();
+      // KEY FIX: immediately open service-linking modal for the new master
+      // Without this step the master has 0 services and is invisible in the widget
+      const createdId = newMaster.id || newMaster.staffId;
+      if(createdId){
+        showLinkServicesModal(createdId, true);
+      } else {
+        toast('Мастер создан! Не забудьте привязать услуги через кнопку «Привязать услуги».');
+      }
+    }
+  } catch(e){
+    errEl.innerHTML=`<div class="alert-box err">${esc(e.message==='HTTP 401'?'Нет прав. Войдите как администратор.':e.message)}</div>`;
+    btn.disabled=false; btn.innerHTML=id?'Сохранить':'Далее: выбрать услуги →';
+  }
+}
+
+// ── LINK SERVICES MODAL ──
+// isAfterCreate=true shows a special header explaining why this is required
+async function showLinkServicesModal(masterId, isAfterCreate){
+  const master=MASTERS.find(m=>m.id===masterId);
+  if(!master)return;
+  if(!SVCS.length) await loadSvcs();
+  const linked=new Set((master.services||[]).map(ss=>ss.serviceId||ss.service?.id));
+  const activeSvcs=SVCS.filter(s=>s.isActive!==false);
+
+  const overlay=document.createElement('div');
+  overlay.className='modal-overlay';
+  overlay.id='link-modal';
+  overlay.innerHTML=`
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3 style="display:flex;align-items:center;gap:8px">
+        ${isAfterCreate?'<span class="step-badge">2</span>':''} Услуги мастера: ${esc(master.name)}
+      </h3>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:12px;padding:8px 10px;background:var(--teal-bg);border-radius:var(--r)">
+        <b>Важно:</b> мастер появляется в виджете только для отмеченных здесь услуг.
+        Без хотя бы одной услуги клиент его не увидит.
+      </div>
+      <div id="link-err"></div>
+      ${activeSvcs.length===0
+        ? `<p style="font-size:13px;color:var(--danger)">Нет активных услуг. Сначала добавьте услуги в разделе «Услуги».</p>`
+        : `<div class="svc-check-list">
+            ${activeSvcs.map(s=>`
+              <label class="svc-check-label">
+                <input type="checkbox" value="${s.id}" ${linked.has(s.id)?'checked':''}>
+                ${esc(s.name)}
+              </label>`).join('')}
+          </div>`}
+      <div class="modal-acts">
+        <button class="ib" onclick="document.getElementById('link-modal').remove()">
+          ${isAfterCreate?'Пропустить':'Отмена'}
+        </button>
+        <button class="ib primary" id="link-save-btn" onclick="saveLinkServices('${masterId}')">
+          Сохранить
+        </button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  if(!isAfterCreate){
+    overlay.addEventListener('click',e=>{ if(e.target===overlay) overlay.remove(); });
+  }
+}
+
+async function saveLinkServices(masterId){
+  const master=MASTERS.find(m=>m.id===masterId);
+  if(!master)return;
+  const btn=document.getElementById('link-save-btn');
+  btn.disabled=true; btn.innerHTML='<div class="spinner"></div>';
+
+  const checked=[...document.querySelectorAll('#link-modal input[type=checkbox]:checked')].map(el=>el.value);
+  const currentLinked=new Set((master.services||[]).map(ss=>ss.serviceId||ss.service?.id));
+
+  const toAdd=checked.filter(id=>!currentLinked.has(id));
+  const toRemove=[...currentLinked].filter(id=>!checked.includes(id));
+
+  try{
+    await Promise.all([
+      ...toAdd.map(serviceId=>apiPost(`/staff/${masterId}/services`,{serviceId})),
+      ...toRemove.map(serviceId=>apiDelete(`/staff/${masterId}/services/${serviceId}`)),
+    ]);
+    const addedCount=toAdd.length;
+    toast(addedCount>0
+      ? `Готово! Мастер виден в виджете для ${addedCount} услуг.`
+      : 'Услуги обновлены.');
+    document.getElementById('link-modal').remove();
+    await loadMasters();
+    const list=document.getElementById('masters-list');
+    if(list)list.innerHTML=renderMasterCards();
+  } catch(e){
+    document.getElementById('link-err').innerHTML=`<div class="alert-box err">${esc(e.message)}</div>`;
+    btn.disabled=false; btn.textContent='Сохранить';
+  }
+}
+
+// ── SERVICES ──
+async function renderSvcs(){
+  await Promise.all([loadSvcs(), loadMasters()]);
+  return `
+  <div class="topbar"><h2>Услуги</h2></div>
+  <div class="card">
+    <h3><i class="ti ti-cut" style="font-size:15px;color:var(--teal)"></i> Каталог услуг (${SVCS.length})</h3>
+    ${SVCS.length===0?'<p style="font-size:13px;color:var(--text2)">Услуг пока нет.</p>':
+    `<div id="svcs-list">${renderSvcRows()}</div>`}
+  </div>
+  <div class="card">
+    <h3>Привязка мастер × услуга</h3>
+    <p style="font-size:11px;color:var(--text2);margin-bottom:10px">
+      ✓ — мастер выполняет услугу и виден в виджете при её выборе клиентом.
+    </p>
+    <div style="overflow-x:auto">
+      <table class="tbl" style="min-width:400px">
+        <thead><tr><th>Мастер</th>${SVCS.map(s=>`<th style="text-align:center;font-size:10px">${esc(s.name.length>9?s.name.slice(0,8)+'…':s.name)}</th>`).join('')}</tr></thead>
+        <tbody>${MASTERS.map((m,i)=>{
+          const c=avaColor(i);
+          const linked=new Set((m.services||[]).map(ss=>ss.serviceId||ss.service?.id));
+          return `<tr><td><div style="display:flex;align-items:center;gap:5px">${ava(m.name,c.bg,c.tc,18)} ${esc(m.name.split(' ')[0])}</div></td>
+            ${SVCS.map(s=>{const has=linked.has(s.id);return`<td style="text-align:center"><i class="ti ${has?'ti-circle-check':'ti-circle-x'}" style="font-size:15px;color:${has?'#1D9E75':'var(--border2)'}"></i></td>`;}).join('')}
+          </tr>`;
+        }).join('')}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+function renderSvcRows(){
+  return SVCS.map(s=>
+    `<div class="svc-row">
+      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">
+        <div style="width:32px;height:32px;border-radius:8px;background:var(--bg2);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <i class="ti ti-cut" style="font-size:16px;color:${s.isActive!==false?'var(--teal-dark)':'var(--text3)'}"></i>
+        </div>
+        <div style="min-width:0">
+          <div style="font-size:13px;font-weight:500">${esc(s.name)}</div>
+          <div style="font-size:11px;color:var(--text2)">${esc(s.description||'')} · ${s.durationMin||0} мин</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;flex-shrink:0">
+        <div style="text-align:center">
+          <div style="font-size:10px;color:var(--text3)">Базовая цена</div>
+          <div style="font-size:12px;font-weight:500">${(s.basePrice||0).toLocaleString('ru-RU')} ₽</div>
+        </div>
+        <span class="badge ${s.isActive!==false?'confirmed':'cancelled'}">${s.isActive!==false?'Активна':'Отключена'}</span>
+      </div>
+    </div>`
+  ).join('');
+}
+
+// ── BOOT ──
+async function boot(){
+  try{
+    CURRENT_USER = await apiGet('/auth/me');
+    renderApp();
+    nav('dash', null);
+  } catch(e){
+    TOKEN=null; localStorage.removeItem('admin_token');
+    renderLogin();
+  }
+}
+
+// Start
+if(TOKEN){
+  document.getElementById('root').innerHTML='<div class="login-wrap"><div class="spinner"></div></div>';
+  boot();
+} else {
+  renderLogin();
+}
+</script>
+</body>
+</html>

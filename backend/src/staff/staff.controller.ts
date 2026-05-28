@@ -23,8 +23,16 @@ export class StaffController {
   getSlots(
     @Param('id') staffId: string,
     @Query('date') date: string,
-    @Query('serviceId') serviceId: string,
-  ) { return this.svc.getAvailableSlots(staffId, date, serviceId); }
+    @Query('serviceId') serviceId?: string,
+    @Query('duration') duration?: string,
+  ) {
+    return this.svc.getAvailableSlots(
+      staffId,
+      date,
+      serviceId,
+      duration ? Number(duration) : undefined,
+    );
+  }
 
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
