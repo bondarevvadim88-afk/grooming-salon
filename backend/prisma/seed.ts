@@ -1,5 +1,6 @@
 // prisma/seed.ts
 import { PrismaClient, PetType, PetSize } from '@prisma/client';
+import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
@@ -56,6 +57,20 @@ async function main() {
         basePrice: 600, durationMin: 60, coefSmall: 1.0, coefMedium: 1.0, coefLarge: 1.0, isActive: false,
       },
     }),
+ prisma.service.upsert({
+  where: { id: 'svc-deshed' },
+  update: {},
+  create: {
+    id: 'svc-deshed',
+    name: 'Экспресс-линька',
+    description: 'Интенсивный вычёс подшёрстка и уход в период линьки',
+    basePrice: 2200,
+    durationMin: 45,
+    coefSmall: 0.8,
+    coefMedium: 1.0,
+    coefLarge: 1.4,
+  },
+}),
   ]);
   console.log(`  ✓ ${services.length} services`);
 
@@ -139,6 +154,9 @@ async function main() {
     { staffId: elena.id,  serviceId: 'svc-spa'   },
     { staffId: elena.id,  serviceId: 'svc-puppy' },
     { staffId: elena.id,  serviceId: 'svc-nails' },
+    { staffId: maria.id, serviceId: 'svc-deshed' },
+    { staffId: alexey.id, serviceId: 'svc-deshed' },
+    { staffId: elena.id, serviceId: 'svc-deshed' },
   ];
   for (const link of links) {
     await prisma.staffService.upsert({
@@ -166,19 +184,20 @@ async function main() {
     },
   });
   console.log('  ✓ Demo client: Анна Смирнова');
+
+  const adminHash = await bcrypt.hash('admin123', 10);
+  await prisma.user.upsert({
+    where:  { email: 'admin@lyubi-grooming.ru' },
+    update: {},
+    create: { email: 'admin@lyubi-grooming.ru', password: adminHash, role: 'ADMIN' },
+  });
+  console.log('  ✓ Admin user created: admin@lyubi-grooming.ru / admin123');
+
   console.log('\n🎉 Seed complete!');
+  console.log(`  ✓ ${services.length} services`);
+  console.log(`  ✓ ${links.length} staff↔service links`);
 }
 
 main()
   .catch(e => { console.error(e); process.exit(1); })
   .finally(() => prisma.$disconnect());
-
-// Admin user
-import * as bcrypt from 'bcryptjs';
-const adminHash = await bcrypt.hash('admin123', 10);
-await prisma.user.upsert({
-  where:  { email: 'admin@lyubi-grooming.ru' },
-  update: {},
-  create: { email: 'admin@lyubi-grooming.ru', password: adminHash, role: 'ADMIN' },
-});
-console.log('  ✓ Admin user created: admin@lyubi-grooming.ru / admin123');

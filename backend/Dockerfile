@@ -5,13 +5,16 @@ WORKDIR /app
 RUN apk add --no-cache openssl
 
 COPY package*.json ./
+COPY backend/package*.json ./backend/
 RUN npm install
 
 COPY . .
 
-RUN ./node_modules/.bin/prisma generate
+WORKDIR /app/backend
+
+RUN npx prisma generate
 RUN npm run build
 
 EXPOSE 3000
 
-CMD ["node", "--no-warnings", "--max-old-space-size=512", "diagnose.js"]
+CMD ["node", "dist/main.js"]
