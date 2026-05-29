@@ -8,6 +8,7 @@ import { ServicesModule }     from './services/services.module';
 import { ClientsModule }      from './clients/clients.module';
 import { NotificationsModule }from './notifications/notifications.module';
 import { PrismaModule }       from './prisma/prisma.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { PrismaModule }       from './prisma/prisma.module';
     ServicesModule,
     ClientsModule,
     NotificationsModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
 })

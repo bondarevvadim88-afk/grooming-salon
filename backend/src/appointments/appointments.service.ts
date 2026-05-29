@@ -4,6 +4,7 @@ import { NotificationsService } from '../notifications/notifications.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { ListAppointmentsDto  } from './dto/list-appointments.dto';
 import { AppointmentStatus }   from '@prisma/client';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 const INCLUDE_ALL = {
   client:  true,
@@ -18,6 +19,20 @@ export class AppointmentsService {
     private readonly prisma: PrismaService,
     private readonly notifications: NotificationsService,
   ) {}
+  @Cron(CronExpression.EVERY_MINUTE)
+async autoCompleteFinishedAppointments() {
+  await this.prisma.appointment.updateMany({
+    where: {
+      status: 'PENDING',
+      endAt: {
+        lte: new Date(),
+      },
+    },
+    data: {
+      status: 'COMPLETED',
+    },
+  });
+}
 
   async create(dto: CreateAppointmentDto) {
     const service = await this.prisma.service.findUniqueOrThrow({ where: { id: dto.serviceId } });
