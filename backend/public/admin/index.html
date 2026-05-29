@@ -466,7 +466,7 @@ function openApptModal(id){
 
         <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:18px">
           <button class="ib" type="button" onclick="closeApptModal()">Закрыть</button>
-          <button class="ib" type="button" style="background:#b91c1c;color:#fff;border-color:#b91c1c" onclick="cancelAppointment('${esc(String(a.id || a.appointmentId || ''))}')">
+          <button class="ib" type="button" style="background:#b91c1c;color:#fff;border-color:#b91c1c" onclick="cancelAppt('${esc(String(a.id || a.appointmentId || ''))}')">
             Отменить запись
           </button>
         </div>
@@ -476,17 +476,8 @@ function openApptModal(id){
   document.body.appendChild(wrap);
 }
 
-async function cancelAppointment(id){
-  if(!confirm('Отменить эту запись?')) return;
-  try{
-    await apiPut('/appointments/' + id + '/status', { status: 'cancelled' });
-    closeApptModal();
-    toast('Запись отменена');
-    await loadAppts();
-    nav('sched', null);
-  }catch(e){
-    alert('Не удалось отменить запись: ' + (e.message || e));
-  }
+function cancelAppointment(id){
+  return cancelAppt(id);
 }
 
 // ── WORK SCHEDULE (per staff, per weekday) ──
@@ -655,6 +646,14 @@ async function cancelAppt(id){
   }catch(e){
     alert(e.message || 'Не удалось отменить запись');
   }
+
+  try{ closeApptModal(); }catch(e){}
+  try{
+    if(typeof page!=='undefined' && page==='sched'){
+      await loadAppts();
+      nav('sched', null);
+    }
+  }catch(e){}
 }
 
 // ── MASTERS ──
