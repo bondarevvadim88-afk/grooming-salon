@@ -359,7 +359,7 @@ async function renderDash(){
 }
 
 // ── SCHEDULE ──
-const SCHED_TIMES=['09:00','09:30','10:00','10:30','11:00','11:30','12:00','13:00','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00'];
+const SCHED_TIMES=['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30','20:00'];
 async function renderSched(){
   if(!MASTERS.length) await loadMasters();
   await loadAppts();
@@ -444,14 +444,14 @@ function renderWorkcalFor(staffId){
   const schedMap = new Map((m.workSchedules||[]).map(w=>[w.dayOfWeek,w]));
   const staffOptions = MASTERS.map(x=>`<option value="${x.id}" ${x.id===m.id?'selected':''}>${esc(x.name)}</option>`).join('');
   const rows = days.map(day=>{
-    const w = schedMap.get(day.d) || { isWorking: day.d<=5, startTime:'09:00', endTime:'18:00'};
+    const w = schedMap.get(day.d) || { isWorking: day.d<=5, startTime:'09:00', endTime:'20:00'};
     const checked = w.isWorking!==false;
     const br = (m.breaks||[]).find(b=>b.dayOfWeek===day.d);
     return `<tr>
       <td style="white-space:nowrap">${day.label}</td>
       <td style="text-align:center"><input type="checkbox" data-day="${day.d}" class="ws-day-check" ${checked?'checked':''}></td>
       <td><input type="time" class="ws-from" data-day="${day.d}" value="${w.startTime||'09:00'}" ${checked?'':'disabled'}></td>
-      <td><input type="time" class="ws-to" data-day="${day.d}" value="${w.endTime||'18:00'}" ${checked?'':'disabled'}></td>
+      <td><input type="time" class="ws-to" data-day="${day.d}" value="${w.endTime||'20:00'}" ${checked?'':'disabled'}></td>
       <td><input type="time" class="ws-break-from" data-day="${day.d}" value="${br?.startTime||''}" ${checked?'':'disabled'} placeholder="—"></td>
       <td><input type="time" class="ws-break-to" data-day="${day.d}" value="${br?.endTime||''}" ${checked?'':'disabled'} placeholder="—"></td>
     </tr>`;
@@ -503,7 +503,7 @@ async function saveWorkSchedule(staffId){
     const fromEl = document.querySelector(`.ws-from[data-day="${d}"]`);
     const toEl   = document.querySelector(`.ws-to[data-day="${d}"]`);
     const startTime = (fromEl && fromEl.value)||'09:00';
-    const endTime   = (toEl && toEl.value)||'18:00';
+    const endTime   = (toEl && toEl.value)||'20:00';
     return { dayOfWeek:d, isWorking:on, startTime, endTime };
   });
   try{
