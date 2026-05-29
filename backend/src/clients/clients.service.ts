@@ -7,10 +7,20 @@ export class ClientsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateClientDto) {
-    const existing = await this.prisma.client.findUnique({ where: { phone: dto.phone } });
-    if (existing) return existing;
-    return this.prisma.client.create({ data: dto });
+  const existing = await this.prisma.client.findUnique({ where: { phone: dto.phone } });
+
+  if (existing) {
+    return this.prisma.client.update({
+      where: { id: existing.id },
+      data: {
+        name: dto.name,
+        ...(dto.email ? { email: dto.email } : {}),
+      },
+    });
   }
+
+  return this.prisma.client.create({ data: dto });
+}
 
   async findOne(id: string) {
     const client = await this.prisma.client.findUnique({
