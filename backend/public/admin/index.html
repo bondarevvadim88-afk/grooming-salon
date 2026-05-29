@@ -564,7 +564,7 @@ async function cancelAppt(id){
   if(!confirm('Отменить эту запись?')) return;
 
   try{
-    await apiFetch(`/appointments/${id}/cancel`, { method:'PATCH' });
+    await apiPatch(`/appointments/${id}/cancel`, {});
     await loadAppts();
     document.getElementById('main-content').innerHTML = await renderHist();
   }catch(e){
