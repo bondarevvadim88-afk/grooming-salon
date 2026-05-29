@@ -94,6 +94,7 @@ const state = {
 };
 
 const breeds = [
+  // БАЗОВЫЕ ПОРОДЫ (остались как были)
   {id:'spitz', name:'Померанский шпиц', aliases:['шпиц','померанский шпиц'], size:'small', coat:'double', services:['full','express','hygiene'], base:{full:4200,express:2800,hygiene:2200}, duration:{full:150,express:90,hygiene:60}, popular:true},
   {id:'york', name:'Йоркширский терьер', aliases:['йорк','йоркширский терьер'], size:'small', coat:'silky', services:['full','express','hygiene'], base:{full:3900,express:2500,hygiene:2100}, duration:{full:135,express:80,hygiene:55}, popular:true},
   {id:'corgi', name:'Корги', aliases:['корги','вельш-корги'], size:'medium', coat:'double', services:['full','express','deshed'], base:{full:5200,express:3400,deshed:3900}, duration:{full:165,express:95,deshed:120}, popular:true},
@@ -102,9 +103,50 @@ const breeds = [
   {id:'labrador', name:'Лабрадор', aliases:['лабрадор'], size:'large', coat:'short-double', services:['express','deshed','nails'], base:{express:3600,deshed:4600,nails:900}, duration:{express:85,deshed:115,nails:20}, popular:true},
   {id:'husky', name:'Хаски', aliases:['хаски','сибирский хаски'], size:'large', coat:'heavy-double', services:['express','deshed'], base:{express:4800,deshed:6200}, duration:{express:110,deshed:150}, popular:false},
   {id:'schnauzer', name:'Цвергшнауцер', aliases:['шнауцер','цвергшнауцер'], size:'small', coat:'wire', services:['full','trim','hygiene'], base:{full:4300,trim:5200,hygiene:2300}, duration:{full:145,trim:170,hygiene:60}, popular:false},
-  {id:'mestizo-small', name:'Метис, маленькая собака', aliases:['метис'], size:'small', services:['full','express','hygiene'], base:{full:3900,express:2600,hygiene:2100}, duration:{full:140,express:85,hygiene:55}, popular:false, generic:true},
-  {id:'mestizo-medium', name:'Метис, средняя собака', aliases:['метис средний'], size:'medium', services:['full','express','deshed'], base:{full:4900,express:3200,deshed:3800}, duration:{full:155,express:90,deshed:115}, popular:false, generic:true},
-  {id:'mestizo-large', name:'Метис, большая собака', aliases:['метис большой'], size:'large', services:['express','deshed'], base:{express:4300,deshed:5600}, duration:{express:100,deshed:135}, popular:false, generic:true}
+
+  // МЕТИСЫ (как были)
+  {id:'mestizo-small', name:'Метис, маленькая собака', aliases:['метис','дворняга маленькая'], size:'small', services:['full','express','hygiene'], base:{full:3900,express:2600,hygiene:2100}, duration:{full:140,express:85,hygiene:55}, popular:false, generic:true},
+  {id:'mestizo-medium', name:'Метис, средняя собака', aliases:['метис средний','дворняга средняя'], size:'medium', services:['full','express','deshed'], base:{full:4900,express:3200,deshed:3800}, duration:{full:155,express:90,deshed:115}, popular:false, generic:true},
+  {id:'mestizo-large', name:'Метис, большая собака', aliases:['метис большой','дворняга большая'], size:'large', services:['express','deshed'], base:{express:4300,deshed:5600}, duration:{express:100,deshed:135}, popular:false, generic:true},
+
+  // МАЛЕНЬКИЕ ДЕКОРАТИВНЫЕ (тариф как у той-пуделя / йорка)
+  {id:'chihuahua', name:'Чихуахуа', aliases:['чихуа','чихуахуа'], size:'small', coat:'short', services:['full','express','hygiene'], base:{full:4300,express:2700,hygiene:2100}, duration:{full:140,express:85,hygiene:55}, popular:false},
+  {id:'pomeranian', name:'Немецкий шпиц малый/средний', aliases:['немецкий шпиц','шпиц малый','шпиц средний'], size:'small', coat:'double', services:['full','express','hygiene'], base:{full:4300,express:2700,hygiene:2100}, duration:{full:145,express:85,hygiene:55}, popular:false},
+  {id:'pug', name:'Мопс', aliases:['мопс'], size:'small', coat:'short', services:['express','hygiene'], base:{express:3200,hygiene:2100}, duration:{express:80,hygiene:50}, popular:false},
+  {id:'papillon', name:'Папильон', aliases:['папильон','континентальный той-спаниель'], size:'small', coat:'silky', services:['full','express','hygiene'], base:{full:4300,express:2700,hygiene:2100}, duration:{full:140,express:85,hygiene:55}, popular:false},
+  {id:'bichon', name:'Бишон фризе', aliases:['бишон','бишон фризе'], size:'small', coat:'curly', services:['full','express','hygiene'], base:{full:4500,express:2900,hygiene:2300}, duration:{full:155,express:90,hygiene:60}, popular:false},
+  {id:'shih-tzu', name:'Ши-тцу', aliases:['шитцу','ши тцу'], size:'small', coat:'silky', services:['full','express','hygiene'], base:{full:4400,express:2800,hygiene:2200}, duration:{full:150,express:90,hygiene:60}, popular:false},
+  {id:'pekingese', name:'Пекинес', aliases:['пекинес'], size:'small', coat:'double', services:['full','express','hygiene'], base:{full:4300,express:2700,hygiene:2100}, duration:{full:145,express:85,hygiene:55}, popular:false},
+  {id:'jack-russell', name:'Джек-рассел-терьер', aliases:['джек рассел','джек-рассел'], size:'small', coat:'short', services:['express','hygiene'], base:{express:3200,hygiene:2100}, duration:{express:80,hygiene:50}, popular:false},
+
+  // СРЕДНИЕ
+  {id:'beagle', name:'Бигль', aliases:['бигль'], size:'medium', coat:'short', services:['express','hygiene'], base:{express:3600,hygiene:2300}, duration:{express:90,hygiene:55}, popular:false},
+  {id:'cocker-spaniel', name:'Кокер-спаниель', aliases:['кокер','кокер спаниель','английский кокер'], size:'medium', coat:'silky', services:['full','express','hygiene'], base:{full:5000,express:3200,hygiene:2600}, duration:{full:160,express:90,hygiene:60}, popular:false},
+  {id:'border-collie', name:'Бордер-колли', aliases:['бордер колли'], size:'medium', coat:'double', services:['full','express','deshed'], base:{full:5200,express:3400,deshed:3900}, duration:{full:165,express:95,deshed:120}, popular:false},
+  {id:'australian-shepherd', name:'Австралийская овчарка', aliases:['аусси','австралийская овчарка'], size:'medium', coat:'double', services:['full','express','deshed'], base:{full:5200,express:3400,deshed:3900}, duration:{full:165,express:95,deshed:120}, popular:false},
+  {id:'samoyed', name:'Самоед', aliases:['самоед','самоедская лайка'], size:'large', coat:'heavy-double', services:['express','deshed'], base:{express:5000,deshed:6500}, duration:{express:120,deshed:160}, popular:false},
+
+  // КРУПНЫЕ
+  {id:'golden-retriever', name:'Голден ретривер', aliases:['голден','голден ретривер'], size:'large', coat:'double', services:['express','deshed'], base:{express:4300,deshed:5600}, duration:{express:100,deshed:135}, popular:false},
+  {id:'german-shepherd', name:'Немецкая овчарка', aliases:['немец','немецкая овчарка'], size:'large', coat:'double', services:['express','deshed'], base:{express:4300,deshed:5600}, duration:{express:100,deshed:135}, popular:false},
+  {id:'rottweiler', name:'Ротвейлер', aliases:['ротвейлер'], size:'large', coat:'short', services:['express','hygiene'], base:{express:3800,hygiene:2600}, duration:{express:90,hygiene:55}, popular:false},
+  {id:'doberman', name:'Доберман', aliases:['доберман'], size:'large', coat:'short', services:['express','hygiene'], base:{express:3800,hygiene:2600}, duration:{express:90,hygiene:55}, popular:false},
+  {id:'bernese', name:'Бернский зенненхунд', aliases:['бернский зенненхунд','берн'], size:'large', coat:'heavy-double', services:['express','deshed'], base:{express:5200,deshed:6700}, duration:{express:120,deshed:170}, popular:false},
+  {id:'newfoundland', name:'Ньюфаундленд', aliases:['ньюфаундленд','ньюф'], size:'large', coat:'heavy-double', services:['express','deshed'], base:{express:5500,deshed:7000}, duration:{express:130,deshed:180}, popular:false},
+
+  // ЖЕСТКОШЁРСТНЫЕ И ТЕРЬЕРЫ
+  {id:'fox-terrier', name:'Фокстерьер жесткошёрстный', aliases:['фокстерьер','фокс терьер'], size:'small', coat:'wire', services:['full','trim','hygiene'], base:{full:4300,trim:5200,hygiene:2300}, duration:{full:145,trim:170,hygiene:60}, popular:false},
+  {id:'westie', name:'Вест-хайленд-уайт-терьер', aliases:['вестик','вест хайленд'], size:'small', coat:'wire', services:['full','trim','hygiene'], base:{full:4300,trim:5200,hygiene:2300}, duration:{full:145,trim:170,hygiene:60}, popular:false},
+  {id:'scottish-terrier', name:'Скотч-терьер', aliases:['скотч терьер','скоттиш терьер'], size:'small', coat:'wire', services:['full','trim','hygiene'], base:{full:4300,trim:5200,hygiene:2300}, duration:{full:145,trim:170,hygiene:60}, popular:false},
+
+  // ЛАЙКИ И СЕВЕРНЫЕ
+  {id:'akita-inu', name:'Акита-ину', aliases:['акита','акита ину'], size:'large', coat:'double', services:['express','deshed'], base:{express:4800,deshed:6200}, duration:{express:110,deshed:150}, popular:false},
+  {id:'alaskan-malamute', name:'Аляскинский маламут', aliases:['маламут','аляскинский маламут'], size:'large', coat:'heavy-double', services:['express','deshed'], base:{express:5200,deshed:6700}, duration:{express:120,deshed:170}, popular:false},
+
+  // ОСТАЛЬНЫЕ ПОРОДЫ, КОТОРЫЕ ЧАСТО ВСТРЕЧАЮТСЯ
+  {id:'staffordshire-bull-terrier', name:'Стаффордширский бультерьер', aliases:['стаффордширский бультерьер','стафф'], size:'medium', coat:'short', services:['express','hygiene'], base:{express:3600,hygiene:2300}, duration:{express:90,hygiene:55}, popular:false},
+  {id:'american-bully', name:'Американский булли', aliases:['американский булли','булли'], size:'medium', coat:'short', services:['express','hygiene'], base:{express:3800,hygiene:2500}, duration:{express:90,hygiene:55}, popular:false},
+  {id:'shiba-inu', name:'Сиба-ину', aliases:['сиба','сиба ину'], size:'small', coat:'double', services:['express','deshed'], base:{express:3800,deshed:4800}, duration:{express:95,deshed:130}, popular:false}
 ];
 
 const serviceMeta = {
