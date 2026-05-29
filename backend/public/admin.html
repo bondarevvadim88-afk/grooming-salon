@@ -385,6 +385,8 @@ function getFiltered(){
 }
 function histRow(a){
   const si=D.staff.findIndex(x=>x.id===a.staffId);
+  const canCancel = a.status === 'pending';
+
   return `<tr>
     <td style="color:var(--text2)">${fmtD(a.startAt)}<div style="font-size:10px">${fmtT(a.startAt)}</div></td>
     <td><div style="font-weight:500">${esc(a.client?.name||'—')}</div><div style="font-size:10px;color:var(--text2)">${esc(a.client?.phone||'')}</div></td>
@@ -393,6 +395,11 @@ function histRow(a){
     <td style="font-size:11px">${esc(a.service?.name||'—')}</td>
     <td style="font-weight:500">${(a.totalPrice||0).toLocaleString('ru-RU')} ₽</td>
     <td><span class="badge ${a.status}">${STATUS_LABEL[a.status]||a.status}</span></td>
+    <td>
+      ${canCancel
+        ? `<button class="ib danger" onclick="cancelAppt('${a.id}')"><i class="ti ti-x"></i> Отменить</button>`
+        : `<span style="font-size:10px;color:var(--text3)">—</span>`}
+    </td>
   </tr>`;
 }
 function renderHist(){
@@ -413,14 +420,26 @@ function renderHist(){
     </div>
     <div style="overflow-x:auto">
       <table class="tbl" style="min-width:600px">
-        <thead><tr><th>Дата</th><th>Клиент</th><th>Мастер</th><th>Питомец</th><th>Услуга</th><th>Сумма</th><th>Статус</th></tr></thead>
+        <thead><tr><th>Дата</th><th>Клиент</th><th>Мастер</th><th>Питомец</th><th>Услуга</th><th>Сумма</th><th>Статус</th><th>Действия</th></tr></thead>
         <tbody id="htbody">${f.map(histRow).join('')}</tbody>
       </table>
     </div>
     <div id="hcount" style="font-size:11px;color:var(--text2);margin-top:8px">Показано: ${f.length} из ${D.appointments.length}</div>
   </div>`);
 }
-function updHist(){
+function updHist()
+{async function cancelAppt(id){
+  if(!confirm('Отменить эту запись?')) return;
+
+  try{
+    await req(`/appointments/${id}/cancel`, { method:'PATCH' });
+    await loadData();
+    updHist();
+    renderStats();
+  }catch(e){
+    alert(e.message || 'Не удалось отменить запись');
+  }
+}
   const f=getFiltered();
   const tb=document.getElementById('htbody');const ct=document.getElementById('hcount');
   if(tb)tb.innerHTML=f.map(histRow).join('');
