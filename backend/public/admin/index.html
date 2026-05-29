@@ -534,23 +534,42 @@ async function renderHist(){
   <div class="card">
     <h3><i class="ti ti-table" style="font-size:15px;color:var(--teal)"></i> Все записи (${APPTS.length})</h3>
     ${APPTS.length===0?'<p style="font-size:13px;color:var(--text2)">Записей пока нет.</p>':
-    `<div style="overflow-x:auto"><table class="tbl" style="min-width:500px">
-      <thead><tr><th>Дата</th><th>Клиент / питомец</th><th>Мастер</th><th>Услуга</th><th>Статус</th></tr></thead>
+    `<div style="overflow-x:auto"><table class="tbl" style="min-width:700px">
+      <thead><tr><th>Дата</th><th>Клиент / питомец</th><th>Мастер</th><th>Услуга</th><th>Статус</th><th>Действия</th></tr></thead>
       <tbody>${APPTS.slice().reverse().map(a=>{
         const dt=a.startAt?new Date(a.startAt):'';
         const masterName=a.staff?.name||'—';
         const idx=MASTERS.findIndex(m=>m.id===a.staffId);
         const c=avaColor(idx>=0?idx:0);
+        const status = (a.status||'').toLowerCase();
+        const canCancel = status === 'pending';
+
         return `<tr>
           <td style="color:var(--text2)">${dt?dt.toLocaleDateString('ru-RU'):''}<div style="font-size:10px">${dt?dt.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):''}</div></td>
           <td><div style="font-weight:500">${esc(a.client?.name||a.clientName||'—')}</div><div style="font-size:10px;color:var(--text2)">${esc(a.pet?.name||a.petName||'')}</div></td>
           <td><div style="display:flex;align-items:center;gap:4px">${ava(masterName,c.bg,c.tc,18)}<span style="font-size:10px">${esc(masterName.split(' ')[0])}</span></div></td>
           <td style="font-size:11px">${esc(a.service?.name||a.serviceName||'—')}</td>
-          <td><span class="badge ${(a.status||'').toLowerCase()}">${STATUS_LABEL[a.status]||a.status}</span></td>
+          <td><span class="badge ${status}">${STATUS_LABEL[a.status]||a.status}</span></td>
+          <td>
+            ${canCancel
+              ? `<button class="ib danger" onclick="cancelAppt('${a.id}')"><i class="ti ti-x"></i> Отменить</button>`
+              : `<span style="font-size:10px;color:var(--text3)">—</span>`}
+          </td>
         </tr>`;
       }).join('')}</tbody>
     </table></div>`}
   </div>`;
+}
+async function cancelAppt(id){
+  if(!confirm('Отменить эту запись?')) return;
+
+  try{
+    await apiFetch(`/appointments/${id}/cancel`, { method:'PATCH' });
+    await loadAppts();
+    document.getElementById('main-content').innerHTML = await renderHist();
+  }catch(e){
+    alert(e.message || 'Не удалось отменить запись');
+  }
 }
 
 // ── MASTERS ──
