@@ -360,6 +360,99 @@ async function renderDash(){
 
 // ── SCHEDULE ──
 const SCHED_TIMES=['09:00','09:30','10:00','10:30','11:00','11:30','12:00','13:00','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00'];
+
+function fmtMoney(v){
+  const n = Number(v||0);
+  return n ? n.toLocaleString('ru-RU') + ' ₽' : '—';
+}
+function apptPrice(a){
+  return a?.price ?? a?.totalPrice ?? a?.finalPrice ?? a?.amount ?? a?.service?.price ?? a?.servicePrice ?? 0;
+}
+function apptClientName(a){
+  return a?.client?.name || a?.clientName || a?.ownerName || a?.name || '—';
+}
+function apptPhone(a){
+  return a?.client?.phone || a?.phone || a?.clientPhone || a?.ownerPhone || '—';
+}
+function apptPet(a){
+  return a?.pet?.name || a?.petName || '—';
+}
+function apptBreed(a){
+  return a?.breed?.name || a?.pet?.breed || a?.breedName || a?.petBreed || '—';
+}
+function apptService(a){
+  return a?.service?.name || a?.serviceName || '—';
+}
+function apptDuration(a){
+  return a?.duration || a?.service?.duration || a?.durationMin || a?.durationMinutes || '—';
+}
+function apptStaff(a){
+  return a?.staff?.name || a?.staffName || '—';
+}
+function apptComment(a){
+  return a?.comment || a?.notes || a?.note || a?.clientComment || '—';
+}
+function apptStatusRu(s){
+  if(['PENDING','pending'].includes(s)) return 'Ожидает';
+  if(['COMPLETED','completed'].includes(s)) return 'Завершена';
+  if(['CANCELLED','cancelled'].includes(s)) return 'Отменена';
+  if(['CONFIRMED','confirmed'].includes(s)) return 'Подтверждена';
+  return s || '—';
+}
+function closeApptDetails(){
+  const el=document.getElementById('appt-modal');
+  if(el) el.remove();
+}
+function openApptDetails(id){
+  const a = APPTS.find(x => String(x.id)===String(id));
+  if(!a) return;
+  closeApptDetails();
+
+  const dt = a.startAt ? new Date(a.startAt) : null;
+  const dateText = dt ? dt.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) : '—';
+  const timeText = dt ? dt.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}) : '—';
+  const priceText = fmtMoney(apptPrice(a));
+  const dur = apptDuration(a);
+  const status = a.status || '';
+  const statusCls = ['PENDING','pending'].includes(status) ? 'wait' : ['COMPLETED','completed'].includes(status) ? 'done' : ['CANCELLED','cancelled'].includes(status) ? 'cancelled' : 'booked';
+
+  const html = `
+    <div id="appt-modal" onclick="if(event.target.id==='appt-modal') closeApptDetails()" style="position:fixed;inset:0;background:rgba(15,23,42,.45);backdrop-filter:blur(3px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px">
+      <div style="width:min(680px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.18);padding:22px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px">
+          <div>
+            <div style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--text2)">Детали записи</div>
+            <h3 style="margin:4px 0 0 0;font-size:24px">${esc(apptPet(a))}</h3>
+          </div>
+          <button class="ib" onclick="closeApptDetails()" aria-label="Закрыть"><i class="ti ti-x"></i></button>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:14px">
+          <div class="card" style="margin:0"><div style="font-size:12px;color:var(--text2)">Клиент</div><div style="font-weight:600">${esc(apptClientName(a))}</div></div>
+          <div class="card" style="margin:0"><div style="font-size:12px;color:var(--text2)">Телефон</div><div style="font-weight:600">${esc(apptPhone(a))}</div></div>
+          <div class="card" style="margin:0"><div style="font-size:12px;color:var(--text2)">Питомец</div><div style="font-weight:600">${esc(apptPet(a))}</div></div>
+          <div class="card" style="margin:0"><div style="font-size:12px;color:var(--text2)">Порода</div><div style="font-weight:600">${esc(apptBreed(a))}</div></div>
+          <div class="card" style="margin:0"><div style="font-size:12px;color:var(--text2)">Услуга</div><div style="font-weight:600">${esc(apptService(a))}</div></div>
+          <div class="card" style="margin:0"><div style="font-size:12px;color:var(--text2)">Мастер</div><div style="font-weight:600">${esc(apptStaff(a))}</div></div>
+          <div class="card" style="margin:0"><div style="font-size:12px;color:var(--text2)">Дата</div><div style="font-weight:600">${esc(dateText)}</div></div>
+          <div class="card" style="margin:0"><div style="font-size:12px;color:var(--text2)">Время</div><div style="font-weight:600">${esc(timeText)}</div></div>
+          <div class="card" style="margin:0"><div style="font-size:12px;color:var(--text2)">Длительность</div><div style="font-weight:600">${esc(String(dur))}${String(dur).match(/^\d+$/)?' мин':''}</div></div>
+          <div class="card" style="margin:0"><div style="font-size:12px;color:var(--text2)">Стоимость</div><div style="font-weight:700;color:var(--teal-dark)">${esc(priceText)}</div></div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+          <span class="badge ${statusCls}">${esc(apptStatusRu(status))}</span>
+        </div>
+
+        <div class="card" style="margin:0">
+          <div style="font-size:12px;color:var(--text2);margin-bottom:6px">Комментарий</div>
+          <div>${esc(apptComment(a))}</div>
+        </div>
+      </div>
+    </div>`;
+  document.body.insertAdjacentHTML('beforeend', html);
+}
+
 async function renderSched(){
   if(!MASTERS.length) await loadMasters();
   await loadAppts();
@@ -395,8 +488,13 @@ async function renderSched(){
               const at=new Date(x.startAt).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
               return at===t&&(x.staffId===m.id||(x.staff&&x.staff.id===m.id));
             });
-            if(a){const cls=['PENDING','pending'].includes(a.status)?'wait':['COMPLETED','completed'].includes(a.status)?'done':'booked';
-              return `<div class="sched-slot ${cls}" title="${esc((a.client?.name||a.clientName||''))} — ${esc((a.service?.name||a.serviceName||''))}"><div style="font-weight:500">${esc(a.petName||'')}</div></div>`;}
+            if(a){
+              const cls=['PENDING','pending'].includes(a.status)?'wait':['COMPLETED','completed'].includes(a.status)?'done':['CANCELLED','cancelled'].includes(a.status)?'cancelled':'booked';
+              return `<button type="button" class="sched-slot ${cls}" onclick="openApptDetails('${esc(String(a.id||''))}')" title="${esc((a.client?.name||a.clientName||''))} — ${esc((a.service?.name||a.serviceName||''))}" style="cursor:pointer;text-align:left">
+                <div style="font-weight:600">${esc(apptPet(a))}</div>
+                <div style="font-size:11px;opacity:.8;margin-top:2px">${esc(apptService(a))}</div>
+              </button>`;
+            }
             return `<div class="sched-slot free"></div>`;
           }).join('')}
         `).join('')}
