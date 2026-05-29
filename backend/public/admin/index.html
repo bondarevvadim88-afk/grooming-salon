@@ -546,7 +546,13 @@ async function renderHist(){
 
         return `<tr>
           <td style="color:var(--text2)">${dt?dt.toLocaleDateString('ru-RU'):''}<div style="font-size:10px">${dt?dt.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):''}</div></td>
-          <td><div style="font-weight:500">${esc(a.client?.name||a.clientName||'—')}</div><div style="font-size:10px;color:var(--text2)">${esc(a.pet?.name||a.petName||'')}</div></td>
+          <td>
+          <div style="font-weight:500">${esc(a.client?.name||a.clientName||'—')}</div>
+          <div style="font-size:10px;color:var(--text2)">
+            ${esc(a.pet?.name||a.petName||'')}
+            ${(a.pet?.breed || a.petBreed) ? ` • ${esc(a.pet?.breed || a.petBreed)}` : ''}
+          </div>
+        </td>
           <td><div style="display:flex;align-items:center;gap:4px">${ava(masterName,c.bg,c.tc,18)}<span style="font-size:10px">${esc(masterName.split(' ')[0])}</span></div></td>
           <td style="font-size:11px">${esc(a.service?.name||a.serviceName||'—')}</td>
           <td><span class="badge ${status}">${STATUS_LABEL[a.status]||a.status}</span></td>
