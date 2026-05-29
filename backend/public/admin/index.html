@@ -366,7 +366,8 @@ async function renderSched(){
   const dateStr=fmtDate(schedDate);
   const todayA=APPTS.filter(a=>{
     const d=a.startAt?new Date(a.startAt).toLocaleDateString('ru-RU'):'';
-    return d===dateStr;
+    const st=String(a.status||'').toUpperCase();
+    return d===dateStr && !['CANCELLED','NO_SHOW'].includes(st);
   });
   const cols=`64px repeat(${MASTERS.length},1fr)`;
   return `
