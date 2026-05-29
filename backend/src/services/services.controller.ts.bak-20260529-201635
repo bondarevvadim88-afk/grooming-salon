@@ -22,18 +22,9 @@ export class ServicesController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create service (admin only)' })
   create(@Body() body: {
-    name: string;
-    description?: string;
-    basePrice: number;
-    durationMin: number;
-    coefSmall?: number;
-    coefMedium?: number;
-    coefLarge?: number;
-    code: string;
-    icon?: string;
-    petType?: 'DOG' | 'CAT' | 'BOTH';
-    sortOrder?: number;
-    isBookable?: boolean;
+    name: string; description?: string;
+    basePrice: number; durationMin: number;
+    coefSmall?: number; coefMedium?: number; coefLarge?: number;
   }) { return this.svc.createService(body); }
 
   @Patch(':id')
@@ -42,18 +33,9 @@ export class ServicesController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update service (admin only)' })
   update(@Param('id') id: string, @Body() body: {
-    name?: string;
-    description?: string;
-    basePrice?: number;
-    durationMin?: number;
-    coefSmall?: number;
-    coefMedium?: number;
-    coefLarge?: number;
-    code?: string;
-    icon?: string;
-    petType?: 'DOG' | 'CAT' | 'BOTH';
-    sortOrder?: number;
-    isBookable?: boolean;
+    name?: string; description?: string;
+    basePrice?: number; durationMin?: number;
+    coefSmall?: number; coefMedium?: number; coefLarge?: number;
     isActive?: boolean;
   }) { return this.svc.updateService(id, body); }
 

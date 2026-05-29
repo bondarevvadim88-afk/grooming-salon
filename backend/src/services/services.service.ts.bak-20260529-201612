@@ -9,7 +9,7 @@ export class ServicesService {
     return this.prisma.service.findMany({
       where:   { isActive: true },
       include: { staff: { include: { staff: true } } },
-      orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
+      orderBy: { name: 'asc' },
     });
   }
 
@@ -23,18 +23,9 @@ export class ServicesService {
   }
 
   createService(data: {
-    name: string;
-    description?: string;
-    basePrice: number;
-    durationMin: number;
-    coefSmall?: number;
-    coefMedium?: number;
-    coefLarge?: number;
-    code: string;
-    icon?: string;
-    petType?: string;
-    sortOrder?: number;
-    isBookable?: boolean;
+    name: string; description?: string;
+    basePrice: number; durationMin: number;
+    coefSmall?: number; coefMedium?: number; coefLarge?: number;
   }) {
     return this.prisma.service.create({
       data: {
@@ -45,28 +36,14 @@ export class ServicesService {
         coefSmall:   data.coefSmall  ?? 0.8,
         coefMedium:  data.coefMedium ?? 1.0,
         coefLarge:   data.coefLarge  ?? 1.5,
-        code:        data.code,
-        icon:        data.icon || 'ti-scissors',
-        petType:     data.petType || 'DOG',
-        sortOrder:   data.sortOrder ?? 0,
-        isBookable:  data.isBookable ?? true,
       },
     });
   }
 
   updateService(id: string, data: {
-    name?: string;
-    description?: string;
-    basePrice?: number;
-    durationMin?: number;
-    coefSmall?: number;
-    coefMedium?: number;
-    coefLarge?: number;
-    code?: string;
-    icon?: string;
-    petType?: string;
-    sortOrder?: number;
-    isBookable?: boolean;
+    name?: string; description?: string;
+    basePrice?: number; durationMin?: number;
+    coefSmall?: number; coefMedium?: number; coefLarge?: number;
     isActive?: boolean;
   }) {
     return this.prisma.service.update({ where: { id }, data });

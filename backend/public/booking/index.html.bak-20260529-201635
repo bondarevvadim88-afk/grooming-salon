@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Запись на груминг — новый сценарий</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/dist/tabler-icons.min.css">
+  <style>
+    :root{
+      --bg:#f6f5f1;--surface:#ffffff;--surface-2:#faf9f6;--border:#ddd9d1;--text:#1f1f1b;--muted:#6f6d66;
+      --primary:#1d9e75;--primary-dark:#0f6e56;--primary-soft:#e5f5ef;--warning:#9c5a1a;--error:#a13a3a;
+      --radius:14px;--radius-sm:10px;--shadow:0 12px 30px rgba(32,33,28,.06);
+    }
+    *{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.45}
+    .page{max-width:760px;margin:0 auto;padding:24px 16px 60px}
+    .hero{text-align:center;margin-bottom:20px}
+    .hero-badge{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;background:var(--primary-soft);color:var(--primary)}
+    h1{font-size:28px;line-height:1.1;margin:0 0 8px} .sub{font-size:14px;color:var(--muted);max-width:560px;margin:0 auto}
+    .progress{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:22px 0 18px}
+    .step{background:rgba(255,255,255,.7);border:1px solid var(--border);border-radius:999px;padding:8px 10px;font-size:12px;color:#908d85;text-align:center}
+    .step.active{background:var(--surface);border-color:var(--primary);color:var(--primary-dark);font-weight:600}
+    .step.done{background:var(--primary-soft);border-color:#b9e5d3;color:var(--primary-dark)}
+    .card{background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow);border-radius:18px;padding:22px}
+    .section-title{font-size:19px;font-weight:600;margin:0 0 6px}
+    .section-sub{font-size:13px;color:var(--muted);margin:0 0 16px}
+    .grid-2,.grid-3{display:grid;gap:12px}.grid-2{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(3,1fr)}
+    @media (max-width:640px){.progress{grid-template-columns:1fr 1fr}.grid-2,.grid-3{grid-template-columns:1fr}.card{padding:18px}h1{font-size:24px}}
+    .choice,.service,.master,.pet-type,.quick,.size-btn,.slot,.toggle{border:1px solid var(--border);background:#fff;border-radius:12px;cursor:pointer;transition:.18s ease all}
+    .pet-type,.quick,.size-btn,.toggle{padding:12px 14px;font:inherit}.choice,.service,.master{padding:14px}
+    .choice:hover,.service:hover,.master:hover,.pet-type:hover,.quick:hover,.size-btn:hover,.slot:hover,.toggle:hover{border-color:var(--primary)}
+    .selected{border-color:var(--primary)!important;background:var(--primary-soft)!important}
+    .pet-type .ttl,.service .ttl,.master .ttl,.choice .ttl{font-weight:600;font-size:14px;color:var(--text)}
+    .meta,.hint,.mini{font-size:12px;color:var(--muted)} .mini{font-size:11px}
+    .icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--primary-soft);color:var(--primary);margin-bottom:10px;font-size:18px}
+    .search{position:relative;margin:14px 0 10px}
+    .search input,.field input,.field textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);font:inherit;background:#fff;outline:none}
+    .search input:focus,.field input:focus,.field textarea:focus{border-color:var(--primary)}
+    .suggestions{display:grid;gap:8px;margin-top:10px}
+    .quick-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .service-head{display:flex;align-items:start;justify-content:space-between;gap:10px}
+    .price{font-size:15px;font-weight:700;color:var(--primary-dark)}
+    .tag{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#f3f1ec;color:#5f5c53;font-size:11px;margin:8px 8px 0 0}
+    .helper{background:#fcfaf6;border:1px dashed #d8cfbe;border-radius:12px;padding:12px 14px;margin-top:14px}
+    .summary{background:var(--surface-2);border-radius:14px;padding:14px;margin-bottom:16px}
+    .row{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.06);font-size:14px}
+    .row:last-child{border-bottom:none}.row span:first-child{color:var(--muted)}
+    .nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px}.btn{padding:12px 18px;border-radius:12px;border:none;font:inherit;cursor:pointer}
+    .btn-primary{background:var(--primary);color:#fff}.btn-secondary{background:#fff;border:1px solid var(--border);color:var(--muted)} .btn:disabled{opacity:.4;cursor:not-allowed}
+    .note{font-size:12px;color:var(--muted);margin-top:10px}.error{color:var(--error);font-size:12px;margin-top:8px}.ok{padding:24px 10px;text-align:center}
+    .ok .big{width:58px;height:58px;border-radius:50%;margin:0 auto 12px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:28px}
+    .hidden{display:none}
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <div class="hero-badge"><i class="ti ti-scissors"></i></div>
+    <h1>Запись на груминг</h1>
+    <p class="sub">Сначала определим питомца, затем покажем только подходящие услуги, их длительность и стоимость.</p>
+  </div>
+
+  <div class="progress" id="progress"></div>
+  <div class="card" id="app"></div>
+</div>
+
+
+<script>
+"use strict";
+
+const API = 'https://grooming-salon-production.up.railway.app';
+const steps = ['Питомец','Порода','Услуга','Время','Контакты'];
+
+const SERVICE_MAP = {
+  full: 'svc-full',
+  express: 'svc-bath',
+  hygiene: 'svc-nails',
+  deshed: 'svc-deshed',
+  trim: 'svc-trim',
+  nails: 'svc-nails',
+  manual: null,
+};
+
+const state = {
+  step:0,
+  petType:'dog',
+  breed:null,
+  size:null,
+  service:null,
+  slot:null,
+  ownerName:'', phone:'', email:'', petName:'', notes:'', photoCheck:false,
+  services:[], masters:[], slotsApi:[], selectedMasterId:null,
+  calYear:new Date().getFullYear(), calMonth:new Date().getMonth(), currentDate:null,
+  submitError:''
+};
+
+const breeds = [
+  // БАЗОВЫЕ ПОРОДЫ (остались как были)
+  {id:'spitz', name:'Померанский шпиц', aliases:['шпиц','померанский шпиц'], size:'small', coat:'double', services:['full','express','hygiene'], base:{full:4200,express:2800,hygiene:2200}, duration:{full:150,express:90,hygiene:60}, popular:true},
+  {id:'york', name:'Йоркширский терьер', aliases:['йорк','йоркширский терьер'], size:'small', coat:'silky', services:['full','express','hygiene'], base:{full:3900,express:2500,hygiene:2100}, duration:{full:135,express:80,hygiene:55}, popular:true},
+  {id:'corgi', name:'Корги', aliases:['корги','вельш-корги'], size:'medium', coat:'double', services:['full','express','deshed'], base:{full:5200,express:3400,deshed:3900}, duration:{full:165,express:95,deshed:120}, popular:true},
+  {id:'poodle-toy', name:'Пудель той/мини', aliases:['пудель','той пудель','мини пудель'], size:'small', coat:'curly', services:['full','express','hygiene'], base:{full:4500,express:2900,hygiene:2400}, duration:{full:155,express:90,hygiene:65}, popular:true},
+  {id:'maltipoo', name:'Мальтипу', aliases:['мальтипу'], size:'small', coat:'mixed', services:['full','express','hygiene'], base:{full:4600,express:3000,hygiene:2300}, duration:{full:155,express:90,hygiene:60}, popular:true},
+  {id:'labrador', name:'Лабрадор', aliases:['лабрадор'], size:'large', coat:'short-double', services:['express','deshed','nails'], base:{express:3600,deshed:4600,nails:900}, duration:{express:85,deshed:115,nails:20}, popular:true},
+  {id:'husky', name:'Хаски', aliases:['хаски','сибирский хаски'], size:'large', coat:'heavy-double', services:['express','deshed'], base:{express:4800,deshed:6200}, duration:{express:110,deshed:150}, popular:false},
+  {id:'schnauzer', name:'Цвергшнауцер', aliases:['шнауцер','цвергшнауцер'], size:'small', coat:'wire', services:['full','trim','hygiene'], base:{full:4300,trim:5200,hygiene:2300}, duration:{full:145,trim:170,hygiene:60}, popular:false},
+
+  // МЕТИСЫ (как были)
+  {id:'mestizo-small', name:'Метис, маленькая собака', aliases:['метис','дворняга маленькая'], size:'small', services:['full','express','hygiene'], base:{full:3900,express:2600,hygiene:2100}, duration:{full:140,express:85,hygiene:55}, popular:false, generic:true},
+  {id:'mestizo-medium', name:'Метис, средняя собака', aliases:['метис средний','дворняга средняя'], size:'medium', services:['full','express','deshed'], base:{full:4900,express:3200,deshed:3800}, duration:{full:155,express:90,deshed:115}, popular:false, generic:true},
+  {id:'mestizo-large', name:'Метис, большая собака', aliases:['метис большой','дворняга большая'], size:'large', services:['express','deshed'], base:{express:4300,deshed:5600}, duration:{express:100,deshed:135}, popular:false, generic:true},
+
+  // МАЛЕНЬКИЕ ДЕКОРАТИВНЫЕ (тариф как у той-пуделя / йорка)
+  {id:'chihuahua', name:'Чихуахуа', aliases:['чихуа','чихуахуа'], size:'small', coat:'short', services:['full','express','hygiene'], base:{full:4300,express:2700,hygiene:2100}, duration:{full:140,express:85,hygiene:55}, popular:false},
+  {id:'pomeranian', name:'Немецкий шпиц малый/средний', aliases:['немецкий шпиц','шпиц малый','шпиц средний'], size:'small', coat:'double', services:['full','express','hygiene'], base:{full:4300,express:2700,hygiene:2100}, duration:{full:145,express:85,hygiene:55}, popular:false},
+  {id:'pug', name:'Мопс', aliases:['мопс'], size:'small', coat:'short', services:['express','hygiene'], base:{express:3200,hygiene:2100}, duration:{express:80,hygiene:50}, popular:false},
+  {id:'papillon', name:'Папильон', aliases:['папильон','континентальный той-спаниель'], size:'small', coat:'silky', services:['full','express','hygiene'], base:{full:4300,express:2700,hygiene:2100}, duration:{full:140,express:85,hygiene:55}, popular:false},
+  {id:'bichon', name:'Бишон фризе', aliases:['бишон','бишон фризе'], size:'small', coat:'curly', services:['full','express','hygiene'], base:{full:4500,express:2900,hygiene:2300}, duration:{full:155,express:90,hygiene:60}, popular:false},
+  {id:'shih-tzu', name:'Ши-тцу', aliases:['шитцу','ши тцу'], size:'small', coat:'silky', services:['full','express','hygiene'], base:{full:4400,express:2800,hygiene:2200}, duration:{full:150,express:90,hygiene:60}, popular:false},
+  {id:'pekingese', name:'Пекинес', aliases:['пекинес'], size:'small', coat:'double', services:['full','express','hygiene'], base:{full:4300,express:2700,hygiene:2100}, duration:{full:145,express:85,hygiene:55}, popular:false},
+  {id:'jack-russell', name:'Джек-рассел-терьер', aliases:['джек рассел','джек-рассел'], size:'small', coat:'short', services:['express','hygiene'], base:{express:3200,hygiene:2100}, duration:{express:80,hygiene:50}, popular:false},
+
+  // СРЕДНИЕ
+  {id:'beagle', name:'Бигль', aliases:['бигль'], size:'medium', coat:'short', services:['express','hygiene'], base:{express:3600,hygiene:2300}, duration:{express:90,hygiene:55}, popular:false},
+  {id:'cocker-spaniel', name:'Кокер-спаниель', aliases:['кокер','кокер спаниель','английский кокер'], size:'medium', coat:'silky', services:['full','express','hygiene'], base:{full:5000,express:3200,hygiene:2600}, duration:{full:160,express:90,hygiene:60}, popular:false},
+  {id:'border-collie', name:'Бордер-колли', aliases:['бордер колли'], size:'medium', coat:'double', services:['full','express','deshed'], base:{full:5200,express:3400,deshed:3900}, duration:{full:165,express:95,deshed:120}, popular:false},
+  {id:'australian-shepherd', name:'Австралийская овчарка', aliases:['аусси','австралийская овчарка'], size:'medium', coat:'double', services:['full','express','deshed'], base:{full:5200,express:3400,deshed:3900}, duration:{full:165,express:95,deshed:120}, popular:false},
+
+  {id:'maltese', name:'Мальтезе', aliases:['мальтезе','мальтийская болонка','maltese'], size:'small', coat:'silky', services:['full','spa','express','nails'], base:{express:3000,full:4200,spa:5200,nails:900}, duration:{express:80,full:120,spa:150,nails:20}, popular:false},
+  {id:'bichon-frise', name:'Бишон фризе', aliases:['бишон','бишон фризе','bichon'], size:'small', coat:'curly', services:['full','spa','express','nails'], base:{express:3200,full:4400,spa:5400,nails:900}, duration:{express:85,full:125,spa:155,nails:20}, popular:false},
+  {id:'mini-poodle', name:'Карликовый пудель', aliases:['карликовый пудель','мини пудель','mini poodle'], size:'small', coat:'curly', services:['full','spa','express','nails'], base:{express:3300,full:4600,spa:5600,nails:900}, duration:{express:90,full:130,spa:160,nails:20}, popular:false},
+  {id:'toy-poodle', name:'Той-пудель', aliases:['той пудель','toy poodle'], size:'small', coat:'curly', services:['full','spa','express','nails'], base:{express:3200,full:4500,spa:5500,nails:900}, duration:{express:85,full:125,spa:155,nails:20}, popular:false},
+  {id:'mini-schnauzer', name:'Цвергшнауцер', aliases:['цвергшнауцер','мини шнауцер','mini schnauzer'], size:'small', coat:'wire', services:['full','spa','express','nails'], base:{express:3200,full:4400,spa:5400,nails:900}, duration:{express:85,full:120,spa:150,nails:20}, popular:false},
+  {id:'westie', name:'Вест-хайленд-уайт-терьер', aliases:['вести','вести','westie'], size:'small', coat:'wire', services:['full','express','nails'], base:{express:3000,full:4100,nails:900}, duration:{express:80,full:115,nails:20}, popular:false},
+  {id:'cavalier', name:'Кавалер-кинг-чарльз-спаниель', aliases:['кавалер','кинг чарльз','cavalier'], size:'small', coat:'silky', services:['full','spa','express','nails'], base:{express:3000,full:4100,spa:5100,nails:900}, duration:{express:80,full:115,spa:145,nails:20}, popular:false},
+  {id:'pekingese', name:'Пекинес', aliases:['пекинес','pekingese'], size:'small', coat:'double-long', services:['full','spa','express','nails'], base:{express:3000,full:4100,spa:5100,nails:900}, duration:{express:80,full:115,spa:145,nails:20}, popular:false},
+  {id:'papillon', name:'Папильон', aliases:['папильон','papillon'], size:'small', coat:'silky', services:['full','express','nails'], base:{express:2800,full:3700,nails:900}, duration:{express:75,full:105,nails:20}, popular:false},
+  {id:'griffon', name:'Брюссельский гриффон', aliases:['гриффон','брюссельский гриффон','griffon'], size:'small', coat:'wire', services:['full','express','nails'], base:{express:2900,full:3900,nails:900}, duration:{express:75,full:110,nails:20}, popular:false},
+
+  {id:'beagle', name:'Бигль', aliases:['бигль','beagle'], size:'medium', coat:'short', services:['express','deshed','nails'], base:{express:3000,deshed:3900,nails:900}, duration:{express:75,deshed:100,nails:20}, popular:false},
+  {id:'cocker-english', name:'Английский кокер-спаниель', aliases:['английский кокер','english cocker'], size:'medium', coat:'silky', services:['full','spa','express','nails'], base:{express:3500,full:4700,spa:5700,nails:900}, duration:{express:95,full:130,spa:160,nails:20}, popular:false},
+  {id:'cocker-american', name:'Американский кокер-спаниель', aliases:['американский кокер','american cocker'], size:'medium', coat:'silky', services:['full','spa','express','nails'], base:{express:3600,full:4800,spa:5800,nails:900}, duration:{express:95,full:135,spa:165,nails:20}, popular:false},
+  {id:'springer-spaniel', name:'Спрингер-спаниель', aliases:['спрингер спаниель','springer spaniel'], size:'medium', coat:'silky', services:['full','spa','express','nails'], base:{express:3600,full:4800,spa:5800,nails:900}, duration:{express:95,full:135,spa:165,nails:20}, popular:false},
+  {id:'border-collie', name:'Бордер-колли', aliases:['бордер колли','border collie'], size:'medium', coat:'double-long', services:['express','deshed','nails'], base:{express:3800,deshed:5000,nails:900}, duration:{express:95,deshed:130,nails:20}, popular:false},
+  {id:'aussie', name:'Австралийская овчарка', aliases:['австралийская овчарка','аусси','australian shepherd'], size:'medium', coat:'double-long', services:['express','deshed','nails'], base:{express:3900,deshed:5200,nails:900}, duration:{express:100,deshed:135,nails:20}, popular:false},
+  {id:'keeshond', name:'Кеесхонд', aliases:['кеесхонд','вольфшпиц','keeshond'], size:'medium', coat:'heavy-double', services:['express','deshed','nails'], base:{express:4000,deshed:5400,nails:900}, duration:{express:105,deshed:145,nails:20}, popular:false},
+  {id:'cockapoo', name:'Кокапу', aliases:['кокапу','cockapoo'], size:'medium', coat:'curly-mix', services:['full','spa','express','nails'], base:{express:3600,full:4900,spa:5900,nails:900}, duration:{express:95,full:135,spa:165,nails:20}, popular:false},
+
+  {id:'golden', name:'Золотистый ретривер', aliases:['голден','золотистый ретривер','golden retriever'], size:'large', coat:'double-long', services:['express','deshed','nails'], base:{express:4500,deshed:5900,nails:900}, duration:{express:110,deshed:150,nails:20}, popular:false},
+  {id:'husky', name:'Сибирский хаски', aliases:['хаски','husky'], size:'large', coat:'heavy-double', services:['express','deshed','nails'], base:{express:4600,deshed:6100,nails:900}, duration:{express:115,deshed:155,nails:20}, popular:false},
+  {id:'akita', name:'Акита-ину', aliases:['акита','акита ину','akita inu'], size:'large', coat:'heavy-double', services:['express','deshed','nails'], base:{express:4800,deshed:6300,nails:900}, duration:{express:120,deshed:160,nails:20}, popular:false},
+  {id:'bernese', name:'Бернский зенненхунд', aliases:['бернский зенненхунд','берн','bernese'], size:'large', coat:'double-long', services:['express','deshed','nails'], base:{express:5200,deshed:6800,nails:900}, duration:{express:130,deshed:175,nails:20}, popular:false},
+  {id:'newfoundland', name:'Ньюфаундленд', aliases:['ньюфаундленд','newfoundland'], size:'large', coat:'heavy-double', services:['express','deshed','nails'], base:{express:5500,deshed:7200,nails:900}, duration:{express:140,deshed:185,nails:20}, popular:false},
+  {id:'labradoodle', name:'Лабрадудль', aliases:['лабрадудль','labradoodle'], size:'large', coat:'curly-mix', services:['full','spa','express','nails'], base:{express:4800,full:6300,spa:7300,nails:900}, duration:{express:120,full:160,spa:190,nails:20}, popular:false},
+  {id:'goldendoodle', name:'Голдендудль', aliases:['голдендудль','goldendoodle'], size:'large', coat:'curly-mix', services:['full','spa','express','nails'], base:{express:4900,full:6500,spa:7500,nails:900}, duration:{express:125,full:165,spa:195,nails:20}, popular:false},
+
+  {id:'samoyed', name:'Самоед', aliases:['самоед','самоедская лайка'], size:'large', coat:'heavy-double', services:['express','deshed'], base:{express:5000,deshed:6500}, duration:{express:120,deshed:160}, popular:false},
+
+  // КРУПНЫЕ
+  {id:'golden-retriever', name:'Голден ретривер', aliases:['голден','голден ретривер'], size:'large', coat:'double', services:['express','deshed'], base:{express:4300,deshed:5600}, duration:{express:100,deshed:135}, popular:false},
+  {id:'german-shepherd', name:'Немецкая овчарка', aliases:['немец','немецкая овчарка'], size:'large', coat:'double', services:['express','deshed'], base:{express:4300,deshed:5600}, duration:{express:100,deshed:135}, popular:false},
+  {id:'rottweiler', name:'Ротвейлер', aliases:['ротвейлер'], size:'large', coat:'short', services:['express','hygiene'], base:{express:3800,hygiene:2600}, duration:{express:90,hygiene:55}, popular:false},
+  {id:'doberman', name:'Доберман', aliases:['доберман'], size:'large', coat:'short', services:['express','hygiene'], base:{express:3800,hygiene:2600}, duration:{express:90,hygiene:55}, popular:false},
+  {id:'bernese', name:'Бернский зенненхунд', aliases:['бернский зенненхунд','берн'], size:'large', coat:'heavy-double', services:['express','deshed'], base:{express:5200,deshed:6700}, duration:{express:120,deshed:170}, popular:false},
+  {id:'newfoundland', name:'Ньюфаундленд', aliases:['ньюфаундленд','ньюф'], size:'large', coat:'heavy-double', services:['express','deshed'], base:{express:5500,deshed:7000}, duration:{express:130,deshed:180}, popular:false},
+
+  // ЖЕСТКОШЁРСТНЫЕ И ТЕРЬЕРЫ
+  {id:'fox-terrier', name:'Фокстерьер жесткошёрстный', aliases:['фокстерьер','фокс терьер'], size:'small', coat:'wire', services:['full','trim','hygiene'], base:{full:4300,trim:5200,hygiene:2300}, duration:{full:145,trim:170,hygiene:60}, popular:false},
+  {id:'westie', name:'Вест-хайленд-уайт-терьер', aliases:['вестик','вест хайленд'], size:'small', coat:'wire', services:['full','trim','hygiene'], base:{full:4300,trim:5200,hygiene:2300}, duration:{full:145,trim:170,hygiene:60}, popular:false},
+  {id:'scottish-terrier', name:'Скотч-терьер', aliases:['скотч терьер','скоттиш терьер'], size:'small', coat:'wire', services:['full','trim','hygiene'], base:{full:4300,trim:5200,hygiene:2300}, duration:{full:145,trim:170,hygiene:60}, popular:false},
+
+  // ЛАЙКИ И СЕВЕРНЫЕ
+  {id:'akita-inu', name:'Акита-ину', aliases:['акита','акита ину'], size:'large', coat:'double', services:['express','deshed'], base:{express:4800,deshed:6200}, duration:{express:110,deshed:150}, popular:false},
+  {id:'alaskan-malamute', name:'Аляскинский маламут', aliases:['маламут','аляскинский маламут'], size:'large', coat:'heavy-double', services:['express','deshed'], base:{express:5200,deshed:6700}, duration:{express:120,deshed:170}, popular:false},
+
+  // ОСТАЛЬНЫЕ ПОРОДЫ, КОТОРЫЕ ЧАСТО ВСТРЕЧАЮТСЯ
+  {id:'staffordshire-bull-terrier', name:'Стаффордширский бультерьер', aliases:['стаффордширский бультерьер','стафф'], size:'medium', coat:'short', services:['express','hygiene'], base:{express:3600,hygiene:2300}, duration:{express:90,hygiene:55}, popular:false},
+  {id:'american-bully', name:'Американский булли', aliases:['американский булли','булли'], size:'medium', coat:'short', services:['express','hygiene'], base:{express:3800,hygiene:2500}, duration:{express:90,hygiene:55}, popular:false},
+  {id:'shiba-inu', name:'Сиба-ину', aliases:['сиба','сиба ину'], size:'small', coat:'double', services:['express','deshed'], base:{express:3800,deshed:4800}, duration:{express:95,deshed:130}, popular:false}
+];
+
+const serviceMeta = {
+  full:{name:'Полный груминг', desc:'Мытьё, сушка, вычёс, стрижка, когти, уши.', icon:'ti-scissors'},
+  express:{name:'Экспресс-уход', desc:'Мытьё, сушка, вычёс и базовый уход без стрижки.', icon:'ti-bath'},
+  hygiene:{name:'Гигиенический комплекс', desc:'Лапы, пах, морда, когти и аккуратный уход.', icon:'ti-sparkles'},
+  deshed:{name:'Экспресс-линька / SPA-уход', desc:'Интенсивный уход за шерстью и подшёрстком.', icon:'ti-wind'},
+  trim:{name:'Тримминг / стрижка', desc:'Для жёсткошёрстных пород и породного ухода.', icon:'ti-cut'},
+  nails:{name:'Когти и лапы', desc:'Быстрая короткая услуга без полного комплекса.', icon:'ti-hand-stop'},
+  manual:{name:'Подбор администратором', desc:'Уточним услугу и стоимость после фото или консультации.', icon:'ti-message-circle'}
+};
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function fmtPrice(v){return new Intl.NumberFormat('ru-RU').format(v)+' ₽'}
+function renderProgress(){document.getElementById('progress').innerHTML = steps.map((s,i)=>`<div class="step ${i<state.step?'done':''} ${i===state.step?'active':''}">${s}</div>`).join('');}
+function setApp(html){document.getElementById('app').innerHTML = html; renderProgress();}
+function next(){ if(state.step<steps.length-1){ state.step++; render(); } }
+function prev(){ if(state.step>0){ state.step--; render(); } }
+function selectPetType(type){ state.petType=type; if(type!=='dog'){ state.breed=null; } render(); }
+function searchBreeds(q){ const s=q.trim().toLowerCase(); if(!s) return breeds.filter(b=>b.popular).slice(0,6); return breeds.filter(b=> b.name.toLowerCase().includes(s) || (b.aliases||[]).some(a=>a.includes(s)) ).slice(0,8); }
+function chooseBreed(id){ state.breed = breeds.find(b=>b.id===id); state.size = state.breed?.size || null; state.service = null; state.selectedMasterId = null; state.slot = null; state.currentDate = null; state.slotsApi=[]; render(); }
+function chooseService(id){ state.service=id; state.selectedMasterId=null; state.slot=null; state.currentDate=null; state.slotsApi=[]; render(); }
+function chooseSlot(startAt){ state.slot = startAt; render(); }
+function chooseMaster(id){ state.selectedMasterId=id; state.slot=null; state.slotsApi=[]; render(); if(state.currentDate){ loadSlotsForDate(state.currentDate); } }
+function canContinueBreed(){ return state.petType!=='dog' || !!state.breed || state.photoCheck; }
+function getServiceCards(){ if(state.photoCheck && !state.breed) return [{id:'manual', ...serviceMeta.manual, price:null, duration:null}]; if(!state.breed) return []; return state.breed.services.map(id=>({id, ...serviceMeta[id], price:state.breed.base[id], duration:state.breed.duration[id]})); }
+function apiServiceId(){ return SERVICE_MAP[state.service] || null; }
+function apiService(){ const id = apiServiceId(); return state.services.find(s=>s.id===id) || null; }
+function summaryRows(){ const service = state.service ? serviceMeta[state.service] : null; const breedName = state.breed ? state.breed.name : (state.photoCheck ? 'Уточнение по фото' : '—'); const slotText = state.slot ? new Date(state.slot).toLocaleString('ru-RU',{day:'2-digit',month:'long',hour:'2-digit',minute:'2-digit'}) : '—'; return ` <div class="row"><span>Питомец</span><strong>${esc(state.petName || 'Собака')}</strong></div> <div class="row"><span>Порода</span><strong>${esc(breedName)}</strong></div> <div class="row"><span>Услуга</span><strong>${service ? service.name : '—'}</strong></div> <div class="row"><span>Время</span><strong>${slotText}</strong></div> <div class="row"><span>Стоимость</span><strong>${state.service && state.breed && state.service!=='manual' ? fmtPrice(state.breed.base[state.service]) : 'Уточним после подбора'}</strong></div>`; }
+function getAvailableMasters(){ const serviceId = apiServiceId(); if(!serviceId) return state.masters.filter(m=>m.isActive!==false); return state.masters.filter(m=>m.isActive!==false && Array.isArray(m.services) && m.services.some(ss => (ss.service?.id||ss.id||ss.serviceId) === serviceId)); }
+async function apiGet(path){ const r=await fetch(API+path); if(!r.ok)throw new Error('Ошибка '+r.status); return r.json(); }
+async function apiPost(path,body){ const r=await fetch(API+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); const data=await r.json().catch(()=>({})); if(!r.ok)throw new Error(data.message||'Ошибка сервера'); return data; }
+
+function renderStep0(){ setApp(`
+  <h2 class="section-title">Кто записывается?</h2>
+  <p class="section-sub">Начнём с питомца. Для собак дальше покажем поиск по породе и только подходящие услуги.</p>
+  <div class="grid-2">
+    <button class="pet-type ${state.petType==='dog'?'selected':''}" onclick="selectPetType('dog')"><div class="icon"><i class="ti ti-bone"></i></div><div class="ttl">Собака</div><div class="meta">Подбор услуг по породе, шерсти и размеру.</div></button>
+    <button class="pet-type ${state.petType==='cat'?'selected':''}" onclick="selectPetType('cat')"><div class="icon"><i class="ti ti-cat"></i></div><div class="ttl">Кошка</div><div class="meta">Отдельный сценарий или запись через администратора.</div></button>
+  </div>
+  <div class="field" style="margin-top:16px"><label class="mini">Кличка питомца</label><input value="${esc(state.petName)}" oninput="state.petName=this.value" placeholder="Например, Ричи"></div>
+  <div class="nav"><div></div><button class="btn btn-primary" onclick="if((state.petName||'').trim()){next()}else{alert('Введите кличку питомца')} ">Далее</button></div>`); }
+
+function renderStep1(){
+  if(state.petType!=='dog'){
+    setApp(`<h2 class="section-title">Запись для кошки</h2><p class="section-sub">Для кошек и нестандартных случаев лучше сразу направить в ручной подбор, чтобы не ошибиться со временем и стоимостью.</p><div class="helper"><strong>Рекомендуемый сценарий:</strong> кнопка “Связаться с администратором” или короткая форма с фото питомца.</div><div class="nav"><button class="btn btn-secondary" onclick="prev()">Назад</button><button class="btn btn-primary" onclick="state.photoCheck=true; next()">Продолжить как ручной подбор</button></div>`); return;
+  }
+  const popular = breeds.filter(b=>b.popular).slice(0,6);
+  const selected = state.breed ? `<div class="helper"><strong>Вы выбрали:</strong> ${state.breed.name}. Дальше покажем только релевантные услуги для этой породы.</div>` : '';
+  setApp(`<h2 class="section-title">Какая у вас собака?</h2><p class="section-sub">Вместо длинного списка используем поиск по породе. Если точной породы нет, есть сценарий для метиса и уточнение по фото.</p><div class="search"><input id="breedSearch" placeholder="Начните вводить породу: шпиц, корги, мальтипу..." oninput="renderBreedSuggestions(this.value)"></div><div class="mini">Популярные породы</div><div class="quick-row">${popular.map(b=>`<button class="quick ${state.breed?.id===b.id?'selected':''}" onclick="chooseBreed('${b.id}')">${b.name}</button>`).join('')}</div><div id="breedSuggestions" class="suggestions"></div>${selected}<div class="quick-row" style="margin-top:14px"><button class="toggle ${state.photoCheck?'selected':''}" onclick="state.photoCheck=!state.photoCheck; render()"><i class="ti ti-camera"></i> Нужен подбор по фото</button><button class="quick" onclick="chooseBreed('mestizo-small')">Метис, маленькая</button><button class="quick" onclick="chooseBreed('mestizo-medium')">Метис, средняя</button><button class="quick" onclick="chooseBreed('mestizo-large')">Метис, большая</button></div><div class="nav"><button class="btn btn-secondary" onclick="prev()">Назад</button><button class="btn btn-primary" onclick="if(canContinueBreed()) next()" ${canContinueBreed()?'':'disabled'}>Далее</button></div>`);
+  renderBreedSuggestions('');
+}
+function renderBreedSuggestions(query=''){ const results = searchBreeds(query); const box = document.getElementById('breedSuggestions'); if(!box) return; box.innerHTML = results.map(b=>`<button class="choice ${state.breed?.id===b.id?'selected':''}" onclick="chooseBreed('${b.id}')"><div class="ttl">${b.name}</div><div class="meta">${b.size==='small'?'Маленькая':b.size==='medium'?'Средняя':'Крупная'} собака</div></button>`).join('') || '<div class="helper">Порода не найдена. Можно выбрать метиса или перейти к подбору по фото.</div>'; }
+
+function renderStep2(){ const cards = getServiceCards(); if(!state.breed && !state.photoCheck){ prev(); return; } if(state.photoCheck && !state.breed){ setApp(`<h2 class="section-title">Подбор услуги по фото</h2><p class="section-sub">Для редкой породы, метиса со сложной шерстью или сомнений в оценке лучше не заставлять клиента выбирать из прайса.</p><div class="helper">Покажите короткую форму: фото питомца, порода или описание, желаемая услуга. После этого администратор подберёт точную категорию, время и цену.</div><div class="nav"><button class="btn btn-secondary" onclick="prev()">Назад</button><button class="btn btn-primary" onclick="state.service='manual'; next()">Перейти к времени</button></div>`); return; }
+  setApp(`<h2 class="section-title">Какая услуга нужна для ${state.breed.name}?</h2><p class="section-sub">Показываем только услуги, которые действительно подходят этой породе, с уже рассчитанным временем и стоимостью.</p><div class="grid-2">${cards.map(s=>`<button class="service ${state.service===s.id?'selected':''}" onclick="chooseService('${s.id}')"><div class="service-head"><div><div class="icon"><i class="ti ${s.icon}"></i></div><div class="ttl">${s.name}</div></div><div class="price">${s.price?fmtPrice(s.price):'—'}</div></div><div class="meta" style="margin-top:6px">${s.desc}</div>${s.duration?`<div class="tag"><i class="ti ti-clock"></i> ${s.duration} мин</div>`:''}<div class="tag"><i class="ti ti-paw"></i> Для ${state.breed.name}</div></button>`).join('')}</div><div class="nav"><button class="btn btn-secondary" onclick="prev()">Назад</button><button class="btn btn-primary" onclick="next()" ${state.service?'':'disabled'}>Далее</button></div>`);
+}
+
+async function loadSlotsForDate(date){
+  state.currentDate = date;
+  state.slot = null;
+  if(!state.selectedMasterId){ state.slotsApi=[]; render(); return; }
+  const svc = apiService();
+  const duration = state.breed && state.service && state.service!=='manual' ? state.breed.duration[state.service] : (svc?.durationMin || 60);
+  try{ const data = await apiGet(`/staff/${state.selectedMasterId}/slots?date=${date}&duration=${duration}`); state.slotsApi = Array.isArray(data)?data:[]; }
+  catch(e){ state.slotsApi=[]; }
+  render();
+}
+
+function renderStep3(){
+  const masters = getAvailableMasters();
+  const first = new Date(state.calYear, state.calMonth, 1); const startOffset = (first.getDay()+6)%7; const daysInMonth = new Date(state.calYear, state.calMonth+1, 0).getDate(); const today = new Date(); today.setHours(0,0,0,0);
+  let grid=''; for(let i=0;i<startOffset;i++) grid += '<div></div>'; for(let d=1; d<=daysInMonth; d++){ const dt = new Date(state.calYear, state.calMonth, d); const isPast = dt < today; const iso = `${state.calYear}-${String(state.calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; grid += `<button class="slot ${state.currentDate===iso?'selected':''}" style="padding:10px;${isPast?'opacity:.35;cursor:not-allowed':''}" ${isPast?'disabled':''} onclick="loadSlotsForDate('${iso}')">${d}</button>`; }
+  setApp(`<h2 class="section-title">Выберите время</h2><p class="section-sub">После выбора породы и услуги можно показывать только реальные слоты, без лишних шагов.</p>${state.service && state.service!=='manual' ? `<div class="summary">${summaryRows()}</div>` : '<div class="helper">Услуга будет подтверждена администратором после фото или уточнения.</div>'}<div class="mini" style="margin-bottom:8px">Сначала выберите мастера</div><div class="quick-row">${masters.map(m=>`<button class="quick ${state.selectedMasterId===m.id?'selected':''}" onclick="chooseMaster('${m.id}')">${m.name}</button>`).join('') || '<div class="helper">Нет подходящих мастеров для этой услуги.</div>'}</div><div style="display:flex;align-items:center;justify-content:space-between;margin:16px 0 10px"><button class="btn btn-secondary" onclick="state.calMonth=state.calMonth===0?11:state.calMonth-1; if(state.calMonth===11) state.calYear--; render()">←</button><strong>${['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'][state.calMonth]} ${state.calYear}</strong><button class="btn btn-secondary" onclick="state.calMonth=state.calMonth===11?0:state.calMonth+1; if(state.calMonth===0) state.calYear++; render()">→</button></div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:8px">${['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(d=>`<div class="mini" style="text-align:center">${d}</div>`).join('')}</div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">${grid}</div><div style="margin-top:16px"><div class="mini" style="margin-bottom:8px">Свободное время ${state.currentDate?('на '+state.currentDate):''}</div><div class="quick-row">${state.slotsApi.map(sl=>`<button class="slot ${state.slot===sl.startAt?'selected':''} ${sl.busy?'tbtn-busy':''}" ${sl.busy?'disabled':''} onclick="chooseSlot('${sl.startAt}')">${new Date(sl.startAt).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}</button>`).join('') || '<div class="helper">Сначала выберите мастера и дату.</div>'}</div></div><div class="nav"><button class="btn btn-secondary" onclick="prev()">Назад</button><button class="btn btn-primary" onclick="next()" ${(state.slot && state.selectedMasterId)?'':'disabled'}>Далее</button></div>`);
+}
+
+async function submit(){
+  const ok = state.ownerName.trim() && state.phone.trim();
+  if(!ok){ document.getElementById('contactError').textContent='Укажите имя и телефон.'; return; }
+  const serviceId = apiServiceId();
+  if(!serviceId && state.service!=='manual') { document.getElementById('contactError').textContent='Не удалось определить backend-услугу.'; return; }
+  if(!state.selectedMasterId){ document.getElementById('contactError').textContent='Не выбран мастер.'; return; }
+  if(!state.slot){ document.getElementById('contactError').textContent='Не выбрано время.'; return; }
+  const btn = document.getElementById('submitBtn'); if(btn){btn.disabled=true;btn.textContent='Отправка...';}
+  try{
+    const client = await apiPost('/clients',{name:state.ownerName.trim(),phone:state.phone.trim(),...(state.email.trim()?{email:state.email.trim()}:{})});
+    const pet = await apiPost(`/clients/${client.id}/pets`,{ name:state.petName.trim(), type:(state.petType||'dog').toUpperCase(), breed:state.breed?.name || '', size:(state.breed?.size||state.size||'medium').toUpperCase() });
+    await apiPost('/appointments',{ petId:pet.id, serviceId:(serviceId || 'svc-bath'), staffId:state.selectedMasterId, startAt:state.slot });
+    state.step = 5; render();
+  }catch(e){ if(btn){btn.disabled=false;btn.textContent='Записаться';} const er = document.getElementById('contactError'); if(er) er.textContent = e.message || 'Ошибка. Попробуйте ещё раз.'; }
+}
+
+function renderStep4(){ setApp(`<h2 class="section-title">Подтвердите запись</h2><p class="section-sub">В конце собираем только необходимый минимум: имя, телефон и важные комментарии по питомцу.</p><div class="summary">${summaryRows()}</div><div class="field"><label class="mini">Ваше имя</label><input value="${esc(state.ownerName)}" oninput="state.ownerName=this.value" placeholder="Анна"></div><div class="field" style="margin-top:12px"><label class="mini">Телефон</label><input value="${esc(state.phone)}" oninput="state.phone=this.value" placeholder="+7 999 000-00-00"></div><div class="field" style="margin-top:12px"><label class="mini">Email</label><input value="${esc(state.email)}" oninput="state.email=this.value" placeholder="name@example.com"></div><div class="field" style="margin-top:12px"><label class="mini">Комментарий</label><textarea rows="4" oninput="state.notes=this.value" placeholder="Например: есть колтуны, собака тревожная, нужен первый визит">${esc(state.notes)}</textarea></div><div class="note">Если для породы или состояния шерсти потребуется уточнение, администратор скорректирует длительность и финальную стоимость до визита.</div><div id="contactError" class="error"></div><div class="nav"><button class="btn btn-secondary" onclick="prev()">Назад</button><button class="btn btn-primary" id="submitBtn" onclick="submit()">Записаться</button></div>`); }
+function renderSuccess(){ setApp(`<div class="ok"><div class="big"><i class="ti ti-circle-check"></i></div><h2 class="section-title">Запись создана</h2><p class="section-sub">Спасибо! Мы получили вашу запись и свяжемся при необходимости для уточнений.</p><div class="summary" style="text-align:left;max-width:520px;margin:0 auto">${summaryRows()}</div><button class="btn btn-secondary" onclick="location.reload()">Начать заново</button></div>`); }
+function render(){ if(state.step===0) return renderStep0(); if(state.step===1) return renderStep1(); if(state.step===2) return renderStep2(); if(state.step===3) return renderStep3(); if(state.step===4) return renderStep4(); return renderSuccess(); }
+async function boot(){ setApp('<div class="helper">Загрузка данных...</div>'); renderProgress(); try{ const [services,masters] = await Promise.all([apiGet('/services'), apiGet('/staff')]); state.services = Array.isArray(services)?services:[]; state.masters = Array.isArray(masters)?masters:[]; render(); }catch(e){ setApp(`<div class="error">Не удалось загрузить данные: ${esc(e.message)}</div>`); } }
+boot();
+</script>
+
+</body>
+</html>

@@ -102,22 +102,15 @@ model WorkBreak {
 }
 
 model Service {
-  id          String   @id @default(uuid())
+  id          String  @id @default(uuid())
   name        String
   description String?
   basePrice   Float
   durationMin Int
-
-  coefSmall   Float    @default(0.8)
-  coefMedium  Float    @default(1.0)
-  coefLarge   Float    @default(1.5)
-
-  code        String?  @unique
-  icon        String?  @default("ti-scissors")
-  petType     String   @default("DOG")
-  sortOrder   Int      @default(0)
-  isBookable  Boolean  @default(true)
-  isActive    Boolean  @default(true)
+  isActive    Boolean @default(true)
+  coefSmall   Float   @default(0.8)
+  coefMedium  Float   @default(1.0)
+  coefLarge   Float   @default(1.5)
 
   staff        StaffService[]
   appointments Appointment[]
