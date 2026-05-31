@@ -519,49 +519,91 @@ async function deactivateSvc(){
 }
 
 function renderSvcModalHtml(){
-  const s = svcDraft || emptyServiceDraft();
-  return `
-  <div class="modal-backdrop">
-    <div class="modal">
-      <h3>${s.id ? 'Редактирование услуги' : 'Новая услуга'}</h3>
-      <div class="grid-2" style="grid-template-columns:1.2fr 1fr;gap:16px;margin-top:10px">
+  if(!svcModalOpen || !svcDraft) return '';
+  const s = svcDraft;
+  return `<div class="modal-backdrop" onclick="closeSvcModal()">
+    <div class="modal-card" style="max-width:760px;width:min(760px,calc(100vw - 32px));max-height:calc(100vh - 32px);overflow:auto" onclick="event.stopPropagation()">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px">
         <div>
-          <div class="field"><label class="mini">Название</label><input value="${esc(s.name)}" oninput="updateSvcField('name',this.value)"></div>
-          <div class="field"><label class="mini">Код (для связки с породами)</label><input value="${esc(s.code||'')}" oninput="updateSvcField('code',this.value)" placeholder="full, express, deshed..."></div>
-          <div class="field"><label class="mini">Описание</label><textarea rows="3" oninput="updateSvcField('description',this.value)">${esc(s.description||'')}</textarea></div>
-          <div class="grid-2">
-            <div class="field"><label class="mini">Базовая цена</label><input type="number" min="0" value="${s.basePrice||0}" oninput="updateSvcField('basePrice',this.value)"></div>
-            <div class="field"><label class="mini">Базовая длительность, мин</label><input type="number" min="10" step="5" value="${s.durationMin||60}" oninput="updateSvcField('durationMin',this.value)"></div>
-          </div>
-          <div class="grid-3" style="margin-top:8px">
-            <div class="field"><label class="mini">Коэф. маленькая</label><input type="number" step="0.1" value="${s.coefSmall||0.8}" oninput="updateSvcField('coefSmall',this.value)"></div>
-            <div class="field"><label class="mini">Коэф. средняя</label><input type="number" step="0.1" value="${s.coefMedium||1.0}" oninput="updateSvcField('coefMedium',this.value)"></div>
-            <div class="field"><label class="mini">Коэф. крупная</label><input type="number" step="0.1" value="${s.coefLarge||1.5}" oninput="updateSvcField('coefLarge',this.value)"></div>
+          <div style="font-size:24px;font-weight:700;line-height:1.2">${s.id ? 'Редактирование услуги' : 'Новая услуга'}</div>
+          <div style="font-size:13px;color:var(--text2);margin-top:4px">Только понятные для администратора настройки услуги.</div>
+        </div>
+        <button class="ib" type="button" onclick="closeSvcModal()"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr;gap:18px">
+        <div class="card" style="padding:16px">
+          <div style="font-size:14px;font-weight:600;margin-bottom:12px">Основное</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <label style="grid-column:1 / -1">
+              <div style="font-size:12px;color:var(--text2);margin-bottom:6px">Название</div>
+              <input class="inp" value="${esc(s.name||'')}" oninput="setSvcField('name',this.value)" placeholder="Например, Полный груминг">
+            </label>
+
+            <label style="grid-column:1 / -1">
+              <div style="font-size:12px;color:var(--text2);margin-bottom:6px">Описание</div>
+              <textarea class="inp" rows="3" oninput="setSvcField('description',this.value)" placeholder="Кратко опишите, что входит в услугу">${esc(s.description||'')}</textarea>
+            </label>
+
+            <label>
+              <div style="font-size:12px;color:var(--text2);margin-bottom:6px">Базовая цена, ₽</div>
+              <input class="inp" type="number" min="0" step="100" value="${Number(s.basePrice||0)}" oninput="setSvcField('basePrice',Number(this.value||0))">
+            </label>
+
+            <label>
+              <div style="font-size:12px;color:var(--text2);margin-bottom:6px">Длительность, мин</div>
+              <input class="inp" type="number" min="0" step="5" value="${Number(s.durationMin||0)}" oninput="setSvcField('durationMin',Number(this.value||0))">
+            </label>
+
+            <label style="grid-column:1 / -1">
+              <div style="font-size:12px;color:var(--text2);margin-bottom:6px">Тип питомца</div>
+              <select class="inp" onchange="setSvcField('petType',this.value)">
+                <option value="BOTH" ${String(s.petType||'BOTH')==='BOTH'?'selected':''}>Обе категории</option>
+                <option value="DOG" ${String(s.petType||'BOTH')==='DOG'?'selected':''}>Только собаки</option>
+                <option value="CAT" ${String(s.petType||'BOTH')==='CAT'?'selected':''}>Только кошки</option>
+              </select>
+            </label>
           </div>
         </div>
-        <div>
-          <div class="field"><label class="mini">Иконка (Tabler)</label><input value="${esc(s.icon||'ti-scissors')}" oninput="updateSvcField('icon',this.value)" placeholder="ti-scissors"></div>
-          <div class="field"><label class="mini">Тип питомца</label>
-            <select onchange="updateSvcField('petType',this.value)">
-              <option value="DOG" ${s.petType==='DOG'?'selected':''}>Собака</option>
-              <option value="CAT" ${s.petType==='CAT'?'selected':''}>Кошка</option>
-              <option value="BOTH" ${s.petType==='BOTH'?'selected':''}>Обе категории</option>
-            </select>
+
+        <div class="card" style="padding:16px">
+          <div style="font-size:14px;font-weight:600;margin-bottom:12px">Коэффициенты по размеру</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:12px">Используются для автоматического расчёта цены в зависимости от размера питомца.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+            <label>
+              <div style="font-size:12px;color:var(--text2);margin-bottom:6px">Маленькая</div>
+              <input class="inp" type="number" min="0" step="0.1" value="${Number(s.coefSmall ?? 1)}" oninput="setSvcField('coefSmall',Number(this.value||0))">
+            </label>
+            <label>
+              <div style="font-size:12px;color:var(--text2);margin-bottom:6px">Средняя</div>
+              <input class="inp" type="number" min="0" step="0.1" value="${Number(s.coefMedium ?? 1)}" oninput="setSvcField('coefMedium',Number(this.value||0))">
+            </label>
+            <label>
+              <div style="font-size:12px;color:var(--text2);margin-bottom:6px">Крупная</div>
+              <input class="inp" type="number" min="0" step="0.1" value="${Number(s.coefLarge ?? 1)}" oninput="setSvcField('coefLarge',Number(this.value||0))">
+            </label>
           </div>
-          <div class="field"><label class="mini">Порядок сортировки</label><input type="number" value="${s.sortOrder||0}" oninput="updateSvcField('sortOrder',this.value)"></div>
-          <div class="field"><label class="mini">Параметры отображения</label>
-            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-              <label style="font-size:13px"><input type="checkbox" ${s.isBookable!==false?'checked':''} onchange="updateSvcField('isBookable',this.checked)"> Показывать в записи</label>
-              <label style="font-size:13px"><input type="checkbox" ${s.isActive!==false?'checked':''} onchange="updateSvcField('isActive',this.checked)"> Активна</label>
-            </div>
+        </div>
+
+        <div class="card" style="padding:16px">
+          <div style="font-size:14px;font-weight:600;margin-bottom:12px">Отображение</div>
+          <div style="display:flex;flex-wrap:wrap;gap:18px">
+            <label style="display:flex;align-items:center;gap:8px">
+              <input type="checkbox" ${s.isBookable!==false?'checked':''} onchange="setSvcField('isBookable',this.checked)">
+              <span>Показывать в онлайн-записи</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:8px">
+              <input type="checkbox" ${s.isActive!==false?'checked':''} onchange="setSvcField('isActive',this.checked)">
+              <span>Услуга активна</span>
+            </label>
           </div>
-          <pre id="svc-json" style="font-size:11px;background:var(--bg2);padding:8px;border-radius:8px;max-height:160px;overflow:auto">${esc(JSON.stringify(s,null,2))}</pre>
         </div>
       </div>
-      <div class="nav" style="margin-top:16px">
+
+      <div style="display:flex;align-items:center;gap:10px;margin-top:18px">
         <button class="btn btn-secondary" onclick="closeSvcModal()">Отмена</button>
         <div style="flex:1"></div>
-        ${s.id ? `<button class="btn btn-secondary" style="margin-right:8px" onclick="deactivateSvc()">Отключить</button>`:''}
+        ${s.id ? `<button class="btn btn-secondary" style="color:#b42318;border-color:#f1b5ae" onclick="deactivateSvc()">Отключить</button>` : ''}
         <button class="btn btn-primary" onclick="saveSvc()">Сохранить</button>
       </div>
     </div>
