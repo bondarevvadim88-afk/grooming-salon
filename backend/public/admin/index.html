@@ -206,12 +206,13 @@ function nav(page,el){
   try{
     document.getElementById('main-content').innerHTML='<div style="padding:32px;text-align:center"><div class="spinner"></div></div>';
     const result = (pages[page]??renderDash)();
+    if(page==='svcs') return;
     if(result instanceof Promise){
-      result.then(html=>{ document.getElementById('main-content').innerHTML=html||''; }).catch(e=>{
+      result.then(html=>{ if(html!==undefined) document.getElementById('main-content').innerHTML=html||''; }).catch(e=>{
         document.getElementById('main-content').innerHTML=`<div class="alert-box err">Ошибка загрузки: ${esc(e.message)}</div>`;
       });
     } else {
-      document.getElementById('main-content').innerHTML=result||'';
+      if(result!==undefined) document.getElementById('main-content').innerHTML=result||'';
     }
   } catch(err){
     document.getElementById('main-content').innerHTML=`<div class="alert-box err">Ошибка рендера: ${esc(err.message)}</div>`;
