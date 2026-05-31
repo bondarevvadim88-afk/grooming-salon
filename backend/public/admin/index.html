@@ -1151,34 +1151,6 @@ async function saveLinkServices(masterId){
 }
 
 // ── SERVICES ──
-async function renderSvcs(){
-  await Promise.all([loadSvcs(), loadMasters()]);
-  return `
-  <div class="topbar"><h2>Услуги</h2></div>
-  <div class="card">
-    <h3><i class="ti ti-cut" style="font-size:15px;color:var(--teal)"></i> Каталог услуг (${SVCS.length})</h3>
-    ${SVCS.length===0?'<p style="font-size:13px;color:var(--text2)">Услуг пока нет.</p>':
-    `<div id="svcs-list">${renderSvcRows()}</div>`}
-  </div>
-  <div class="card">
-    <h3>Привязка мастер × услуга</h3>
-    <p style="font-size:11px;color:var(--text2);margin-bottom:10px">
-      ✓ — мастер выполняет услугу и виден в виджете при её выборе клиентом.
-    </p>
-    <div style="overflow-x:auto">
-      <table class="tbl" style="min-width:400px">
-        <thead><tr><th>Мастер</th>${SVCS.map(s=>`<th style="text-align:center;font-size:10px">${esc(s.name.length>9?s.name.slice(0,8)+'…':s.name)}</th>`).join('')}</tr></thead>
-        <tbody>${MASTERS.map((m,i)=>{
-          const c=avaColor(i);
-          const linked=new Set((m.services||[]).map(ss=>ss.serviceId||ss.service?.id));
-          return `<tr><td><div style="display:flex;align-items:center;gap:5px">${ava(m.name,c.bg,c.tc,18)} ${esc(m.name.split(' ')[0])}</div></td>
-            ${SVCS.map(s=>{const has=linked.has(s.id);return`<td style="text-align:center"><i class="ti ${has?'ti-circle-check':'ti-circle-x'}" style="font-size:15px;color:${has?'#1D9E75':'var(--border2)'}"></i></td>`;}).join('')}
-          </tr>`;
-        }).join('')}</tbody>
-      </table>
-    </div>
-  </div>`;
-}
 function renderSvcRows(){
   return SVCS.map(s=>
     `<div class="svc-row">
